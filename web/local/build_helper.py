@@ -22,7 +22,7 @@ def source_files():
                 continue
             if path.suffix in EXTENSIONS or path.name == 'requirements.txt':
                 yield path
-    for name in ('web/local/run.py', 'web/local/install.py', 'web/local/folder_guides.py',
+    for name in ('web/local/run.py', 'web/local/install.py', 'web/local/folder_guides.py', 'web/local/batch_proposals.py',
                  'web/local/requirements-qwen.txt', 'file-lifecycle-agent/requirements.txt', 'web/THIRD_PARTY_NOTICES.md'):
         yield ROOT / name
 

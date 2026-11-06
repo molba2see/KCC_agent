@@ -16,6 +16,13 @@ REPO = Path(__file__).resolve().parents[2]
 DATA = Path(os.environ.get('MOA_LOCAL_DATA', Path.home() / 'Library/Application Support/Moa'))
 
 
+def screenshot_folder():
+    result = subprocess.run(['defaults', 'read', 'com.apple.screencapture', 'location'], capture_output=True, text=True)
+    value = result.stdout.strip() if result.returncode == 0 else ''
+    folder = Path(value).expanduser() if value else Path.home() / 'Desktop'
+    return folder if folder.is_absolute() and folder.is_dir() else Path.home() / 'Desktop'
+
+
 def main():
     DATA.mkdir(parents=True, exist_ok=True, mode=0o700)
     lock = (DATA / 'run.lock').open('w')
@@ -99,11 +106,18 @@ def main():
                     agent.terminate()
                     agent.wait(timeout=10)
                 if agent is None or agent.poll() is not None:
-                    agent = start('agent', [REPO / 'file-lifecycle-agent/prototype/demo_v5.py',
+                    arguments = [REPO / 'file-lifecycle-agent/prototype/demo_v5.py',
                         '--root', DATA / 'workspace', '--projects', DATA / 'projects.json',
                         '--watch', '--scan-existing-inbox', '--auto-inbox', inbox,
                         '--strict-auto-inbox', Path.home() / 'Downloads',
-                        '--source-rules', DATA / 'source-rules.json', '--port', '8791'])
+                        '--source-rules', DATA / 'source-rules.json', '--port', '8791']
+                    cleanup_settings = DATA / 'initial-cleanup-settings.json'
+                    if cleanup_settings.exists() and json.loads(cleanup_settings.read_text()).get('enabled') is True:
+                        arguments += ['--screenshot-inbox', screenshot_folder(),
+                            '--initial-cleanup', '--proposal-python', DATA / 'qwen-runtime/bin/python',
+                            '--proposal-worker', REPO / 'web/local/batch_proposals.py',
+                            '--proposal-root', Path.home() / 'Library/Mobile Documents/com~apple~CloudDocs/모아']
+                    agent = start('agent', arguments)
                     agent_inbox = inbox
                     agent_projects = projects_version
                 if bridge is None or bridge.poll() is not None:

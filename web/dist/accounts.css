@@ -11,3 +11,5 @@
 #iphone-shortcut .setup-screen>a.primary{display:inline-block;margin:22px 0 8px;text-decoration:none}
 #iphone-shortcut .setup-screen>.ghost{margin-top:14px}
 #iphone-shortcut{scroll-margin-top:84px}
+
+.setup-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}.setup-actions>button{flex:1 1 220px}.setup-screen .setup-source{font-size:12px;margin-top:20px}#shortcut-guide>.setup-screen{margin-bottom:28px;scroll-margin-top:100px}#shortcut-guide .ghost{display:inline-block;margin-top:20px}#setup-mac-security .setup-path,#setup-shortcut .setup-path{margin-top:18px}

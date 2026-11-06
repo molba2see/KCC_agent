@@ -50,11 +50,12 @@ class Lifecycle:
         a['refs']=re.findall(r'REF:\s*(.+)',text)
         a['reason']='explicit project_id' if len(hits)==1 else 'missing or ambiguous project_id'
         self.save(); return a['project']
-    def plan(self,aid):
+    def plan(self,aid,active_references=None):
         a=self.data['assets'][aid]; proj=a['project']
         if a['keep']: return {'action':'keep','reason':'user keep'}
         if not proj: return {'action':'defer','reason':a.get('reason','unknown project')}
-        if any(x['refs'] and (a['path'] in x['refs'] or Path(a['path']).name in x['refs']) for x in self.data['assets'].values() if self.data['projects'].get(x['project'])!='completed'):
+        referenced = (a['path'] in active_references or Path(a['path']).name in active_references) if active_references is not None else any(x['refs'] and (a['path'] in x['refs'] or Path(a['path']).name in x['refs']) for x in self.data['assets'].values() if self.data['projects'].get(x['project'])!='completed')
+        if referenced:
             return {'action':'keep','reason':'active reference'}
         if a['refs']: return {'action':'defer','reason':'reference-bearing file requires bundle-preserving move'}
         folder=self.data.get('folders',{}).get(proj)

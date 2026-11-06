@@ -6,7 +6,7 @@ Without --qwen the deterministic rule controller drives the same tools (no GPU n
 On the GPU server run with --qwen and open it through `ssh -L 8765:localhost:8765 ...`."""
 from pathlib import Path
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import argparse, json, random, shutil, subprocess, threading, time
+import argparse, json, random, shutil, subprocess, threading, time, sys, os
 from lifecycle_v3 import Lifecycle
 from agent_v5 import ToolHostV5, run, run_hybrid, rule_controller, DEFAULT_GUARDS, content, caption, TEXT, IMAGE, WEIGHTS, CHUNK, DOCS, ToolError, semantic_doc, dense_scores
 from sources import where_froms, source_keys, Rules
@@ -95,15 +95,62 @@ def notify(title, text):
                     '-e', 'end run', title, text], capture_output=True, timeout=10)
 
 
+def numbered_path(path, number):
+    if not number: return path
+    stem = path.stem.encode('utf-8')[:200].decode('utf-8', errors='ignore')
+    return path.with_name(f'{stem}_{number}{path.suffix}')
+
+
+def stage_copy(source, target, reserved):
+    """Claim a fresh filename exclusively, including names of previously filed assets."""
+    number = 0
+    while True:
+        candidate = numbered_path(target, number); number += 1
+        if candidate in reserved: continue
+        try:
+            output = candidate.open('xb')
+        except FileExistsError:
+            continue
+        try:
+            with output, source.open('rb') as incoming:
+                shutil.copyfileobj(incoming, output)
+            shutil.copystat(source, candidate)
+            return candidate
+        except BaseException:
+            candidate.unlink(missing_ok=True)
+            raise
+
+
+def rename_staged(source, target, reserved):
+    if source == target: return source
+    number = 0
+    while True:
+        candidate = numbered_path(target, number); number += 1
+        if candidate in reserved: continue
+        try:
+            os.link(source, candidate)
+        except FileExistsError:
+            continue
+        try:
+            source.unlink()
+        except BaseException:
+            candidate.unlink(missing_ok=True)
+            raise
+        return candidate
+
+
 class Watcher(threading.Thread):
     """Trigger: a new file in a watched folder is ingested and analyzed, then the user is notified.
     --inbox folders (e.g. ~/Desktop for screenshots) are copied in, never moved: user originals stay untouched."""
-    def __init__(self, demo, inboxes, interval=2.0, auto_inboxes=(), strict_inboxes=(), ask_inboxes=(), scan_existing=False):
+    def __init__(self, demo, inboxes, interval=2.0, auto_inboxes=(), strict_inboxes=(), ask_inboxes=(), scan_existing=False, screenshot_inboxes=()):
         super().__init__(daemon=True); self.d = demo; self.interval = interval
         self.ask_inboxes = {Path(x).expanduser() for x in ask_inboxes}; self.ask = set()  # not auto-filed -> ask in a dialog
         # auto: any confident 'file' plan runs without a click (iPhone captures). strict: only download-source rules and the
         # rule controller, and only documents/screenshots (Downloads, Desktop: personal notes and mixed files live there).
         self.auto_inboxes = {Path(x).expanduser() for x in auto_inboxes}; self.strict_inboxes = {Path(x).expanduser() for x in strict_inboxes}
+        self.screenshot_inboxes = {Path(x).expanduser() for x in screenshot_inboxes}
+        self.image_only = self.screenshot_inboxes - set(map(lambda x: Path(x).expanduser(), inboxes)) - self.auto_inboxes - self.strict_inboxes
+        self.strict_inboxes.update(self.screenshot_inboxes)
         self.auto = set(); self.strict = set()
         self.inboxes = list(dict.fromkeys([Path(x).expanduser() for x in inboxes] + sorted(self.auto_inboxes) + sorted(self.strict_inboxes)))
         self.sizes = {}; self.fetching = set()
@@ -116,7 +163,7 @@ class Watcher(threading.Thread):
     def candidates(self):
         for x in self.inboxes:
             for p in x.glob('*'):
-                if p not in self.seen and p.is_file() and not p.name.startswith(('.', '~$')) and p.suffix.lower() in TEXT | IMAGE | WEIGHTS and (not self.scan_existing or self.seen_fingerprints.get(str(p)) != self.fingerprint(p)):
+                if p not in self.seen and not p.is_symlink() and p.is_file() and (x not in self.image_only or p.suffix.lower() in IMAGE) and not p.name.startswith(('.', '~$')) and p.suffix.lower() in TEXT | IMAGE | WEIGHTS and (not self.scan_existing or self.seen_fingerprints.get(str(p)) != self.fingerprint(p)):
                     yield p, self.d.root / 'screenshots' / p.name
         for sub in WATCH_DIRS:
             for p in (self.d.root / sub).glob('*'):
@@ -145,11 +192,13 @@ class Watcher(threading.Thread):
         if cap:
             new = p.with_name(cap + p.suffix)
             used = {a['original'] for a in self.d.engine().data['assets'].values()}  # an earlier capture may already be filed under this name
-            if new.exists() or str(new.relative_to(self.d.root)) in used: new = new.with_stem(f'{new.stem}_{time.strftime("%m%d_%H%M")}')
-            p.rename(new); old = str(p.relative_to(self.d.root))
+            new = rename_staged(p, new, {self.d.root / rel for rel in used})
+            old = str(p.relative_to(self.d.root))
             for s in (self.auto, self.strict, self.ask):
                 if p in s: s.discard(p); s.add(new)
             if old in self.d.sources: self.d.sources[str(new.relative_to(self.d.root))] = self.d.sources.pop(old); self.d.save_sources()
+            if hasattr(self.d, 'origins') and old in self.d.origins:
+                self.d.origins[str(new.relative_to(self.d.root))] = self.d.origins.pop(old); self.d.save_origins()
             p = new
         return p, str(p.relative_to(self.d.root))
 
@@ -157,19 +206,22 @@ class Watcher(threading.Thread):
         with self.d.lock:
             known = {a['original'] for a in self.d.engine().data['assets'].values()}
         for p, copy_to in list(self.candidates()):
+            if copy_to and p.stat().st_size == 0:
+                self.remember(p); continue
             if not self.stable(p): continue
             if copy_to:
                 if p.stat().st_size > 50 << 20: self.remember(p); continue  # shortcut: skips >50MB
-                if copy_to.exists(): copy_to = copy_to.with_stem(f'{copy_to.stem}_{time.strftime("%Y%m%d_%H%M%S")}')  # iPhone names repeat
                 copy_to.parent.mkdir(exist_ok=True)
-                try: shutil.copy2(p, copy_to)
+                try: copy_to = stage_copy(p, copy_to, {self.d.root / rel for rel in known})
                 except OSError as exc:
-                    copy_to.unlink(missing_ok=True)
                     if p not in self.fetching:  # iCloud keeps new files 'dataless' until something asks for them
                         self.fetching.add(p); subprocess.run(['brctl', 'download', str(p)], capture_output=True, timeout=30)
                         print('watcher: asked iCloud to download', p.name, exc, flush=True)
                     continue
                 self.remember(p)
+                if hasattr(self.d, 'origins'):
+                    self.d.origins[str(copy_to.relative_to(self.d.root))] = {'kind': 'icloud' if p.parent in self.auto_inboxes else 'screenshot' if p.parent in self.screenshot_inboxes else 'download', 'received_at': time.time(), 'source_mtime': p.stat().st_mtime}
+                    self.d.save_origins()
                 urls = where_froms(p)
                 if urls: self.d.sources[str(copy_to.relative_to(self.d.root))] = urls; self.d.save_sources()
                 if p.parent in self.auto_inboxes: self.auto.add(copy_to)
@@ -196,12 +248,14 @@ class Watcher(threading.Thread):
                 filed = self.d.engine().data['assets'][aid]['path'] != rel
             if p in self.ask and not filed:
                 threading.Thread(target=ask_folder, args=(self.d, aid, p.name, r.get('project') or (r.get('candidates') or [None])[0]), daemon=True).start()
-            else: notify(f'새 파일: {p.name}', text)
+            elif not getattr(self.d, 'cleanup', None) or self.d.cleanup.data['status'] != 'scanning': notify(f'새 파일: {p.name}', text)
 
     def run(self):
         for sub in WATCH_DIRS: (self.d.root / sub).mkdir(exist_ok=True)
         while True:
-            try: self.tick()
+            try:
+                self.tick()
+                if getattr(self.d, 'cleanup', None): self.d.cleanup.observe(self)
             except Exception as exc: print('watcher:', exc, flush=True)
             time.sleep(self.interval)
 
@@ -216,8 +270,13 @@ class Demo:
         self.sources_path = self.root / 'sources.json'  # copy path -> download URLs (kMDItemWhereFroms of the original)
         self.sources = json.loads(self.sources_path.read_text()) if self.sources_path.exists() else {}
         self.rules = None  # sources.Rules: page URL -> project, learned from answers and approvals
+        self.origins_path = self.root / 'origins.json'
+        self.origins = json.loads(self.origins_path.read_text()) if self.origins_path.exists() else {}
+        self.cleanup = None
         self.expiry = None  # expiry.Expiry: installers to the Trash after N days
 
+    def save_origins(self):
+        temporary = self.origins_path.with_suffix('.tmp'); temporary.write_text(json.dumps(self.origins, ensure_ascii=False)); temporary.chmod(0o600); temporary.replace(self.origins_path)
     def engine(self): return Lifecycle(self.root)
     def save_runs(self): self.runs_path.write_text(json.dumps(self.runs, ensure_ascii=False, indent=1))
     def save_sources(self): self.sources_path.write_text(json.dumps(self.sources, ensure_ascii=False, indent=1))
@@ -242,16 +301,20 @@ class Demo:
 
     def state(self):
         e = self.engine(); assets = []
+        active_references = {ref for item in e.data['assets'].values() if e.data['projects'].get(item['project']) != 'completed' for ref in item.get('refs', [])}
         for a in e.data['assets'].values():
             if a.get('context'): continue
             r = self.runs.get(a['id'])
-            plan = e.plan(a['id']) if a['project'] or a['keep'] else None
+            origin = self.origins.get(a['original'], {})
+            if isinstance(origin, str): origin = {'kind': origin}
+            plan = e.plan(a['id'], active_references=active_references) if a['project'] or a['keep'] else None
             assets.append({'id': a['id'], 'path': a['path'], 'original': a['original'], 'project': a['project'],
-                           'keep': a['keep'], 'archived': a['path'] != a['original'], 'plan': plan, 'run': r,
+                           'source_kind': origin.get('kind'), 'received_at': origin.get('received_at', 0), 'source_mtime': origin.get('source_mtime'), 'keep': a['keep'], 'archived': a['path'] != a['original'], 'plan': plan, 'run': r,
                            'why': explain(e, a, r, plan) if r else []})
         assets.sort(key=lambda x: x['original'])
         return {'controller': self.name, 'root': str(self.root), 'assets': assets, 'journal': e.data['journal'][-20:],
                 'catalog': [{'id': k, 'name': v['name'], 'desc': v['desc'], 'status': e.data['projects'].get(k)} for k, v in CAT.items()],
+                'cleanup': self.cleanup.public() if self.cleanup else None,
                 'digest': self.digest, 'pending': len(self.pending()),
                 'trashed': [{'i': i, **t} for i, t in enumerate(self.expiry.data['trashed']) if 'restored' not in t][-10:] if self.expiry else []}
 
@@ -460,6 +523,12 @@ def serve(demo, port, origins=()):
                     if self.path == '/api/analyze': out = demo.analyze(aid)
                     elif self.path == '/api/answer': out = demo.answer(aid, d.get('project_id'))
                     elif self.path == '/api/keep': out = demo.keep(aid)
+                    elif self.path in ('/api/cleanup_confirm', '/api/cleanup_dismiss'):
+                        if not demo.cleanup or demo.cleanup.data['status'] in ('scanning', 'generating'): raise ValueError('일괄 정리 제안을 준비 중입니다.')
+                        out = demo.cleanup.decide(d.get('group_id'), self.path.endswith('confirm'))
+                    elif self.path == '/api/cleanup_retry':
+                        if not demo.cleanup or demo.cleanup.data['status'] in ('scanning', 'generating'): raise ValueError('일괄 정리 제안을 준비 중입니다.')
+                        demo.cleanup.data.update(status='scanning', detail=''); demo.cleanup.save(); out = True
                     elif self.path == '/api/approve': out = demo.approve(aid, d.get('plan'))
                     elif self.path == '/api/undo': out = demo.undo(aid)
                     elif self.path == '/api/digest_now': out = demo.digest_now()
@@ -489,6 +558,11 @@ if __name__ == '__main__':
     ap.add_argument('--inbox', action='append', default=[], help='with --watch: copy new files from this folder in (e.g. ~/Desktop for screenshots)')
     ap.add_argument('--scan-existing-inbox', action='store_true', help='collect iCloud files received while the agent was offline, remembering processed file versions')
     ap.add_argument('--digest-hours', type=float, default=0, help='ask about unresolved files every N hours while the user is at the Mac (0 = off; the page also has an "ask now" button)')
+    ap.add_argument('--screenshot-inbox', action='append', default=[], help='collect images only from the Mac screenshot save folder')
+    ap.add_argument('--initial-cleanup', action='store_true', help='offer first-run grouped proposals after collecting existing files')
+    ap.add_argument('--proposal-python', type=Path, help='local Qwen runtime Python')
+    ap.add_argument('--proposal-worker', type=Path, help='local proposal worker')
+    ap.add_argument('--proposal-root', type=Path, help='host-selected destination for confirmed new folders')
     ap.add_argument('--auto-inbox', action='append', default=[], help='like --inbox, but a confident "save to project folder" plan is executed without a click (e.g. the iCloud KCC-inbox for iPhone captures); questions still wait')
     ap.add_argument('--strict-auto-inbox', action='append', default=[], help='like --inbox, but documents/screenshots are filed without a click when a download-source rule or the rule controller decided (e.g. ~/Downloads, ~/Desktop)')
     ap.add_argument('--source-rules', help='JSON {page key: project id}; learned from answers/approvals (see sources.py)')
@@ -512,8 +586,12 @@ if __name__ == '__main__':
         ctl, name = rule_controller, '규칙 controller (GPU 없이 실행)'
     demo = Demo(a.root, ctl, name); demo.watching = a.watch
     if a.source_rules: demo.rules = Rules(a.source_rules)
-    if a.watch: Watcher(demo, a.inbox, auto_inboxes=a.auto_inbox, strict_inboxes=a.strict_auto_inbox, ask_inboxes=a.ask_inbox, scan_existing=a.scan_existing_inbox).start()
     if a.projects: demo.projects_path = Path(a.projects)
+    if a.initial_cleanup:
+        from initial_cleanup import InitialCleanup
+        if not all((a.proposal_python, a.proposal_worker, a.proposal_root)): raise SystemExit('Initial cleanup needs a local proposal runtime, worker, and destination')
+        demo.cleanup = InitialCleanup(demo, CAT, a.proposal_python, a.proposal_worker, a.proposal_root)
+    if a.watch: Watcher(demo, a.inbox, auto_inboxes=a.auto_inbox, strict_inboxes=a.strict_auto_inbox, ask_inboxes=a.ask_inbox, scan_existing=a.scan_existing_inbox, screenshot_inboxes=a.screenshot_inbox).start()
     if a.expire_installers_days:
         demo.expiry = Expiry(Path(a.root) / 'expiry.json', a.inbox + a.strict_auto_inbox, a.expire_installers_days)
         def sweeper():  # every minute, so a clock moved forward is noticed quickly

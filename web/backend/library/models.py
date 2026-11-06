@@ -122,6 +122,7 @@ class MacPairing(OwnedModel):
 
 class OnboardingProgress(models.Model):
     owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    initial_cleanup_confirmed = models.BooleanField(default=False)
     iphone_icloud_confirmed = models.BooleanField(default=False)
     test_started_at = models.DateTimeField(null=True)
     baseline_assets = models.JSONField(default=list)

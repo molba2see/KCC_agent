@@ -43,12 +43,15 @@ def folders(request):
             body = json.loads(request.body)
             selected = guides.validate_folders(body.get('folders') if isinstance(body, dict) else None)
             mode = body.get('mode', 'replace')
+            if 'initial_cleanup' in body and not isinstance(body['initial_cleanup'], bool): raise ValueError('Invalid cleanup option')
             if mode not in {'replace', 'add'}:
                 raise ValueError('Invalid mode')
             if mode == 'add':
                 guides.validate_additions(selected, data)
         except (ValueError, OSError, TypeError):
             return JsonResponse({'detail': '접근 가능한 폴더를 1~20개 선택하세요. 상위·하위 폴더는 중복 선택할 수 없습니다.'}, status=400)
+        if mode == 'replace' and body.get('initial_cleanup') is True:
+            guides.atomic_json(data / 'initial-cleanup-settings.json', {'enabled': True})
         guides.atomic_json(data / 'selected-folders.json', [str(folder) for folder in selected])
         status = {'status': 'preparing', 'completed': 0, 'total': len(selected), 'mode': mode}
         guides.atomic_json(status_file, status)

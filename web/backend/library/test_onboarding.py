@@ -56,6 +56,25 @@ class OnboardingTests(TestCase):
         self.client.force_login(self.other)
         self.assertFalse(self.client.get(self.path).json()['iphone_icloud_confirmed'])
 
+    def test_first_cleanup_requires_decisions_and_downloads_do_not_pass_iphone_test(self):
+        self.link.snapshot['cleanup'] = {'status': 'generating', 'groups': []}
+        self.link.save()
+        self.assertEqual(self.action('confirm_cleanup').status_code, 409)
+        self.link.snapshot['cleanup'] = {'status': 'review', 'groups': [{'status': 'pending'}]}
+        self.link.save()
+        self.assertEqual(self.action('confirm_cleanup').status_code, 409)
+        self.link.snapshot['cleanup']['groups'][0]['status'] = 'dismissed'
+        self.link.save()
+        self.assertEqual(self.action('confirm_cleanup').status_code, 200)
+        self.action('confirm_iphone'); self.action('start_test')
+        self.link.snapshot['assets'].append({'id': 'download', 'name': 'new.pdf', 'source_kind': 'download'})
+        self.link.snapshot['assets'].append({'id': 'old-phone-import', 'name': 'old.png', 'source_kind': 'icloud', 'source_mtime': 0})
+        self.link.last_seen_at = timezone.now(); self.link.save()
+        self.assertFalse(self.client.get(self.path).json()['file_received'])
+        self.link.snapshot['assets'].append({'id': 'phone', 'name': 'new.png', 'source_kind': 'icloud'})
+        self.link.last_seen_at = timezone.now(); self.link.save()
+        self.assertTrue(self.client.get(self.path).json()['file_received'])
+
     def test_progress_requires_login_and_does_not_accept_client_completion_flags(self):
         self.assertEqual(self.action('unsupported').status_code, 400)
         response = self.client.post(self.path, {'completed': True, 'file_received': True}, content_type='application/json')

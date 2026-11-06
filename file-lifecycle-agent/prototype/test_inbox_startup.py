@@ -30,6 +30,15 @@ class InboxStartupTests(unittest.TestCase):
             changed = Watcher(demo, [str(inbox)], scan_existing=True)
             self.assertIn(first, [p for p, _ in changed.candidates()])
 
+    def test_screenshot_source_collects_images_only_and_rejects_symlinks(self):
+        with TemporaryDirectory() as temp:
+            root = Path(temp); inbox = root / 'Desktop'; inbox.mkdir()
+            image = inbox / 'Screenshot.png'; image.write_bytes(b'png')
+            (inbox / 'private.txt').write_text('private')
+            (inbox / 'link.png').symlink_to(image)
+            watcher = Watcher(SimpleNamespace(root=root), [], screenshot_inboxes=[str(inbox)], scan_existing=True)
+            self.assertEqual([p for p, _ in watcher.candidates()], [image])
+
     def test_default_preserves_future_only_behavior(self):
         with TemporaryDirectory() as temp:
             root = Path(temp)

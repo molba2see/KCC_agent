@@ -72,6 +72,7 @@ def send(commands, comment):
 def main():
     if not INSTANCE or not PUBLIC_HOST:
         raise SystemExit("Set MOA_EC2_INSTANCE and MOA_PUBLIC_HOST before deployment")
+    subprocess.run([sys.executable, str(ROOT / 'local/version_assets.py')], check=True)
     # Generate the downloadable helper from this exact source state.
     subprocess.run([sys.executable, str(ROOT / "local/build_helper.py"), "--origin", "https://" + PUBLIC_HOST], check=True)
     archive = bundle()

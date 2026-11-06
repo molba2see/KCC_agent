@@ -34,6 +34,52 @@ class DownloadTrackingTests(unittest.TestCase):
             restarted = Watcher(demo, [], strict_inboxes=[str(inbox)], scan_existing=True)
             self.assertNotIn(file, [p for p, _ in restarted.candidates()])
 
+    def test_three_sources_with_identical_names_never_overwrite_staged_copies(self):
+        with TemporaryDirectory() as temp:
+            base = Path(temp); root = base / 'workspace'; root.mkdir()
+            inboxes = []
+            for index in range(3):
+                inbox = base / f'source-{index}'; inbox.mkdir()
+                (inbox / 'capture.png').write_bytes(f'capture-{index}'.encode())
+                inboxes.append(str(inbox))
+            demo = SimpleNamespace(root=root, lock=threading.Lock(), engine=lambda: Lifecycle(root), sources={}, save_sources=lambda: None)
+            watcher = Watcher(demo, inboxes, scan_existing=True)
+            watcher.tick()
+            with patch('demo_v5.time.strftime', return_value='same-second'), patch('demo_v5.where_froms', return_value=[]):
+                watcher.tick()
+            copies = list((root / 'screenshots').glob('*.png'))
+            self.assertEqual(len(copies), 3)
+            self.assertEqual({copy.read_bytes() for copy in copies}, {b'capture-0', b'capture-1', b'capture-2'})
+
+    def test_reimported_name_does_not_reuse_a_filed_assets_original_path(self):
+        with TemporaryDirectory() as temp:
+            base = Path(temp); root = base / 'workspace'; (root / 'screenshots').mkdir(parents=True)
+            old = root / 'screenshots' / 'notes.txt'; old.write_text('previous file')
+            engine = Lifecycle(root); previous_id = engine.ingest('screenshots/notes.txt')
+            (root / 'archive').mkdir(); old.rename(root / 'archive' / 'notes.txt')
+            engine.data['assets'][previous_id]['path'] = 'archive/notes.txt'; engine.save()
+            inbox = base / 'Downloads'; inbox.mkdir(); (inbox / 'notes.txt').write_text('new file')
+            demo = SimpleNamespace(root=root, lock=threading.Lock(), engine=lambda: Lifecycle(root), sources={}, save_sources=lambda: None)
+            watcher = Watcher(demo, [str(inbox)], scan_existing=True); watcher.tick()
+            with patch('demo_v5.where_froms', return_value=[]): watcher.tick()
+            copied = next((root / 'screenshots').glob('*.txt'))
+            self.assertNotEqual(copied, old)
+            self.assertEqual(copied.read_text(), 'new file')
+            self.assertNotEqual(Lifecycle(root).ingest(str(copied.relative_to(root))), previous_id)
+
+    def test_repeated_ocr_captions_never_overwrite_another_copy(self):
+        with TemporaryDirectory() as temp:
+            root = Path(temp); (root / 'screenshots').mkdir()
+            demo = SimpleNamespace(root=root, ctl=None, engine=lambda: Lifecycle(root), sources={})
+            watcher = Watcher(demo, [])
+            paths = []
+            with patch('demo_v5.content', return_value='회의 자료'), patch('demo_v5.make_caption', return_value='회의'):
+                for index in range(3):
+                    source = root / 'screenshots' / f'source-{index}.png'; source.write_bytes(f'image-{index}'.encode())
+                    path, _ = watcher.rename(source); paths.append(path)
+            self.assertEqual(len(set(paths)), 3)
+            self.assertEqual({path.read_bytes() for path in paths}, {b'image-0', b'image-1', b'image-2'})
+
     def test_manifest_access_waits_for_http_state_lock(self):
         with TemporaryDirectory() as temp:
             root = Path(temp); lock = threading.Lock(); touched = threading.Event()

@@ -3,7 +3,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const path=require('node:path');
 const agent=fs.readFileSync(path.join(__dirname,'../dist/agent.js'),'utf8');
-const markup={esc:String,basename:s=>String(s).split('/').pop()};
+const markup={reviewChoices:new Map(),document:{addEventListener(){}},esc:String,basename:s=>String(s).split('/').pop()};
 vm.createContext(markup);
 vm.runInContext(agent.slice(agent.indexOf('function assetHTML('),agent.indexOf('function linkHTML(')),markup);
 let html=markup.assetHTML({id:'file',name:'AWS.pdf',run:{status:'waiting_user',candidates:['old']}},{connected:true,snapshot:{catalog:[{id:'old',name:'Old'},{id:'new',name:'New folder'}]}});

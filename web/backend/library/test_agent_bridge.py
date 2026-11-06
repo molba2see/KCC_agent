@@ -49,6 +49,19 @@ class AgentBridgeTests(TestCase):
         self.assertEqual(self.browser.post('/api/v1/agent/commands/', body, format='json').status_code, 201)
         self.assertEqual(self.browser.post('/api/v1/agent/commands/', body, format='json').status_code, 409)
 
+    def test_cleanup_confirmation_uses_only_server_group_id_and_is_owner_scoped(self):
+        self.snapshot['cleanup'] = {'status': 'review', 'groups': [{'id': 'group-1', 'status': 'pending', 'files': [{'id': 'asset-1'}]}]}
+        self.mac.post('/api/v1/agent/bridge/poll/', {'snapshot': self.snapshot}, format='json')
+        response = self.browser.post('/api/v1/agent/commands/', {'link_id': str(self.link.id), 'action': 'cleanup_confirm',
+            'group_id': 'group-1', 'folder': '/untrusted/path', 'files': ['foreign']}, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['payload'], {'group_id': 'group-1'})
+        AgentCommand.objects.all().delete()
+        self.assertEqual(self.browser.post('/api/v1/agent/commands/', {'link_id': str(self.link.id), 'action': 'cleanup_confirm', 'group_id': 'foreign'}, format='json').status_code, 409)
+        self.snapshot['cleanup']['status'] = 'generating'
+        self.mac.post('/api/v1/agent/bridge/poll/', {'snapshot': self.snapshot}, format='json')
+        self.assertEqual(self.browser.post('/api/v1/agent/commands/', {'link_id': str(self.link.id), 'action': 'cleanup_confirm', 'group_id': 'group-1'}, format='json').status_code, 409)
+
 class BrowserLoginTests(TestCase):
     def test_login_needs_csrf_and_valid_password(self):
         from django.test import Client

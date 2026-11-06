@@ -213,7 +213,7 @@ final class HelperApp: NSObject, NSApplicationDelegate {
         installing = true
         let alert = NSAlert()
         alert.messageText = "이 Mac을 모아에 연결할까요?"
-        alert.informativeText = "연결 주소: \(origin)\n다음 화면에서 모아가 사용할 폴더를 선택합니다. 선택한 폴더의 파일 이름을 QWEN이 Mac에서 살펴보고 정리 지침(_project.md)을 만듭니다. 기존 지침은 보존합니다. 파일 분류 상태는 모아 계정에 표시됩니다."
+        alert.informativeText = "연결 주소: \(origin)\n다음 화면에서 모아가 사용할 폴더를 선택합니다. 선택한 폴더의 파일 이름을 QWEN이 Mac에서 살펴보고 정리 지침(_project.md)을 만듭니다. 기존 지침은 보존합니다. 이어서 다운로드와 스크린샷 저장 폴더의 문서·이미지를 작업 사본으로 일괄 분류합니다. 원본은 유지하며, 기타 파일의 새 분류안은 웹에서 확인한 뒤 적용합니다. 파일 분류 상태는 모아 계정에 표시됩니다."
         alert.addButton(withTitle: "폴더 선택하기")
         alert.addButton(withTitle: "취소")
         guard alert.runModal() == .alertFirstButtonReturn else {
@@ -308,7 +308,7 @@ final class HelperApp: NSObject, NSApplicationDelegate {
 
     func connect(secret: String, folders: [String]) throws {
         try unlockLocal()
-        _ = try request("local/folders/", body: ["folders": folders], csrf: currentCSRF())
+        _ = try request("local/folders/", body: ["folders": folders, "initial_cleanup": true], csrf: currentCSRF())
         if let _ = try request("local/setup/")["cloud_origin"] as? String {
             _ = try request("local/cloud/disconnect/", body: [:], csrf: currentCSRF())
         }

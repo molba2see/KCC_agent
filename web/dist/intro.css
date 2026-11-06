@@ -1,0 +1,73 @@
+/* Service-introduction content shares the presentation palette in theme.css. */
+.intro-segments { position: sticky; top: 96px; z-index: 8; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; width: min(480px,100%); margin: 24px auto 28px; padding: 0; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: #faf8f5f2; backdrop-filter: blur(12px); box-shadow: none; }
+.intro-segments button { min-height: 42px; padding: 10px 8px; border: 0; border-radius: 0; background: transparent; color: var(--muted); font-size: 12px; font-weight: 500; white-space: nowrap; }
+.intro-segments button[aria-selected=true] { background: transparent; color: var(--ink); font-weight: 700; }
+.intro-panel:focus { outline: none; }
+.intro-section { margin: 64px 0; }
+.intro-section .section-heading { margin-bottom: 24px; }
+.intro-section .section-heading h2 { margin: 12px 0; font-size: 25px; font-weight: 700; }
+.intro-section p, .intro-card p, .intro-note p, .intro-cta p { font-size: 14px; line-height: 1.9; color: var(--muted); }
+.intro-section-heading { padding: 34px 0 36px; max-width: 800px; }
+.intro-section-heading h1 { font-size: clamp(30px,3.2vw,44px); letter-spacing: -.045em; line-height: 1.45; margin: 16px 0; }
+.intro-section-heading>p { max-width: 66ch; color: var(--muted); font-size: 15px; line-height: 1.9; }
+.intro-cases { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; }
+.intro-card { background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 28px; box-shadow: 0 8px 24px var(--shadow); }
+.intro-card h2, .intro-card h3 { font-size: 19px; line-height: 1.6; letter-spacing: -.03em; margin: 22px 0 14px; }
+.intro-card small { display: block; color: var(--muted); font-size: 12px; line-height: 1.8; margin-top: 16px; }
+.intro-tag { display: inline-flex; width: fit-content; border-radius: 999px; padding: 6px 12px; font-size: 11px; line-height: 1.5; font-weight: 600; color: var(--ink); white-space: nowrap; }
+.intro-tag.blue { background: var(--blue-soft); }.intro-tag.peach { background: var(--peach-soft); }.intro-tag.mint { background: var(--mint-soft); }.intro-tag.butter { background: var(--butter-soft); }
+.intro-example { display: flex; flex-direction: column; gap: 8px; margin-top: 24px; padding: 16px; border-radius: 14px; background: var(--blue-soft); font-size: 12px; line-height: 1.7; }
+.intro-example>span { color: var(--muted); }
+.intro-cases article:nth-child(2) .intro-example { background: var(--peach-soft); }.intro-cases article:nth-child(3) .intro-example { background: var(--butter-soft); }
+.intro-principles, .intro-learning { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+.intro-principles h2, .intro-learning h2 { font-size: 30px; line-height: 1.55; letter-spacing: -.04em; margin: 16px 0 20px; }
+.intro-principles dl { margin: 0; }.intro-principles dl>div { padding: 22px 0; border-bottom: 1px solid var(--line); }.intro-principles dt { font-size: 16px; font-weight: 700; }.intro-principles dd { font-size: 14px; line-height: 1.85; color: var(--muted); margin: 10px 0 0; }
+.intro-cta { display: flex; align-items: center; justify-content: space-between; gap: 28px; margin: 56px 0 32px; padding: 32px; background: var(--mint-soft); border: 1px solid #d5e7dc; border-radius: 24px; }
+.intro-cta h2 { font-size: 23px; line-height: 1.6; margin: 0 0 8px; }.intro-cta p { margin: 0; }.intro-cta .primary { flex-shrink: 0; }
+.intro-sources { display: flex; flex-wrap: wrap; gap: 14px 24px; border-top: 1px solid var(--line); padding: 24px 0; margin: 40px 0 0; font-size: 12px; line-height: 1.7; }.intro-sources>span { color: var(--muted); }.intro-sources>a { text-underline-offset: 4px; }
+.intro-number { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--blue-soft); color: var(--link); font-size: 14px; font-weight: 700; flex-shrink: 0; }
+.intro-cases article:nth-child(2)>.intro-number { background: var(--peach-soft); }.intro-cases article:nth-child(3)>.intro-number { background: var(--butter-soft); }
+.intro-evidence { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 32px; align-items: center; margin: 40px 0 64px; padding: 32px; border: 1px solid var(--line); border-radius: 24px; background: var(--peach-soft); }.intro-evidence h2 { font-size: 21px; line-height: 1.6; margin: 12px 0; }.intro-evidence p { color: var(--muted); font-size: 12px; line-height: 1.85; margin-bottom: 0; }.intro-evidence-value { display: grid; gap: 8px; }.intro-evidence-value strong { font-size: 40px; letter-spacing: -.04em; }.intro-evidence-value small { font-size: 18px; }.intro-evidence-value>span { font-size: 12px; color: var(--muted); }
+.intro-table-wrap { border: 1px solid var(--line); border-radius: 20px; background: var(--card); overflow: hidden; }.intro-table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.85; text-align: left; }.intro-table th, .intro-table td { padding: 20px 24px; border-bottom: 1px solid var(--line); vertical-align: top; }.intro-table thead { background: var(--blue-soft); }.intro-table tbody th { width: 29%; font-weight: 600; }.intro-table td { color: var(--muted); }.intro-table tr:last-child>* { border-bottom: 0; }
+.intro-quote { margin: 40px 0 48px; padding: 44px 24px; text-align: center; font-size: clamp(22px,2.6vw,32px); line-height: 1.8; font-weight: 700; letter-spacing: -.035em; }.intro-quote em { font-style: normal; background: linear-gradient(transparent 65%,var(--mint) 65%,var(--mint) 94%,transparent 94%); }
+.intro-pipeline, .intro-howto { list-style: none; padding: 0; margin: 12px 0 56px; }.intro-pipeline li, .intro-howto li { display: flex; align-items: flex-start; gap: 24px; padding: 28px 0; border-bottom: 1px solid var(--line); }.intro-pipeline li>div, .intro-howto li>div { flex: 1; min-width: 0; }.intro-pipeline h2, .intro-howto h2 { font-size: 20px; line-height: 1.6; margin: 2px 0 10px; }.intro-pipeline p, .intro-howto p { color: var(--muted); font-size: 14px; line-height: 1.9; margin: 0; max-width: 80ch; }.intro-pipeline .intro-tag { margin-top: 4px; }.intro-howto .ghost { margin-top: 18px; }
+.intro-components { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; }.intro-components .intro-card { padding: 24px; }.intro-components h3 { font-size: 17px; }
+.intro-evaluation { display: flex; align-items: center; justify-content: center; gap: 28px; padding: 32px 24px; border: 1px solid var(--line); border-radius: 24px; background: var(--blue-soft); }.intro-evaluation>div { display: grid; gap: 14px; }.intro-evaluation span { font-size: 12px; color: var(--muted); }.intro-evaluation strong { font-size: 40px; line-height: 1.3; letter-spacing: -.04em; }.intro-evaluation small { font-size: 20px; }.intro-caption { font-size: 12px!important; line-height: 1.85!important; margin-top: 16px!important; }
+.intro-note { padding: 28px 32px; background: var(--butter-soft); border: 1px solid #e8dbb6; border-radius: 20px; }.intro-note h3 { font-size: 17px; margin: 0 0 12px; }.intro-note p { margin: 0; }
+@media (hover:hover) and (pointer:fine) { .intro-segments button:hover { background: transparent; color: var(--ink); } }
+@media (max-width:760px) and (hover:none) {
+ .intro-segments { top: 86px; margin: 16px auto 24px; padding: 0; gap: 0; }.intro-segments button { min-height: 44px; padding: 10px 2px; font-size: 11px; }
+ .intro-section { margin: 40px 0; }.intro-section .section-heading h2 { font-size: 22px; }.intro-section-heading { padding: 20px 0 24px; }.intro-section-heading h1 { font-size: 29px; }.intro-section-heading>p { font-size: 14px; }
+ .intro-cases, .intro-components, .intro-principles, .intro-learning { grid-template-columns: 1fr; gap: 18px; }.intro-card { padding: 24px; }.intro-principles h2, .intro-learning h2 { font-size: 26px; }.intro-cta { flex-direction: column; align-items: flex-start; padding: 24px; margin: 36px 0 24px; }.intro-cta h2 { font-size: 21px; }
+ .intro-evidence { grid-template-columns: 1fr 1fr; padding: 24px; gap: 24px 16px; margin-bottom: 40px; }.intro-evidence>div:first-child { grid-column: 1/-1; }.intro-evidence-value strong { font-size: 31px; }
+ .intro-table { font-size: 12px; }.intro-table th, .intro-table td { padding: 16px 12px; }.intro-table tbody th { width: 34%; }
+ .intro-pipeline li, .intro-howto li { gap: 14px; padding: 24px 0; }.intro-pipeline h2, .intro-howto h2 { font-size: 18px; }.intro-pipeline .intro-tag { display: none; }.intro-number { width: 32px; height: 32px; font-size: 12px; }.intro-note { padding: 24px; }.intro-sources { gap: 12px 18px; }
+}
+/* Motion stays within the introduction; text remains readable without scripting. */
+.intro-segments { --intro-tab-index: 0; --intro-tab-gap: 12px; --intro-tab-padding: 0px; }
+.intro-segments::before {
+ content: ''; position: absolute; bottom: -1px; left: var(--intro-tab-padding); height: 2px;
+ width: calc((100% - var(--intro-tab-padding) * 2 - var(--intro-tab-gap) * 3) / 4);
+ border: 0; border-radius: 2px; background: linear-gradient(to right,transparent 18px,var(--ink) 18px,var(--ink) calc(100% - 18px),transparent calc(100% - 18px));
+ transform: translateX(calc(var(--intro-tab-index) * (100% + var(--intro-tab-gap))));
+ transition: transform 300ms cubic-bezier(.2,.7,.2,1); pointer-events: none;
+}
+.intro-segments button { position: relative; z-index: 1; }
+.intro-segments button[aria-selected=true] { background: transparent; border-color: transparent; }
+.intro-card { transition: translate 240ms ease, border-color 240ms ease, box-shadow 240ms ease; }
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+ .intro-card:hover { translate: 0 -3px; border-color: #b8cde8; box-shadow: 0 12px 28px #6f9be014; }
+}
+@keyframes intro-capsule-drift { from { translate: 0 0; } to { translate: 0 -6px; } }
+@media (prefers-reduced-motion:no-preference) {
+ #intro.active #intro-panel-overview:not([hidden]) .capsule-decor span { animation: intro-capsule-drift 5s ease-in-out infinite alternate; }
+ #intro.active .capsule-decor span:nth-child(2n) { animation-delay: -2s; animation-duration: 6s; }
+ #intro.active .capsule-decor span:nth-child(3n) { animation-delay: -3s; animation-duration: 7s; }
+}
+@media (max-width:760px) and (hover:none) {
+ .intro-segments { --intro-tab-gap: 0px; --intro-tab-padding: 0px; }
+}
+@media (prefers-reduced-motion:reduce) {
+ .intro-card:hover { translate: none; }
+ .intro-segments::before { transition: none; }
+}

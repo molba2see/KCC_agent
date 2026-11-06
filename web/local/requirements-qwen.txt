@@ -4,3 +4,6 @@ transformers==4.51.3
 torch==2.6.0; sys_platform != 'darwin' or platform_machine == 'arm64'
 torch==2.2.2; sys_platform == 'darwin' and platform_machine == 'x86_64'
 safetensors>=0.4.3,<1
+
+# Initial batch document snippets are read in the local proposal worker.
+pypdf>=6.1,<7

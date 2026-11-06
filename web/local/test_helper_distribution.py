@@ -11,7 +11,8 @@ class HelperDistributionTests(unittest.TestCase):
     def test_payload_has_runtime_and_no_local_state_or_recursive_downloads(self):
         paths = {str(path.relative_to(ROOT)) for path in source_files()}
         for required in ['web/local/run.py', 'web/local/install.py', 'web/local/folder_guides.py',
-                         'web/local/requirements-qwen.txt', 'web/backend/manage.py',
+                         'web/local/requirements-qwen.txt', 'web/local/batch_proposals.py',
+                         'file-lifecycle-agent/prototype/initial_cleanup.py', 'web/backend/manage.py',
                          'web/bridge/mac_bridge.py', 'file-lifecycle-agent/prototype/demo_v5.py',
                          'file-lifecycle-agent/prototype/agent_specs/system_v5.md', 'web/THIRD_PARTY_NOTICES.md']:
             self.assertIn(required, paths)

@@ -5,8 +5,11 @@ const assert=require('node:assert/strict');
 (async()=>{
  const browser=await chromium.launch({headless:true,channel:process.env.PLAYWRIGHT_CHANNEL||'chrome'});
  try{
-  const page=await browser.newPage();let authenticated=false,acceptLogin=false;
-  const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));
+  let page;let authenticated=false,acceptLogin=false;
+  const errors=[],requests=[];
+  async function createPage(width){
+   const page=await browser.newPage({viewport:{width,height:900},isMobile:width<760,hasTouch:width<760});
+   page.on('pageerror',e=>errors.push(e.message));
   await page.route('http://localhost/**',async route=>{
    const url=new URL(route.request().url());let body;
    if(url.pathname==='/api/v1/auth/session/')body={authenticated,username:authenticated?'tester':null,display_name:'테스터',onboarding_completed:true,csrf:'test'};
@@ -21,8 +24,11 @@ const assert=require('node:assert/strict');
    if(url.pathname.startsWith('/api/'))return route.fulfill({status:404,json:{}});
    return route.fulfill({path:path.join(__dirname,'../dist',url.pathname==='/'?'index.html':url.pathname.slice(1))});
   });
+   return page;
+  }
   for(const width of [1440,390,320]){
-   await page.setViewportSize({width,height:900});await page.goto('http://localhost/');
+   if(page)await page.close();
+   page=await createPage(width);await page.goto('http://localhost/');
    await page.locator('.header-login').waitFor();const hash=new URL(page.url()).hash;
    await page.locator('.header-login').click();await page.waitForFunction(()=>document.getElementById('login-modal').open);
    assert.equal(new URL(page.url()).hash,hash);
@@ -32,7 +38,7 @@ const assert=require('node:assert/strict');
    await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.getElementById('login-modal').open);
    await page.waitForFunction(()=>document.querySelector('#agent-login-form [name=password]').value==='');
    assert.equal(await page.locator('.header-login').evaluate(e=>e===document.activeElement),true);
-   await page.locator('.header-login').click();await page.locator('.login-modal-close').click();
+   await page.locator('.header-login').click();await page.locator('#login-modal .login-modal-close').click();
    await page.locator('.header-login').click();await page.mouse.click(2,2);
    assert.equal(await page.locator('#login-modal').evaluate(e=>e.open),false);
    console.log('PASS modal, current page, focus, Escape, close and backdrop',width);
@@ -49,9 +55,9 @@ const assert=require('node:assert/strict');
   assert.equal(requests.length,2);await page.waitForFunction(()=>document.body.style.overflow==='');
   await page.locator('.header-account-toggle').click();await page.locator('.account-manage').click();
   await page.locator('#agent-logout').click();await page.locator('.header-login').waitFor();
-  await page.locator('.header-signup').click();await page.locator('#signup [data-login]').click();
+  const signupHash=new URL(page.url()).hash;await page.locator('.header-signup').click();await page.locator('#signup-modal [data-login]').click();
   assert.equal(await page.locator('#login-modal').evaluate(e=>e.open),true);
-  assert.equal(new URL(page.url()).hash,'#signup');
+  assert.equal(new URL(page.url()).hash,signupHash);
   await page.locator('#agent-login [data-page=signup]').click();
   assert.equal(await page.locator('#login-modal').evaluate(e=>e.open),false);
   assert.deepEqual(errors,[]);

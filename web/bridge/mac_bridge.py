@@ -10,7 +10,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 
-ACTIONS = {"answer", "approve", "keep", "undo", "restore_trashed"}
+ACTIONS = {"answer", "approve", "keep", "undo", "restore_trashed", "cleanup_confirm", "cleanup_dismiss", "cleanup_retry"}
 
 
 def post(url, body, token=None):
@@ -37,20 +37,39 @@ def write_pending(path, value):
 
 def public_state(raw):
     """Send only the fields needed by the web UI and command validator."""
-    return {
+    assets = sorted(raw.get("assets", []), key=lambda asset: asset.get("received_at") or 0, reverse=True)
+    result = {
         "assets": [{"id": a.get("id"), "name": Path(a.get("original") or a.get("path") or "").name,
-                    "project": a.get("project"), "archived": bool(a.get("archived")), "keep": bool(a.get("keep")),
+                    "source_kind": a.get("source_kind"), "source_mtime": a.get("source_mtime"), "project": a.get("project"), "archived": bool(a.get("archived")), "keep": bool(a.get("keep")),
                     "plan": a.get("plan"),
                     "why": [str(x)[:500] for x in (a.get("why") or [])[:4]],
                     "run": {k: (a.get("run") or {}).get(k) for k in ("status", "question", "candidates")}}
-                   for a in raw.get("assets", [])],
+                   for a in assets[:500]],
         "catalog": [{k: p.get(k) for k in ("id", "name", "desc", "status")}
                     for p in raw.get("catalog", [])],
         "trashed": [{"i": t.get("i"), "name": Path(t.get("path") or t.get("trash") or "").name}
                     for t in raw.get("trashed", [])],
+        "cleanup": public_cleanup(raw.get("cleanup")),
+        "counts": {"files": len(assets), "moved": sum(bool(asset.get('archived')) for asset in assets),
+                   "pending": sum(not asset.get('archived') and not asset.get('keep') for asset in assets),
+                   "folders": {str(project.get('id')): sum(asset.get('project') == project.get('id') for asset in assets) for project in raw.get('catalog', [])}},
         "pending": raw.get("pending", 0),
     }
+    # A first scan may contain thousands of files. Keep the relay below nginx's body limit.
+    while result['assets'] and len(json.dumps(result, ensure_ascii=False).encode()) > 750_000:
+        del result['assets'][-25:]
+    result['assets_truncated'] = len(result['assets']) < len(assets)
+    return result
 
+
+
+def public_cleanup(value):
+    if not isinstance(value, dict): return None
+    result = {key: value.get(key) for key in ('status', 'detail', 'total', 'processed', 'classified', 'remaining', 'model_processed', 'pending_groups')}
+    result['groups'] = [{**{key: group.get(key) for key in ('id', 'name', 'purpose', 'status', 'new_folder', 'destination')},
+                         'files': [{'id': file.get('id'), 'name': Path(str(file.get('name') or '')).name} for file in group.get('files', [])]}
+                        for group in value.get('groups', []) if isinstance(group, dict)]
+    return result
 
 def server_allowed(server, allow_insecure_localhost=False):
     parsed = urlsplit(server)
