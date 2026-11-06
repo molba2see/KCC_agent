@@ -40,7 +40,9 @@ class LocalSetupTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()['configured'])
         config = json.loads((self.data / 'icloud.json').read_text())
-        self.assertEqual(config['inbox'], str(self.cloud / '모아/받은 파일'))
+        self.assertEqual(config['inbox'], str(self.cloud / 'KCC-inbox'))
+        self.assertTrue((self.cloud / 'KCC-inbox').is_dir())
+        self.assertTrue(response.json()['shortcut_ready'])
         guide = self.cloud / '모아/문서/_project.md'
         guide.write_text('User guide')
         self.client.post('/api/v1/local/setup/')
@@ -48,6 +50,22 @@ class LocalSetupTests(TestCase):
         projects = json.loads((self.data / 'projects.json').read_text())
         self.assertEqual(len(projects), 3)
         self.assertFalse((self.data / 'workspace').exists())
+
+    def test_existing_legacy_inbox_switches_without_moving_files(self):
+        self.client.force_login(self.user)
+        old = self.cloud / '모아/받은 파일'
+        old.mkdir(parents=True)
+        (old / 'existing.png').write_bytes(b'original')
+        (self.data / 'icloud.json').write_text(json.dumps({'inbox': str(old)}))
+        custom_projects = '{"custom":{"folder":"/Users/example/Documents"}}'
+        (self.data / 'projects.json').write_text(custom_projects)
+        self.assertFalse(self.client.get('/api/v1/local/setup/').json()['shortcut_ready'])
+        response = self.client.post('/api/v1/local/setup/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['shortcut_ready'])
+        self.assertEqual(json.loads((self.data / 'icloud.json').read_text())['inbox'], str(self.cloud / 'KCC-inbox'))
+        self.assertEqual((old / 'existing.png').read_bytes(), b'original')
+        self.assertEqual((self.data / 'projects.json').read_text(), custom_projects)
 
     def test_missing_icloud_does_not_claim_connection(self):
         self.client.force_login(self.user)

@@ -86,7 +86,7 @@ def complete_schema(result, generator, request, public):
         obj({"ok": BOOL}), errors=((403, '로컬 키 또는 CSRF 오류'), (404, '로컬 설치 아님')), secured=False,
         parameters=csrf + ({"in": "header", "name": "X-Moa-Local-Key", "required": True, "schema": STRING},))
     for method, summary, description in [('get', 'iCloud Drive 연결 상태 조회', 'iCloud Drive 사용 가능 여부와 초기 설정 상태를 조회합니다.'),
-                                         ('post', 'iCloud Drive 초기 폴더 설정', '모아/받은 파일 및 문서·영수증·회의 폴더와 초기 지침을 생성합니다. 이미 설정되어 있으면 상태만 반환합니다.')]:
+                                         ('post', 'iCloud Drive 초기 폴더 설정', 'KCC-inbox와 모아/문서·영수증·회의 폴더를 만들고 기존 받은 파일 설정은 KCC-inbox로 전환합니다.')]:
         add('/api/v1/local/setup/', method, '로컬 설정', summary, local_desc + description + ' local-owner 로그인이 필요합니다.',
             local_response, errors=((403, '로컬 실행기 로그인 또는 CSRF 필요'), (404, '로컬 설치 아님'), (409, 'iCloud Drive 또는 파일 접근 오류')))
     add('/api/v1/auth/config/', 'get', '기기 연결', 'Apple 로그인 사용 가능 여부 조회',

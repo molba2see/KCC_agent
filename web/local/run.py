@@ -78,6 +78,7 @@ def main():
         else:
             raise RuntimeError('Web server did not become ready')
         agent = bridge = cloud_bridge = None
+        agent_inbox = None
         cloud_version = None
         while True:
             if children[0].poll() is not None:
@@ -85,10 +86,14 @@ def main():
             config = DATA / 'icloud.json'
             if config.exists():
                 inbox = json.loads(config.read_text())['inbox']
+                if agent is not None and agent.poll() is None and agent_inbox != inbox:
+                    agent.terminate()
+                    agent.wait(timeout=10)
                 if agent is None or agent.poll() is not None:
                     agent = start('agent', [REPO / 'file-lifecycle-agent/prototype/demo_v5.py',
                         '--root', DATA / 'workspace', '--projects', DATA / 'projects.json',
-                        '--watch', '--scan-existing-inbox', '--inbox', inbox, '--port', '8791'])
+                        '--watch', '--scan-existing-inbox', '--auto-inbox', inbox, '--port', '8791'])
+                    agent_inbox = inbox
                 if bridge is None or bridge.poll() is not None:
                     bridge = start('bridge', [REPO / 'web/bridge/mac_bridge.py',
                         '--server', 'http://127.0.0.1:8000', '--allow-insecure-localhost',

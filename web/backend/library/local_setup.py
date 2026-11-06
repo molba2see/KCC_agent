@@ -45,13 +45,21 @@ def setup(request):
         return JsonResponse({'detail': 'Open Moa from the installed Mac launcher'}, status=403)
     root = cloud_root()
     config_path = storage() / 'icloud.json'
-    if request.method == 'POST' and not config_path.exists():
+    inbox = root / 'KCC-inbox'
+    legacy_inbox = root / '모아' / '받은 파일'
+    existing_inbox = None
+    if config_path.exists():
+        try:
+            existing_inbox = json.loads(config_path.read_text(encoding='utf-8')).get('inbox')
+        except (OSError, ValueError, AttributeError):
+            return JsonResponse({'detail': '기존 iCloud 연결 설정을 읽을 수 없습니다.'}, status=409)
+    if request.method == 'POST' and (not config_path.exists() or existing_inbox == str(legacy_inbox)):
         if not root.is_dir():
             return JsonResponse({'detail': '시스템 설정에서 iCloud Drive를 먼저 켜 주세요.'}, status=409)
         try:
             base = root / '모아'
-            inbox = base / '받은 파일'
             inbox.mkdir(parents=True, exist_ok=True)
+            base.mkdir(parents=True, exist_ok=True)
             projects = {}
             for pid, name, desc, keywords in [
                 ('documents', '문서', '보고서, 기획서와 일반 문서를 보관합니다.', ['보고서', '기획서', '문서']),
@@ -64,16 +72,20 @@ def setup(request):
                 if not guide.exists():
                     guide.write_text('# ' + name + '\n\n' + desc + '\n', encoding='utf-8')
                 projects[pid] = {'name': name, 'folder': str(folder), 'desc': desc, 'keywords': keywords}
-            (storage() / 'projects.json').write_text(json.dumps(projects, ensure_ascii=False), encoding='utf-8')
+            projects_path = storage() / 'projects.json'
+            if not projects_path.exists():
+                projects_path.write_text(json.dumps(projects, ensure_ascii=False), encoding='utf-8')
             tmp = config_path.with_suffix('.tmp')
             tmp.write_text(json.dumps({'inbox': str(inbox)}, ensure_ascii=False), encoding='utf-8')
             tmp.replace(config_path)
+            existing_inbox = str(inbox)
         except OSError:
             return JsonResponse({'detail': 'iCloud Drive 폴더에 접근할 수 없습니다. Mac의 파일 접근 권한을 확인해 주세요.'}, status=409)
     cloud_path = storage() / 'cloud.json'
     cloud_origin = json.loads(cloud_path.read_text()).get('origin') if cloud_path.exists() else None
-    return JsonResponse({'available': root.is_dir(), 'configured': config_path.exists(), 'cloud_origin': cloud_origin,
-                         'folder': 'iCloud Drive / 모아 / 받은 파일'})
+    return JsonResponse({'available': root.is_dir(), 'configured': config_path.exists(),
+                         'shortcut_ready': config_path.exists() and existing_inbox == str(inbox),
+                         'cloud_origin': cloud_origin, 'folder': 'iCloud Drive / KCC-inbox'})
 
 
 @require_POST
