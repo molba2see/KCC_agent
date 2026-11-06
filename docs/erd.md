@@ -2,7 +2,7 @@
 
 Django 모델 기준 · 2026-11-06 · 슬라이드는 주요 필드만 표시하고 아래는 전체 업무 필드를 표시합니다.
 
-[발표자료](index.html#slide-10) · [파일 ERD SVG](assets/erd-library.svg) · [연결 ERD SVG](assets/erd-agent.svg)
+[발표자료](index.html#slide-11) · [파일 ERD SVG](assets/erd-library.svg) · [연결 ERD SVG](assets/erd-agent.svg)
 
 클라우드 DB는 사용자별 메타데이터·스냅샷·명령을 저장합니다. 파일 본문, 로컬 작업 상태와 `_project.md`는 Mac에 남습니다. 기본 DB는 SQLite이며 Django 세션·권한용 내부 테이블은 아래 업무 ERD에서 생략합니다.
 
