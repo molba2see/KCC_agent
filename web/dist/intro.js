@@ -21,17 +21,26 @@
   const panel=intro.querySelector('.intro-panel:not([hidden])');if(!panel)return;
   // Animate each content block once, without stacking parent and child fades.
   const elements=[...panel.querySelectorAll(revealSelector)].filter(element=>!element.parentElement.closest(revealSelector));
+  // Prepare the first frame before painting, so content never flashes before its fade.
+  const prepared=new Map();
+  for(const element of elements){
+   const animation=element.animate([
+    {opacity:0,transform:'translateY(24px)'},
+    {opacity:1,transform:'translateY(0)'}
+   ],{duration:800,easing:'cubic-bezier(.2,.7,.2,1)',fill:'both'});
+   animation.pause();animation.currentTime=0;
+   prepared.set(element,animation);running.add(animation);
+   animation.onfinish=()=>{running.delete(animation);animation.cancel()};
+   animation.oncancel=()=>running.delete(animation);
+  }
   observer=new IntersectionObserver(entries=>{
    const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>elements.indexOf(a.target)-elements.indexOf(b.target));
    visible.forEach((entry,index)=>{
     if(reducedMotion.matches||!intro.classList.contains('active')||entry.target.closest('.intro-panel').hidden)return;
     observer.unobserve(entry.target);
-    // Elements stay readable by default; only visible content is animated.
-    const animation=entry.target.animate([
-     {opacity:0,translate:'0 18px'},
-     {opacity:1,translate:'0 0'}
-    ],{duration:680,delay:Math.min(index,6)*90,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'});
-    running.add(animation);animation.onfinish=()=>running.delete(animation);animation.oncancel=()=>running.delete(animation);
+    const animation=prepared.get(entry.target);
+    animation.effect.updateTiming({delay:Math.min(index,6)*120});
+    animation.play();
    });
   },{threshold:0.06,rootMargin:'0px 0px -24px 0px'});
   elements.forEach(element=>observer.observe(element));

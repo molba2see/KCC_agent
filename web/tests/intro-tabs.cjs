@@ -16,7 +16,7 @@ const {chromium}=require('playwright');const path=require('node:path');const ass
    assert.equal(await page.locator('#intro .intro-panel:visible').count(),1);
    assert.equal(await page.locator('#intro-panel-'+key).isVisible(),true);
    assert.equal(await page.locator('#intro-tab-'+key).getAttribute('aria-selected'),'true');
-   await page.waitForFunction(key=>document.querySelector('#intro-panel-'+key+' h1').getAnimations().length>0,key);
+   await page.waitForFunction(key=>document.querySelector('#intro-panel-'+key+' h1').getAnimations().some(animation=>animation.playState==='running'),key);
    const motion=await page.locator('#intro-panel-'+key).evaluate(panel=>[...panel.querySelectorAll('*')].flatMap(element=>element.getAnimations().filter(animation=>animation.effect.getKeyframes().some(frame=>frame.opacity=== '0')).map(animation=>animation.effect.getTiming().delay)));
    assert(motion.length>=3,'Each tab should fade its visible content in sequence');
    assert(new Set(motion).size>=3,'Visible blocks should have staggered start times');
