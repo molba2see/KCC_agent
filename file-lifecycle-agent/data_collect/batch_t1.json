@@ -1,0 +1,1301 @@
+[
+ {
+  "id": "t1-001",
+  "kind": "weights_referenced",
+  "catalog": {
+   "POLICY_BRIEF_LLM": {
+    "name": "입법조사처 보고서 요약 LLM",
+    "desc": "EXAONE 3.5 7.8B QLoRA 파인튜닝, 정책 브리프 요약",
+    "status": "active"
+   },
+   "MATH_TUTOR_LORA": {
+    "name": "초등 수학 튜터 챗봇 캡스톤",
+    "desc": "Qwen2.5-3B 풀이 과정 생성 LoRA",
+    "status": "active"
+   },
+   "NET_HW2_TCP": {
+    "name": "컴퓨터네트워크 과제 2",
+    "desc": "TCP 혼잡제어 ns-3 시뮬레이션 보고서",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "outputs/brief_r32/exaone-brief-qlora-r32-step1800.safetensors",
+    "binary_bytes": 8192
+   },
+   {
+    "path": "configs/brief_qlora_infer.yaml",
+    "content": "base_model: LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct\nload_in_4bit: true\nadapter: outputs/brief_r32/exaone-brief-qlora-r32-step1800.safetensors\nmax_new_tokens: 512\ntemperature: 0.2\nprompt_template: templates/brief_ko.jinja\n"
+   },
+   {
+    "path": "configs/tutor_lora.yaml",
+    "content": "model_name_or_path: Qwen/Qwen2.5-3B-Instruct\nlora:\n  r: 16\n  alpha: 32\n  target_modules: [q_proj, v_proj]\noutput_dir: outputs/tutor_r16\nsave_steps: 500\n"
+   }
+  ],
+  "context": {
+   "configs/brief_qlora_infer.yaml": {
+    "project": "POLICY_BRIEF_LLM",
+    "refs": [
+     "outputs/brief_r32/exaone-brief-qlora-r32-step1800.safetensors"
+    ]
+   },
+   "configs/tutor_lora.yaml": {
+    "project": "MATH_TUTOR_LORA",
+    "refs": [
+     "outputs/tutor_r16/adapter_model.safetensors"
+    ]
+   }
+  },
+  "target": "outputs/brief_r32/exaone-brief-qlora-r32-step1800.safetensors",
+  "gold": {
+   "status": "planned",
+   "project": "POLICY_BRIEF_LLM",
+   "evidence": "adapter: outputs/brief_r32/exaone-brief-qlora-r32-step1800.safetensors"
+  },
+  "rationale": "The adapter basename appears only in the policy-brief inference config; the tutor config writes a differently named adapter.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-002",
+  "kind": "weights_referenced",
+  "catalog": {
+   "KSL_SIGN_CTC": {
+    "name": "수어 영상 인식 해커톤",
+    "desc": "한국수어 키포인트 시퀀스 Transformer CTC, WER 측정",
+    "status": "active"
+   },
+   "BIRDCLEF_MELSPEC": {
+    "name": "조류 울음소리 분류 (BirdCLEF 2025)",
+    "desc": "멜스펙트로그램 EfficientNet 다중 라벨",
+    "status": "active"
+   },
+   "BOJ_WEEKLY": {
+    "name": "알고리즘 주간 스터디",
+    "desc": "백준 주간 문제 풀이 기록",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "checkpoints/ksl_ctc/epoch=07-val_wer=0.183.ckpt",
+    "binary_bytes": 6144
+   },
+   {
+    "path": "runs/ksl_ctc/summary.json",
+    "content": "{\n  \"run_name\": \"ksl_ctc_kp133_d256\",\n  \"epochs_done\": 12,\n  \"best_model_path\": \"checkpoints/ksl_ctc/epoch=07-val_wer=0.183.ckpt\",\n  \"best_model_score\": 0.183,\n  \"monitor\": \"val_wer\",\n  \"keypoints\": 133\n}\n"
+   },
+   {
+    "path": "configs/birdclef_effb0.yaml",
+    "content": "trainer:\n  max_epochs: 25\n  precision: 16-mixed\nckpt_path: checkpoints/birdclef/epoch=11-val_cmap=0.71.ckpt\naudio:\n  sr: 32000\n  n_mels: 128\n"
+   }
+  ],
+  "context": {
+   "runs/ksl_ctc/summary.json": {
+    "project": "KSL_SIGN_CTC",
+    "refs": [
+     "checkpoints/ksl_ctc/epoch=07-val_wer=0.183.ckpt"
+    ]
+   },
+   "configs/birdclef_effb0.yaml": {
+    "project": "BIRDCLEF_MELSPEC",
+    "refs": [
+     "checkpoints/birdclef/epoch=11-val_cmap=0.71.ckpt"
+    ]
+   }
+  },
+  "target": "checkpoints/ksl_ctc/epoch=07-val_wer=0.183.ckpt",
+  "gold": {
+   "status": "planned",
+   "project": "KSL_SIGN_CTC",
+   "evidence": "\"best_model_path\": \"checkpoints/ksl_ctc/epoch=07-val_wer=0.183.ckpt\""
+  },
+  "rationale": "Lightning summary of the sign-language run records this exact checkpoint as best_model_path; the BirdCLEF config points at another epoch file.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-003",
+  "kind": "weights_referenced",
+  "catalog": {
+   "AGRI_CPT_LLM": {
+    "name": "농업 기술 문서 계속 사전학습",
+    "desc": "농사로 매뉴얼 코퍼스 Llama-3-Ko 8B continual pretraining",
+    "status": "active"
+   },
+   "RECIPE_GPT2": {
+    "name": "레시피 생성 프로젝트",
+    "desc": "GPT-2 한국어 레시피 생성, 재료 조건부",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "outputs/agri_cpt_8b/pytorch_model-00002-of-00004.bin",
+    "binary_bytes": 16384
+   },
+   {
+    "path": "outputs/agri_cpt_8b/pytorch_model.bin.index.json",
+    "content": "{\n  \"metadata\": {\n    \"total_size\": 16060522496\n  },\n  \"weight_map\": {\n    \"model.embed_tokens.weight\": \"pytorch_model-00001-of-00004.bin\",\n    \"model.layers.9.self_attn.o_proj.weight\": \"pytorch_model-00001-of-00004.bin\",\n    \"model.layers.10.mlp.down_proj.weight\": \"pytorch_model-00002-of-00004.bin\",\n    \"model.layers.10.self_attn.q_proj.weight\": \"pytorch_model-00002-of-00004.bin\",\n    \"model.layers.20.input_layernorm.weight\": \"pytorch_model-00003-of-00004.bin\",\n    \"lm_head.weight\": \"pytorch_model-00004-of-00004.bin\"\n  }\n}\n"
+   },
+   {
+    "path": "configs/recipe_gpt2.yaml",
+    "content": "model: skt/kogpt2-base-v2\nsave: outputs/recipe_gpt2/pytorch_model.bin\nmax_len: 256\n"
+   }
+  ],
+  "context": {
+   "outputs/agri_cpt_8b/pytorch_model.bin.index.json": {
+    "project": "AGRI_CPT_LLM",
+    "refs": [
+     "outputs/agri_cpt_8b/pytorch_model-00002-of-00004.bin"
+    ]
+   },
+   "configs/recipe_gpt2.yaml": {
+    "project": "RECIPE_GPT2",
+    "refs": [
+     "outputs/recipe_gpt2/pytorch_model.bin"
+    ]
+   }
+  },
+  "target": "outputs/agri_cpt_8b/pytorch_model-00002-of-00004.bin",
+  "gold": {
+   "status": "planned",
+   "project": "AGRI_CPT_LLM",
+   "evidence": "\"model.layers.10.mlp.down_proj.weight\": \"pytorch_model-00002-of-00004.bin\""
+  },
+  "rationale": "The shard name occurs only in the sharded index of the agriculture CPT model; the recipe model is a single pytorch_model.bin whose name is not a substring match.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-004",
+  "kind": "weights_referenced",
+  "catalog": {
+   "WILDFIRE_BURN_SEG": {
+    "name": "산불 피해 면적 분할 연구",
+    "desc": "Sentinel-2 dNBR 라벨 DeepLabV3+ 연소 면적 분할",
+    "status": "active"
+   },
+   "INDOOR_WAYFIND_APP": {
+    "name": "캠퍼스 실내 길찾기 앱",
+    "desc": "Flutter 실내 지도 경로 탐색",
+    "status": "active"
+   },
+   "DL_HW5_AUG": {
+    "name": "딥러닝 수업 과제 5",
+    "desc": "CIFAR-10 ResNet-18 데이터 증강 비교",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "weights/deeplabv3p_burn_s2_e40.pth",
+    "binary_bytes": 4096
+   },
+   {
+    "path": "src/train_burn.py",
+    "content": "import torch\nfrom models import deeplabv3plus_resnet50\nfrom data import BurnScarDataset\n\ndef main(cfg):\n    model = deeplabv3plus_resnet50(num_classes=2, in_ch=4)\n    ds = BurnScarDataset(cfg['tiles'], bands=('B8A', 'B12', 'B4', 'B3'))\n    for epoch in range(cfg['epochs']):\n        train_one_epoch(model, ds, epoch)\n    torch.save(model.state_dict(), \"weights/deeplabv3p_burn_s2_e40.pth\")\n"
+   },
+   {
+    "path": "hw5/train_cifar.py",
+    "content": "import torch, torchvision\nnet = torchvision.models.resnet18(num_classes=10)\n# cutmix vs mixup\ntorch.save(net.state_dict(), 'hw5/resnet18_cutmix.pth')\n"
+   }
+  ],
+  "context": {
+   "src/train_burn.py": {
+    "project": "WILDFIRE_BURN_SEG",
+    "refs": [
+     "weights/deeplabv3p_burn_s2_e40.pth"
+    ]
+   },
+   "hw5/train_cifar.py": {
+    "project": "DL_HW5_AUG",
+    "refs": [
+     "hw5/resnet18_cutmix.pth"
+    ]
+   }
+  },
+  "target": "weights/deeplabv3p_burn_s2_e40.pth",
+  "gold": {
+   "status": "planned",
+   "project": "WILDFIRE_BURN_SEG",
+   "evidence": "torch.save(model.state_dict(), \"weights/deeplabv3p_burn_s2_e40.pth\")"
+  },
+  "rationale": "The training script of the burn-scar project saves exactly this file; the homework script saves a different .pth.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-005",
+  "kind": "weights_referenced",
+  "catalog": {
+   "HANJA_OCR": {
+    "name": "고문헌 한자 OCR 연구",
+    "desc": "조선왕조실록 영인본 한자 인식 CRNN",
+    "status": "active"
+   },
+   "CHESS_MCTS": {
+    "name": "체스 엔진 개인 프로젝트",
+    "desc": "알파제로식 MCTS 셀프플레이",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "models/crnn_hanja_v3_acc9412.pt",
+    "binary_bytes": 4096
+   },
+   {
+    "path": "README.md",
+    "content": "# hanja-crnn\n\n영인본 페이지에서 세로쓰기 한자 열을 잘라 CRNN 으로 인식합니다.\n\n## 추론\n\n```bash\npython infer.py --weights models/crnn_hanja_v3_acc9412.pt --img samples/p012.png --vertical\n```\n\n정확도는 문자 단위 94.12% (검증 1,800 열).\n"
+   },
+   {
+    "path": "chess/config.yaml",
+    "content": "net: resnet_6x64\nselfplay_games: 2000\nload: nets/az_6x64_gen31.pt\nc_puct: 1.5\n"
+   }
+  ],
+  "context": {
+   "README.md": {
+    "project": "HANJA_OCR",
+    "refs": [
+     "models/crnn_hanja_v3_acc9412.pt"
+    ]
+   },
+   "chess/config.yaml": {
+    "project": "CHESS_MCTS",
+    "refs": [
+     "nets/az_6x64_gen31.pt"
+    ]
+   }
+  },
+  "target": "models/crnn_hanja_v3_acc9412.pt",
+  "gold": {
+   "status": "planned",
+   "project": "HANJA_OCR",
+   "evidence": "python infer.py --weights models/crnn_hanja_v3_acc9412.pt --img samples/p012.png --vertical"
+  },
+  "rationale": "Only the OCR README invokes this weight file; the chess config loads a different network.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-006",
+  "kind": "weights_referenced",
+  "catalog": {
+   "DEEPFAKE_FACE_COMP": {
+    "name": "딥페이크 얼굴 탐지 경진대회",
+    "desc": "얼굴 크롭 Xception 진위 분류 제출",
+    "status": "completed"
+   },
+   "FASHION_TWO_TOWER": {
+    "name": "패션 추천 시스템 연구",
+    "desc": "H&M 구매 이력 two-tower 추천",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "ckpt/xception_f3_ep22.pth",
+    "binary_bytes": 8192
+   },
+   {
+    "path": "submissions/submit_log.csv",
+    "content": "date,ckpt,public_auc,note\n2025-09-11,ckpt/xception_f1_ep18.pth,0.8954,baseline\n2025-09-14,ckpt/xception_f3_ep22.pth,0.9127,tta x4\n2025-09-15,ensemble_f1f3,0.9160,final pick\n"
+   },
+   {
+    "path": "configs/two_tower.yaml",
+    "content": "user_tower: [256, 128]\nitem_tower: [256, 128]\nsave: ckpt/two_tower_e5.pt\n"
+   }
+  ],
+  "context": {
+   "submissions/submit_log.csv": {
+    "project": "DEEPFAKE_FACE_COMP",
+    "refs": [
+     "ckpt/xception_f1_ep18.pth",
+     "ckpt/xception_f3_ep22.pth"
+    ]
+   },
+   "configs/two_tower.yaml": {
+    "project": "FASHION_TWO_TOWER",
+    "refs": [
+     "ckpt/two_tower_e5.pt"
+    ]
+   }
+  },
+  "target": "ckpt/xception_f3_ep22.pth",
+  "gold": {
+   "status": "planned",
+   "project": "DEEPFAKE_FACE_COMP",
+   "evidence": "2025-09-14,ckpt/xception_f3_ep22.pth,0.9127,tta x4"
+  },
+  "rationale": "The reference lives in a submission log csv (not a yaml) of the finished deepfake competition; no other registered file mentions the file.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-007",
+  "kind": "weights_referenced",
+  "catalog": {
+   "CROSSWALK_DET": {
+    "name": "횡단보도 보행자 탐지 캡스톤",
+    "desc": "YOLOv8 보행자·신호등 탐지 엣지 배포",
+    "status": "active"
+   },
+   "FISH_FARM_COUNT": {
+    "name": "양식장 어류 개체수 계수 연구",
+    "desc": "수중 영상 YOLOv8 탐지 + ByteTrack",
+    "status": "active"
+   },
+   "MATH_STAT_HW3": {
+    "name": "수리통계 과제 3",
+    "desc": "최대우도추정 증명 풀이",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/yolov8s.pt",
+    "binary_bytes": 4096
+   },
+   {
+    "path": "crosswalk/data_train.yaml",
+    "content": "task: detect\nmodel: yolov8s.pt\ndata: crosswalk.yaml\nimgsz: 960\nepochs: 120\n"
+   },
+   {
+    "path": "fish/track_cfg.yaml",
+    "content": "detector:\n  weights: yolov8s.pt  # COCO 사전학습에서 시작\n  conf: 0.35\ntracker: bytetrack.yaml\n"
+   }
+  ],
+  "context": {
+   "crosswalk/data_train.yaml": {
+    "project": "CROSSWALK_DET",
+    "refs": [
+     "yolov8s.pt"
+    ]
+   },
+   "fish/track_cfg.yaml": {
+    "project": "FISH_FARM_COUNT",
+    "refs": [
+     "yolov8s.pt"
+    ]
+   }
+  },
+  "target": "downloads/yolov8s.pt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "CROSSWALK_DET",
+    "FISH_FARM_COUNT"
+   ]
+  },
+  "rationale": "The public pretrained yolov8s.pt is the starting point in both detection projects; nothing ties this copy to one of them.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-008",
+  "kind": "weights_referenced",
+  "catalog": {
+   "HATE_SPEECH_KO": {
+    "name": "한국어 혐오표현 탐지 공모전",
+    "desc": "KcELECTRA 파인튜닝 다중 라벨 분류",
+    "status": "active"
+   },
+   "YNA_HEADLINE_TOPIC": {
+    "name": "뉴스 제목 토픽 분류 수업 프로젝트",
+    "desc": "연합뉴스 제목 7개 토픽 분류",
+    "status": "active"
+   },
+   "KBO_BATTED_BALL": {
+    "name": "야구 데이터 분석",
+    "desc": "KBO 타구 속도 회귀",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "pretrained/kcelectra-base-v2022/pytorch_model.bin",
+    "binary_bytes": 16384
+   },
+   {
+    "path": "hate/train_args.json",
+    "content": "{\n  \"init_weights\": \"pretrained/kcelectra-base-v2022/pytorch_model.bin\",\n  \"problem_type\": \"multi_label_classification\",\n  \"num_labels\": 9\n}\n"
+   },
+   {
+    "path": "topic/finetune.py",
+    "content": "from transformers import ElectraForSequenceClassification\nmodel = ElectraForSequenceClassification.from_pretrained('pretrained/kcelectra-base-v2022', num_labels=7)\n# 로컬 사본: pretrained/kcelectra-base-v2022/pytorch_model.bin\n"
+   },
+   {
+    "path": "kbo/notes.md",
+    "content": "타구 속도 회귀: 발사각, 배트 스피드 변수. GBM 이 선형보다 RMSE 1.8 낮음.\n"
+   }
+  ],
+  "context": {
+   "hate/train_args.json": {
+    "project": "HATE_SPEECH_KO",
+    "refs": [
+     "pretrained/kcelectra-base-v2022/pytorch_model.bin"
+    ]
+   },
+   "topic/finetune.py": {
+    "project": "YNA_HEADLINE_TOPIC",
+    "refs": [
+     "pretrained/kcelectra-base-v2022/pytorch_model.bin"
+    ]
+   },
+   "kbo/notes.md": {
+    "project": "KBO_BATTED_BALL",
+    "refs": []
+   }
+  },
+  "target": "pretrained/kcelectra-base-v2022/pytorch_model.bin",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "HATE_SPEECH_KO",
+    "YNA_HEADLINE_TOPIC"
+   ]
+  },
+  "rationale": "The shared KcELECTRA backbone is referenced by the hate-speech args and the topic fine-tune script alike; the baseball project is not a candidate.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-009",
+  "kind": "weights_referenced",
+  "catalog": {
+   "PCB_SOLDER_DET": {
+    "name": "PCB 결함 검출 산학 과제",
+    "desc": "AOI 이미지 YOLOv5 납땜 불량 탐지",
+    "status": "active"
+   },
+   "PLATE_OCR_CAP": {
+    "name": "번호판 인식 캡스톤",
+    "desc": "주차장 CCTV 번호판 검출 + OCR",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/best.pt",
+    "binary_bytes": 4096
+   },
+   {
+    "path": "pcb/detect.yaml",
+    "content": "source: data/aoi_test\nweights: runs/pcb/exp12/weights/best.pt\nconf_thres: 0.4\nclasses: [bridge, void, insufficient]\n"
+   },
+   {
+    "path": "plate/pipeline.yaml",
+    "content": "det_weights: runs/plate_det/exp3/weights/best.pt\nocr_model: crnn_plate_kor.onnx\nroi_pad: 6\n"
+   }
+  ],
+  "context": {
+   "pcb/detect.yaml": {
+    "project": "PCB_SOLDER_DET",
+    "refs": [
+     "runs/pcb/exp12/weights/best.pt"
+    ]
+   },
+   "plate/pipeline.yaml": {
+    "project": "PLATE_OCR_CAP",
+    "refs": [
+     "runs/plate_det/exp3/weights/best.pt"
+    ]
+   }
+  },
+  "target": "downloads/best.pt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "PCB_SOLDER_DET",
+    "PLATE_OCR_CAP"
+   ]
+  },
+  "rationale": "best.pt is the YOLOv5 default name; both projects reference a best.pt under different run dirs and the tools only expose the basename.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-010",
+  "kind": "weights_referenced",
+  "catalog": {
+   "QM9_EDM_DIFF": {
+    "name": "분자 생성 확산 모델 연구",
+    "desc": "QM9 3D 분자 EDM 등변 확산",
+    "status": "active"
+   },
+   "DNS_TASNET": {
+    "name": "음성 잡음 제거 연구",
+    "desc": "DNS Challenge Conv-TasNet 음질 개선",
+    "status": "active"
+   },
+   "MS_THESIS_DRAFT": {
+    "name": "석사 학위논문 작성",
+    "desc": "논문 초안·참고문헌 정리",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/last.ckpt",
+    "binary_bytes": 12288
+   },
+   {
+    "path": "qm9/conf/train.yaml",
+    "content": "defaults:\n  - model: egnn_9l\ntrainer:\n  max_epochs: 3000\nresume:\n  ckpt_path: logs/edm_qm9/version_3/checkpoints/last.ckpt\n"
+   },
+   {
+    "path": "dns/exp.yaml",
+    "content": "model: convtasnet\nsample_rate: 16000\nresume_from: exp/convtasnet_dns/last.ckpt\nsave_last: true\n"
+   },
+   {
+    "path": "thesis/outline.md",
+    "content": "# 3장 실험\n- 3.1 데이터\n- 3.2 모델\n- 3.3 결과 표 (최종 숫자 다시 뽑기)\n"
+   }
+  ],
+  "context": {
+   "qm9/conf/train.yaml": {
+    "project": "QM9_EDM_DIFF",
+    "refs": [
+     "logs/edm_qm9/version_3/checkpoints/last.ckpt"
+    ]
+   },
+   "dns/exp.yaml": {
+    "project": "DNS_TASNET",
+    "refs": [
+     "exp/convtasnet_dns/last.ckpt"
+    ]
+   },
+   "thesis/outline.md": {
+    "project": "MS_THESIS_DRAFT",
+    "refs": []
+   }
+  },
+  "target": "downloads/last.ckpt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "QM9_EDM_DIFF",
+    "DNS_TASNET"
+   ]
+  },
+  "rationale": "Two Lightning projects resume from a last.ckpt; the thesis outline mentions no checkpoint, so only the two are candidates.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-011",
+  "kind": "weights_referenced",
+  "catalog": {
+   "CODET5_REVIEW": {
+    "name": "코드 리뷰 코멘트 생성 연구",
+    "desc": "CodeT5+ 220M 리뷰 코멘트 생성",
+    "status": "active"
+   },
+   "KOEN_MBART_COMP": {
+    "name": "한영 번역 경진대회",
+    "desc": "mBART-50 도메인 적응 번역 BLEU",
+    "status": "active"
+   },
+   "FIN_ACCT_HW": {
+    "name": "회계원리 과제",
+    "desc": "재무제표 분개 연습",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/model.safetensors",
+    "binary_bytes": 16384
+   },
+   {
+    "path": "review/eval.yaml",
+    "content": "model_dir: ckpts/codet5p-review/checkpoint-6000\nweights_file: ckpts/codet5p-review/checkpoint-6000/model.safetensors\nbeam: 4\nmetric: [bleu4, exact_match]\n"
+   },
+   {
+    "path": "mt/serve.json",
+    "content": "{\n  \"tokenizer\": \"facebook/mbart-large-50-many-to-many-mmt\",\n  \"model_file\": \"ckpts/mbart50-koen-legal/final/model.safetensors\",\n  \"src_lang\": \"ko_KR\",\n  \"tgt_lang\": \"en_XX\"\n}\n"
+   }
+  ],
+  "context": {
+   "review/eval.yaml": {
+    "project": "CODET5_REVIEW",
+    "refs": [
+     "ckpts/codet5p-review/checkpoint-6000/model.safetensors"
+    ]
+   },
+   "mt/serve.json": {
+    "project": "KOEN_MBART_COMP",
+    "refs": [
+     "ckpts/mbart50-koen-legal/final/model.safetensors"
+    ]
+   }
+  },
+  "target": "downloads/model.safetensors",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "CODET5_REVIEW",
+    "KOEN_MBART_COMP"
+   ]
+  },
+  "rationale": "HF default file name referenced by two projects with different directories; the download location gives no hint.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-012",
+  "kind": "weights_referenced",
+  "catalog": {
+   "WEED_DRONE_DET": {
+    "name": "밭 잡초 탐지 스마트팜 과제",
+    "desc": "드론 RGB 영상 YOLOv8 잡초 탐지",
+    "status": "active"
+   },
+   "LETTUCE_LEAF_SEG": {
+    "name": "상추 잎 면적 분할 연구",
+    "desc": "생육 이미지 SegFormer 분할",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "runs/detect/weed_v8m/weights/best.pt",
+    "binary_bytes": 4096
+   },
+   {
+    "path": "weed/predict.yaml",
+    "content": "model: runs/detect/weed_v8m/weights/best.pt\nsource: drone/2026-06-12/\nimgsz: 1280\nsave_txt: true\n"
+   },
+   {
+    "path": "leaf/mmseg_cfg.yaml",
+    "content": "model: segformer_mit-b1\nwork_dir: work_dirs/leaf_segformer\nbest_ckpt: work_dirs/leaf_segformer/best.pth\n"
+   }
+  ],
+  "context": {
+   "weed/predict.yaml": {
+    "project": "WEED_DRONE_DET",
+    "refs": [
+     "runs/detect/weed_v8m/weights/best.pt"
+    ]
+   },
+   "leaf/mmseg_cfg.yaml": {
+    "project": "LETTUCE_LEAF_SEG",
+    "refs": [
+     "work_dirs/leaf_segformer/best.pth"
+    ]
+   }
+  },
+  "target": "runs/detect/weed_v8m/weights/best.pt",
+  "gold": {
+   "status": "planned",
+   "project": "WEED_DRONE_DET",
+   "evidence": "model: runs/detect/weed_v8m/weights/best.pt"
+  },
+  "rationale": "Substring search for best.pt also hits the segmentation config, but that line names best.pth, a different file; only the weed config references best.pt.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-013",
+  "kind": "weights_referenced",
+  "catalog": {
+   "KOJA_S2T": {
+    "name": "한일 음성 번역 연구",
+    "desc": "fairseq S2T Transformer 음성→텍스트 번역",
+    "status": "active"
+   },
+   "DYSARTHRIA_W2V": {
+    "name": "구음장애 음성인식",
+    "desc": "wav2vec 2.0 fairseq 파인튜닝 CER",
+    "status": "active"
+   },
+   "KOR_G2P_TF": {
+    "name": "한국어 G2P 변환",
+    "desc": "fairseq Transformer 표준발음법 발음 변환",
+    "status": "completed"
+   },
+   "CLUB_SITE_NEXT": {
+    "name": "동아리 홈페이지 개편",
+    "desc": "Next.js 정적 사이트",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/checkpoint_best.pt",
+    "binary_bytes": 16384
+   },
+   {
+    "path": "s2t/eval_cmd.md",
+    "content": "## 평가\n```\nfairseq-generate data/koja --config-yaml config_st.yaml --gen-subset tst \\\n  --task speech_to_text --path checkpoints/s2t_koja/checkpoint_best.pt --beam 5 --scoring sacrebleu\n```\n"
+   },
+   {
+    "path": "dys/ft_config.yaml",
+    "content": "common:\n  fp16: true\nmodel:\n  w2v_path: pretrained/wav2vec_small.pt\ncheckpoint:\n  save_dir: outputs/dysarthria_ft\n  best_checkpoint_metric: uer\n# 최종: outputs/dysarthria_ft/checkpoint_best.pt\n"
+   },
+   {
+    "path": "g2p/결과정리.txt",
+    "content": "g2p 최종 평가 (PER)\n모델 경로 ckpt/g2p_tf/checkpoint_best.pt\nPER 2.71 / WER 9.8\n"
+   },
+   {
+    "path": "site/next.config.json",
+    "content": "{\n  \"output\": \"export\",\n  \"images\": {\"unoptimized\": true}\n}\n"
+   }
+  ],
+  "context": {
+   "s2t/eval_cmd.md": {
+    "project": "KOJA_S2T",
+    "refs": [
+     "checkpoints/s2t_koja/checkpoint_best.pt"
+    ]
+   },
+   "dys/ft_config.yaml": {
+    "project": "DYSARTHRIA_W2V",
+    "refs": [
+     "outputs/dysarthria_ft/checkpoint_best.pt"
+    ]
+   },
+   "g2p/결과정리.txt": {
+    "project": "KOR_G2P_TF",
+    "refs": [
+     "ckpt/g2p_tf/checkpoint_best.pt"
+    ]
+   },
+   "site/next.config.json": {
+    "project": "CLUB_SITE_NEXT",
+    "refs": []
+   }
+  },
+  "target": "downloads/checkpoint_best.pt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "KOJA_S2T",
+    "DYSARTHRIA_W2V",
+    "KOR_G2P_TF"
+   ]
+  },
+  "rationale": "fairseq default name used by three fairseq projects (md, yaml comment, txt); the web project is excluded.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-014",
+  "kind": "weights_orphan",
+  "catalog": {
+   "BLDG_LOAD_TFT": {
+    "name": "건물 전력 수요 예측 공모전",
+    "desc": "시간대별 건물 전력 TFT 예측",
+    "status": "active"
+   },
+   "FINBERT_NEWS_KO": {
+    "name": "주가 뉴스 감성 연구",
+    "desc": "FinBERT 한국어 뉴스 감성 점수",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/ep017_val0.4123.pth",
+    "binary_bytes": 4096
+   },
+   {
+    "path": "power/tft.yaml",
+    "content": "max_encoder_length: 168\nmax_prediction_length: 24\nsave: ckpt/tft_bldg_ep030.pth\n"
+   },
+   {
+    "path": "news/train.yaml",
+    "content": "model: snunlp/KR-FinBert-SC\nsave: ckpt/finbert_ko_e4.bin\n"
+   }
+  ],
+  "context": {
+   "power/tft.yaml": {
+    "project": "BLDG_LOAD_TFT",
+    "refs": [
+     "ckpt/tft_bldg_ep030.pth"
+    ]
+   },
+   "news/train.yaml": {
+    "project": "FINBERT_NEWS_KO",
+    "refs": [
+     "ckpt/finbert_ko_e4.bin"
+    ]
+   }
+  },
+  "target": "downloads/ep017_val0.4123.pth",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "No registered file mentions ep017_val0.4123.pth and the name carries no topic; a val loss alone fits either project.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-015",
+  "kind": "weights_orphan",
+  "catalog": {
+   "PODCAST_SUMM_WEB": {
+    "name": "팟캐스트 요약 서비스",
+    "desc": "Whisper 전사 + LLM 요약 웹앱",
+    "status": "active"
+   },
+   "PPO_DRONE_LAND": {
+    "name": "강화학습 드론 착륙",
+    "desc": "PPO 시뮬레이션 착륙 제어",
+    "status": "active"
+   },
+   "GRAD_DESIGN_DOCS": {
+    "name": "졸업작품 문서",
+    "desc": "요구사항 명세서·설계서",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/diffusion_pytorch_model.safetensors",
+    "binary_bytes": 16384
+   },
+   {
+    "path": "rl/ppo.yaml",
+    "content": "env: LunarLanderContinuous-v3\ntotal_timesteps: 1000000\nsave_path: models/ppo_landing_1m.pt\n"
+   },
+   {
+    "path": "podcast/settings.json",
+    "content": "{\n  \"asr\": \"whisper-large-v3-turbo\",\n  \"summary_model\": \"gpt-4o-mini\",\n  \"max_minutes\": 90\n}\n"
+   }
+  ],
+  "context": {
+   "rl/ppo.yaml": {
+    "project": "PPO_DRONE_LAND",
+    "refs": [
+     "models/ppo_landing_1m.pt"
+    ]
+   },
+   "podcast/settings.json": {
+    "project": "PODCAST_SUMM_WEB",
+    "refs": []
+   }
+  },
+  "target": "downloads/diffusion_pytorch_model.safetensors",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "A diffusers UNet weight; no project uses diffusion and nothing references it.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-016",
+  "kind": "weights_orphan",
+  "catalog": {
+   "ISAAC_GRASP_SAC": {
+    "name": "로봇 파지 강화학습",
+    "desc": "Isaac Gym 파지 정책 SAC",
+    "status": "active"
+   },
+   "MSRVTT_CAPTION": {
+    "name": "동영상 캡셔닝 연구",
+    "desc": "MSR-VTT CLIP4Clip 캡션 생성",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/ckpt_0050000.pt",
+    "binary_bytes": 8192
+   },
+   {
+    "path": "grasp/sac.yaml",
+    "content": "num_envs: 4096\nreplay_size: 2000000\nresume: runs/grasp_sac/ckpt_0040000.pt\nsave_every: 10000\n"
+   },
+   {
+    "path": "caption/clip4clip.yaml",
+    "content": "backbone: ViT-B/32\nframes: 12\ninit: ckpt/clip4clip_e10.bin\n"
+   }
+  ],
+  "context": {
+   "grasp/sac.yaml": {
+    "project": "ISAAC_GRASP_SAC",
+    "refs": [
+     "runs/grasp_sac/ckpt_0040000.pt"
+    ]
+   },
+   "caption/clip4clip.yaml": {
+    "project": "MSRVTT_CAPTION",
+    "refs": [
+     "ckpt/clip4clip_e10.bin"
+    ]
+   }
+  },
+  "target": "downloads/ckpt_0050000.pt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "Near miss: the grasp config references ckpt_0040000.pt, not this step-50000 file; no registered file references the target, so do not assign.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-017",
+  "kind": "semantic",
+  "catalog": {
+   "EMO_VITS_TTS": {
+    "name": "한국어 감정 TTS 연구",
+    "desc": "VITS 다화자 감정 음성 합성 MOS",
+    "status": "active"
+   },
+   "CHORD_CQT_CRNN": {
+    "name": "음악 코드 인식 프로젝트",
+    "desc": "CQT 스펙트로그램 CRNN 코드 분류",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/train_0302.txt",
+    "content": "[2026-03-02 21:14:07] git 3f9c2e1 / config: configs/vits_emo_ms.json\n[2026-03-02 21:14:09] [data] 다화자 감정 음성 코퍼스 로드: 화자 12명, 감정 7종, 발화 41,260개\n[2026-03-02 21:14:09] [data] 텍스트 정규화: g2pk 사용, 숫자 읽기 규칙 적용\n[2026-03-02 21:14:31] step 0 | loss_g 61.23 | loss_d 4.11 | mel 3.92 | kl 9.80\n[2026-03-02 22:40:55] step 10000 | loss_g 33.47 | loss_d 2.65 | mel 2.18 | kl 1.92\n[2026-03-03 00:07:12] step 20000 | loss_g 31.02 | loss_d 2.58 | mel 2.03 | kl 1.71\n[2026-03-03 00:07:15] saved ckpt/vits_emo_G_20000.pth, ckpt/vits_emo_D_20000.pth\n[2026-03-03 04:26:40] step 44000 | loss_g 29.88 | loss_d 2.51 | mel 1.94 | kl 1.60\n[2026-03-03 04:26:44] saved ckpt/vits_emo_G_44000.pth, ckpt/vits_emo_D_44000.pth\n[2026-03-03 04:27:02] eval: 내부 청취 MOS 3.87 (n=20, 감정 일치율 0.81)\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/train_0302.txt",
+  "gold": {
+   "status": "planned",
+   "project": "EMO_VITS_TTS",
+   "evidence": "[data] 다화자 감정 음성 코퍼스 로드: 화자 12명, 감정 7종, 발화 41,260개"
+  },
+  "rationale": "Training log whose data line names a multi-speaker emotional speech corpus; nothing about chords or CQT.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-018",
+  "kind": "other",
+  "catalog": {
+   "BEARING_FAULT_1D": {
+    "name": "베어링 고장 진단 산학",
+    "desc": "진동 신호 1D-CNN 고장 분류",
+    "status": "active"
+   },
+   "CSRNET_CROWD": {
+    "name": "군중 밀도 추정 연구",
+    "desc": "ShanghaiTech CSRNet 밀도맵",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/eval_sweep_0921.csv",
+    "content": "ckpt,acc,macro_f1,ece\nckpt/cnn1d_cwru_lr1e-3_e50.pt,0.9712,0.9655,0.034\nckpt/cnn1d_cwru_lr3e-4_e50.pt,0.9871,0.9842,0.021\nckpt/cnn1d_cwru_lr3e-4_e80.pt,0.9866,0.9839,0.025\n"
+   },
+   {
+    "path": "configs/bearing_cnn1d.yaml",
+    "content": "data: cwru_12k_drive_end\nwindow: 2048\nlr: 3.0e-4\nepochs: 50\nsave_path: ckpt/cnn1d_cwru_lr3e-4_e50.pt\n"
+   },
+   {
+    "path": "configs/csrnet.yaml",
+    "content": "dataset: shanghaitech_partA\nsave: ckpt/csrnet_partA_e200.pth\n"
+   }
+  ],
+  "context": {
+   "configs/bearing_cnn1d.yaml": {
+    "project": "BEARING_FAULT_1D",
+    "refs": [
+     "ckpt/cnn1d_cwru_lr3e-4_e50.pt"
+    ]
+   },
+   "configs/csrnet.yaml": {
+    "project": "CSRNET_CROWD",
+    "refs": [
+     "ckpt/csrnet_partA_e200.pth"
+    ]
+   }
+  },
+  "target": "downloads/eval_sweep_0921.csv",
+  "gold": {
+   "status": "planned",
+   "project": "BEARING_FAULT_1D",
+   "evidence": "ckpt/cnn1d_cwru_lr3e-4_e50.pt"
+  },
+  "rationale": "A bare metrics csv; its checkpoint ckpt/cnn1d_cwru_lr3e-4_e50.pt is the save_path of the bearing config, reachable with find_related_files.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-019",
+  "kind": "ambiguous",
+  "catalog": {
+   "WAFER_MAP_CLS": {
+    "name": "웨이퍼 맵 불량 패턴 분류",
+    "desc": "WM-811K ConvNeXt 분류",
+    "status": "active"
+   },
+   "STEEL_DEFECT_SEG": {
+    "name": "철강 표면 결함 분할",
+    "desc": "Severstal UNet 결함 분할",
+    "status": "completed"
+   },
+   "TOEIC_GROUP": {
+    "name": "토익 스터디",
+    "desc": "주간 단어 시험",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/latency_bench.csv",
+    "content": "# bench: A100 80GB, batch 32, fp16, torch 2.4\nckpt,params_m,gflops,latency_ms\nconvnext_t_wm811k_e30.pth,27.8,4.5,6.1\nunet_effb4_severstal_f0.pth,20.2,31.7,18.4\n"
+   },
+   {
+    "path": "wafer/cfg.yaml",
+    "content": "arch: convnext_tiny\ninput: 64x64 wafer map\nout: ckpt/convnext_t_wm811k_e30.pth\n"
+   },
+   {
+    "path": "steel/cfg.yaml",
+    "content": "encoder: efficientnet-b4\nfold: 0\nout: ckpt/unet_effb4_severstal_f0.pth\n"
+   }
+  ],
+  "context": {
+   "wafer/cfg.yaml": {
+    "project": "WAFER_MAP_CLS",
+    "refs": [
+     "ckpt/convnext_t_wm811k_e30.pth"
+    ]
+   },
+   "steel/cfg.yaml": {
+    "project": "STEEL_DEFECT_SEG",
+    "refs": [
+     "ckpt/unet_effb4_severstal_f0.pth"
+    ]
+   }
+  },
+  "target": "downloads/latency_bench.csv",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "WAFER_MAP_CLS",
+    "STEEL_DEFECT_SEG"
+   ]
+  },
+  "rationale": "A latency benchmark comparing one checkpoint from each of the two defect projects with equal weight; no row is primary.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-020",
+  "kind": "no_evidence",
+  "catalog": {
+   "PHISHING_CALL_DET": {
+    "name": "보이스피싱 통화 탐지",
+    "desc": "통화 전사문 KoBERT 이진 분류",
+    "status": "active"
+   },
+   "SEOUL_STAY_PRICE": {
+    "name": "숙박 가격 예측",
+    "desc": "에어비앤비 서울 LightGBM",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/nohup_out.txt",
+    "content": "Namespace(batch_size=64, epochs=20, lr=0.0005, seed=13, workers=8, amp=True)\nEpoch 1/20  train_loss=1.4127  val_loss=1.2290  val_metric=0.5521\nEpoch 2/20  train_loss=1.0833  val_loss=1.0412  val_metric=0.6187\nEpoch 3/20  train_loss=0.9271  val_loss=0.9655  val_metric=0.6470\n  -> saved to ./checkpoints/model_epoch3.pt\nEpoch 4/20  train_loss=0.8340  val_loss=0.9893  val_metric=0.6402\nEpoch 5/20  train_loss=0.7712  val_loss=1.0050  val_metric=0.6399\nearly stopping counter 2/5\nTraceback (most recent call last):\n  File \"train.py\", line 211, in <module>\n    main(args)\n  File \"train.py\", line 188, in main\n    val_loss = evaluate(model, val_loader)\nRuntimeError: CUDA out of memory. Tried to allocate 1.50 GiB\n"
+   },
+   {
+    "path": "phish/train.yaml",
+    "content": "model: monologg/kobert\nmax_len: 384\nsave: ckpt/kobert_phish_best.pt\n"
+   }
+  ],
+  "context": {
+   "phish/train.yaml": {
+    "project": "PHISHING_CALL_DET",
+    "refs": [
+     "ckpt/kobert_phish_best.pt"
+    ]
+   }
+  },
+  "target": "downloads/nohup_out.txt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "Generic training stdout; model_epoch3.pt is referenced nowhere and the metrics name no task.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-021",
+  "kind": "long_doc",
+  "catalog": {
+   "RIVER_STAGE_LSTM": {
+    "name": "한강 수위 예측 연구",
+    "desc": "상류 강우량 LSTM 수위 예측, 홍수 경보",
+    "status": "active"
+   },
+   "PM25_XGB_COMP": {
+    "name": "미세먼지 농도 예측 공모전",
+    "desc": "PM2.5 기상 변수 XGBoost",
+    "status": "active"
+   },
+   "OOP_HW4_JAVA": {
+    "name": "객체지향 프로그래밍 과제 4",
+    "desc": "Java 디자인 패턴 적용 보고서",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/lab_meeting_0312.md",
+    "content": "# 3월 2주차 연구실 미팅 기록\n\n## 1. 진행 보고\n- 상류 강우량 피처를 추가한 LSTM 수위 예측 모델이 팔당 지점에서 6시간 선행 RMSE 4.1cm 로 기존 대비 18% 개선됨. 홍수 경보 임계 수위 근처 구간의 과소 추정은 여전함.\n- 다음 주까지 선행시간 12시간, 24시간 결과를 같은 표에 정리하기로 함.\n\n## 2. 서버 및 장비\n- 2번 서버의 /data 파티션 사용률이 92%를 넘었음. 각자 홈 디렉터리의 중간 산출물을 정리하고, 보관이 필요한 원본은 NAS 의 archive 폴더로 옮겨 둘 것.\n- GPU 예약표는 공유 스프레드시트로 일원화. 하루 이상 연속 점유하는 경우 미리 채팅방에 알릴 것.\n- UPS 배터리 교체 일정이 다음 주 수요일 오전으로 잡혀 있어, 그 시간대에는 학습을 걸어 두지 말 것.\n\n## 3. 학회 및 일정\n- 가을 학회 초록 마감은 6월 말로 예상. 제출 여부는 4월 중순 결과를 보고 판단.\n- 학과 연구 윤리 교육 이수 확인서를 이번 달 안에 행정실에 제출해야 함. 온라인 강의 2시간 분량.\n- 4월 첫 주 미팅은 교수님 출장으로 화상으로 진행.\n\n## 4. 예산 및 구매\n- 올해 과제 연구비 중 소모품 항목 잔액이 얼마 남지 않음. 외장 SSD 2개와 키보드 교체는 다음 분기로 미룸.\n- 클라우드 크레딧 신청 결과는 다음 달 초에 나옴. 승인되면 장시간 학습은 클라우드로 넘기고 연구실 서버는 디버깅용으로 쓰는 방향.\n- 구매 요청은 반드시 견적서를 첨부해서 행정 담당에게 메일로 보낼 것. 법인카드 사용 후 영수증 누락이 지난달에 두 건 있었음.\n- 출장비는 학회 등록 확정 후에 신청. 숙박은 학회 지정 호텔이 아니어도 되지만 상한액을 넘으면 개인 부담.\n\n## 5. 논문 읽기\n- 이번 달 읽기 목록은 시계열 예측 쪽 서베이 한 편과 불확실성 추정 논문 두 편. 발표자는 순번표대로.\n- 발표 자료는 전날 저녁까지 공유 폴더에 올리고, 나머지 사람은 최소한 초록과 그림은 보고 올 것.\n- 읽은 논문은 공용 참고문헌 파일에 BibTeX 로 추가. 키 형식은 저자연도 (예: smith2024).\n\n## 6. 기타\n- 연구실 공용 노트북의 운영체제 업데이트를 미뤄 두었는데, 보안 패치 때문에 이번 주말에 일괄 진행.\n- 신입 연구원 온보딩 문서에 VPN 접속 방법과 서버 계정 신청 절차를 추가함. 계정 신청서 양식은 공유 드라이브 문서 폴더에 있음.\n- 간식비 정산은 월말에 한 번에 처리. 영수증은 사진으로 올려 주면 됨.\n- 회의실 프로젝터 HDMI 케이블 접촉 불량. 예비 케이블을 서랍에 넣어 둠.\n\n## 6-1. 안전 및 시설\n- 연구실 안전 점검이 다음 달 둘째 주에 있음. 멀티탭 문어발 연결, 책상 아래 박스 적치, 소화기 앞 물건 적재가 지적 대상이니 미리 정리.\n- 야간에 혼자 남아 작업할 때는 출입 기록부에 시간을 적고, 퇴실할 때 에어컨과 모니터 전원을 끌 것.\n- 냉장고 안 주인 없는 음식은 금요일 오후에 일괄 처분. 이름표를 붙여 두면 남겨 둠.\n- 프린터 토너 교체 방법을 프린터 옆에 붙여 둠. 용지는 행정실에서 박스 단위로 받아 오면 됨.\n- 건물 공사로 다음 주 화요일 오후 두 시간 동안 단전 예정. 서버는 전날 밤에 미리 안전하게 종료하고, 다음 날 아침 담당자가 재가동.\n\n## 7. 다음 미팅\n- 같은 시간, 같은 장소. 발표 순서는 지난주의 역순.\n- 각자 이번 주 실험 중 막힌 부분을 한 줄씩 미리 적어 올 것. 미팅 시간을 줄이기 위해 슬라이드는 3장 이내로.\n- 지난번에 이야기한 공용 코드 저장소의 브랜치 규칙(기능 단위 브랜치, 머지 전 리뷰 1인)을 이번 주부터 적용.\n- 회의록 작성 담당은 순번표 기준으로 다음 사람에게 넘어감.\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/lab_meeting_0312.md",
+  "gold": {
+   "status": "planned",
+   "project": "RIVER_STAGE_LSTM",
+   "evidence": "상류 강우량 피처를 추가한 LSTM 수위 예측 모델이 팔당 지점에서 6시간 선행 RMSE 4.1cm 로 기존 대비 18% 개선됨."
+  },
+  "rationale": "Only the first progress bullet is project-specific (upstream rainfall LSTM water level); the remaining ~2/3 of the minutes are lab logistics.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-022",
+  "kind": "long_doc",
+  "catalog": {
+   "KIOSK_VOICE_UX": {
+    "name": "HCI 수업 기말 프로젝트",
+    "desc": "시각장애인용 키오스크 음성 UI 사용성 평가",
+    "status": "active"
+   },
+   "LLVM_PASS_HW": {
+    "name": "컴파일러 과제",
+    "desc": "LLVM IR 최적화 패스 구현",
+    "status": "active"
+   },
+   "JOB_APPLY_2026": {
+    "name": "하반기 취업 준비",
+    "desc": "자기소개서·코딩테스트 정리",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/참여자_설명문_v2.txt",
+    "content": "연구 참여자 설명문 및 동의서\n\n1. 연구 참여에 앞서\n본 설명문은 귀하가 연구에 참여할지 결정하는 데 필요한 정보를 담고 있습니다. 충분히 읽어 보신 뒤 궁금한 점이 있으면 언제든지 연구진에게 질문하실 수 있습니다. 참여 여부는 전적으로 자유 의사에 따르며, 참여하지 않더라도 어떠한 불이익도 없습니다. 참여 중에도 언제든지 그만둘 수 있습니다.\n\n2. 개인정보의 수집과 이용\n연구진은 연구 수행에 필요한 최소한의 정보(연령대, 성별, 보조기기 사용 여부)만 수집합니다. 이름과 연락처는 사례비 지급 목적으로만 별도 보관하며, 연구 자료와 분리하여 암호화된 저장 장치에 둡니다. 수집된 자료는 연구 종료 후 3년간 보관한 뒤 파기합니다. 녹음 파일은 전사가 끝나는 즉시 파기합니다.\n\n3. 연구 내용\n이 연구는 시각장애인용 키오스크 음성 UI 의 사용성 평가를 목적으로 합니다. 참여자는 음성 안내만으로 가상의 카페 키오스크에서 음료 두 잔을 주문하고 결제 단계까지 진행하게 됩니다. 과업 수행 시간, 오류 횟수, 도움 요청 횟수를 기록하고, 과업 후 SUS 설문과 짧은 인터뷰를 진행합니다.\n\n4. 소요 시간 및 장소\n전체 과정은 약 50분이 소요되며, 공학관 사용자 연구실에서 진행됩니다. 이동이 어려운 경우 연구진이 건물 입구에서 안내해 드립니다. 실험실은 엘리베이터에서 가까운 곳에 있으며 점자 안내 표지가 설치되어 있습니다.\n\n5. 예상되는 위험과 이익\n본 연구는 일상적인 기기 사용 수준을 넘는 위험이 없습니다. 다만 과업 중 피로감을 느끼실 수 있으며, 이 경우 언제든지 휴식을 요청하실 수 있습니다. 참여에 따른 직접적인 이익은 없으나, 결과는 접근성 개선 연구에 활용됩니다.\n\n6. 사례비\n참여를 마치신 분께는 소정의 사례비를 지급합니다. 중도에 그만두신 경우에도 진행한 시간에 비례하여 지급합니다.\n\n7. 참여 철회\n참여를 철회하고자 하는 경우 연구진에게 구두 또는 서면으로 알려 주시면 되며, 철회 시점까지 수집된 자료는 본인이 원하는 경우 연구에 사용하지 않습니다. 철회 의사를 밝힌 뒤에도 사례비 지급과 관련된 최소한의 정보는 정산이 끝날 때까지 보관될 수 있으며, 정산 후 바로 파기합니다.\n\n8. 비밀 보장\n연구 결과는 학술 발표나 논문으로 공개될 수 있으나, 개인을 식별할 수 있는 정보는 어떤 형태로도 공개되지 않습니다. 인용이 필요한 경우 참여자 번호(P01, P02 등)로만 표기합니다. 녹화 영상은 촬영하지 않으며, 화면 기록은 참여자의 얼굴이나 신체가 나오지 않는 범위로 한정합니다. 자료에 접근할 수 있는 사람은 연구 책임자와 공동 연구원으로 제한됩니다.\n\n9. 연구 참여자의 권리\n귀하는 연구에 관해 언제든지 설명을 요구할 수 있고, 본 설명문의 사본을 받아 보관할 수 있습니다. 연구 진행 중 귀하의 참여 의사에 영향을 줄 수 있는 새로운 정보가 생기면 즉시 알려 드립니다. 연구진의 설명이 충분하지 않다고 느끼시면 아래 기관생명윤리위원회로 직접 문의하실 수 있습니다.\n\n10. 자주 묻는 질문\n- 보호자나 활동지원사가 함께 와도 되나요? 함께 오실 수 있으며, 대기 공간이 마련되어 있습니다. 다만 과업 수행 중에는 도움을 주지 않도록 부탁드립니다.\n- 스크린리더를 평소에 쓰지 않아도 참여할 수 있나요? 네, 사용 경험과 관계없이 참여하실 수 있습니다.\n- 일정은 어떻게 정하나요? 연락을 드려 가능한 시간을 여쭌 뒤 정합니다. 평일 오후와 토요일 오전 중 선택하실 수 있습니다.\n- 결과를 받아 볼 수 있나요? 원하시는 분께는 연구 종료 후 요약 결과를 이메일이나 음성 파일로 보내 드립니다.\n\n참고: 과업 진행 순서\n(1) 연구 설명과 동의서 확인, 질문 시간 (약 10분)\n(2) 연습 과업: 물 한 병 주문하기 (약 5분)\n(3) 본 과업 두 가지와 과업별 짧은 질문 (약 20분)\n(4) SUS 설문과 인터뷰 (약 15분)\n각 단계 사이에 원하시면 쉬는 시간을 가질 수 있습니다. 진행자는 과업 중에는 조작 방법을 알려 드리지 않으며, 막히는 경우 '도움 요청'이라고 말씀하시면 기록 후 힌트를 드립니다.\n\n11. 문의처\n연구 책임자: [이름 마스킹] / 연락처: [마스킹]\n연구 윤리 관련 문의: 기관생명윤리위원회 [마스킹]\n\n본인은 위 설명을 충분히 읽고 이해하였으며, 자발적으로 연구에 참여하는 것에 동의합니다.\n\n참여자 성명: ____________   서명: ____________   날짜: ____________\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/참여자_설명문_v2.txt",
+  "gold": {
+   "status": "planned",
+   "project": "KIOSK_VOICE_UX",
+   "evidence": "이 연구는 시각장애인용 키오스크 음성 UI 의 사용성 평가를 목적으로 합니다."
+  },
+  "rationale": "Consent-form boilerplate surrounds section 3, which states the study is a usability test of a voice kiosk UI for blind users.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-023",
+  "kind": "long_doc",
+  "catalog": {
+   "DIALOG_SUMM_T5": {
+    "name": "일상 대화 요약 경진대회",
+    "desc": "구어체 다자 대화 추상 요약 T5",
+    "status": "active"
+   },
+   "MANUAL_RAG_QA": {
+    "name": "문서 기반 질의응답 경진대회",
+    "desc": "PDF 매뉴얼 RAG 질의응답",
+    "status": "active"
+   },
+   "ROBOT_OS_STUDY": {
+    "name": "ROS2 스터디",
+    "desc": "네비게이션 스택 실습",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/참가안내서_요약.txt",
+    "content": "2026 공공 AI 경진대회 참가 안내서 (요약본)\n\n■ 참가 자격\n- 국내 대학(원)생 및 일반인 누구나 참가 가능하며, 팀은 최대 4인까지 구성할 수 있습니다.\n- 한 사람이 여러 팀에 중복으로 소속될 수 없습니다. 적발 시 해당 팀 모두 실격 처리됩니다.\n- 주최 기관 및 데이터 제공 기관 소속 임직원은 참가할 수 없습니다.\n\n■ 일정\n- 참가 신청: 7월 1일 ~ 7월 21일\n- 리더보드 운영: 7월 8일 ~ 8월 29일 (하루 제출 5회 제한)\n- 최종 코드 제출 및 검증: 9월 1일 ~ 9월 7일\n- 시상식: 9월 말 예정 (장소 추후 공지)\n\n■ 외부 데이터 및 사전학습 모델\n- 공개 라이선스로 배포된 사전학습 모델은 사용할 수 있으며, 사용한 모델의 이름과 출처를 최종 보고서에 명시해야 합니다.\n- 외부 데이터는 대회 시작 전에 공개되어 누구나 접근 가능한 것에 한하여 허용됩니다.\n- 상용 API 의 출력을 학습 데이터로 사용하는 것은 금지됩니다.\n\n■ 팀 등록 절차\n- 팀장이 대회 페이지에서 팀을 만든 뒤 초대 코드를 팀원에게 전달합니다. 팀원은 각자 계정으로 로그인해 초대 코드를 입력하면 팀에 합류합니다.\n- 팀 이름은 리더보드에 그대로 공개되므로 소속 기관명이나 개인 이름을 넣지 않는 것을 권장합니다.\n- 참가 신청 마감 이후에 새로 가입한 계정은 기존 팀에 합류할 수 없습니다.\n- 학생 참가자는 재학 증명서를 최종 검증 단계에서 제출해야 하며, 일반인 참가자는 별도 증빙이 필요하지 않습니다.\n\n■ 제공 데이터 이용 규정\n- 데이터는 대회 페이지에서 이용 서약에 동의한 계정만 내려받을 수 있습니다. 내려받은 파일을 팀 외부로 재배포하면 실격 사유가 됩니다.\n- 학습, 검증, 테스트 파일의 분할은 주최 측이 정한 그대로 사용해야 하며, 테스트 파일을 학습에 포함하는 것은 허용되지 않습니다.\n- 데이터 오류를 발견한 경우 Q&A 게시판에 제보해 주시면 확인 후 수정본을 공지합니다. 수정본 공지 이전의 제출 점수는 다시 계산하지 않습니다.\n- 데이터에 포함된 개인 식별 정보는 사전에 가명 처리되어 있으나, 혹시 식별 가능한 정보가 남아 있는 것을 발견하면 즉시 알려 주시기 바랍니다.\n\n■ 과제 설명\n본 트랙의 과제는 구어체 다자 대화를 입력으로 받아 핵심 내용을 3문장 이내로 요약하는 추상 요약입니다. 대화는 2~7명이 참여한 일상 대화 전사문이며, 발화자 표시와 함께 제공됩니다. 평가 지표는 ROUGE-1/2/L F1 의 평균과 사람 평가(사실성, 간결성)를 7:3 으로 합산합니다.\n\n■ 제출물 형식\n- 리더보드 제출 파일은 id 와 결과 두 열로 구성된 UTF-8 csv 입니다.\n- 최종 검증 단계에서는 학습과 추론을 재현할 수 있는 코드와 환경 정보(requirements, Dockerfile 중 하나)를 제출해야 합니다.\n- 재현 결과가 리더보드 점수와 크게 다를 경우 순위에서 제외될 수 있습니다.\n\n■ 하드웨어 제한\n- 추론은 단일 GPU(24GB) 환경에서 테스트 셋 전체 기준 2시간 이내에 끝나야 합니다.\n- 모델 파라미터 수 제한은 없으나 위 시간 제한을 넘기면 실격입니다.\n\n■ 시상\n- 대상 1팀, 최우수상 2팀, 우수상 3팀. 상금 및 부상은 주최 측 사정에 따라 변경될 수 있습니다.\n- 수상 팀은 시상식 전까지 결과 발표 자료를 제출해야 합니다.\n\n■ 실격 및 제재\n- 다른 팀과 코드나 예측 결과를 공유한 사실이 확인되면 관련 팀 모두 실격 처리됩니다. 공개 토론 게시판에 올린 코드는 공유로 보지 않습니다.\n- 테스트 데이터를 수작업으로 라벨링하거나 학습에 사용하는 행위는 금지됩니다.\n- 여러 계정을 만들어 하루 제출 횟수 제한을 넘기는 경우, 적발 즉시 해당 참가자의 모든 제출이 무효가 됩니다.\n- 최종 검증 단계에서 연락이 닿지 않거나 기한 내 코드를 제출하지 않으면 순위에서 제외되며, 차순위 팀이 승계합니다.\n\n■ 저작권 및 결과물 활용\n- 제출된 코드와 모델의 저작권은 참가 팀에 있습니다. 다만 주최 측은 수상작에 한해 대회 홍보와 후속 연구 목적으로 결과를 인용할 수 있습니다.\n- 제공 데이터는 대회 목적 외로 사용할 수 없으며, 대회 종료 후 30일 이내에 파기해야 합니다. 데이터 이용 서약서는 참가 신청 시 함께 제출합니다.\n- 수상 팀이 대회 결과를 논문으로 발표하려면 사전에 주최 측과 협의해 데이터 출처 표기 방식을 확인해야 합니다.\n\n■ 개인정보\n- 참가 신청 시 수집하는 정보는 팀원 이름, 소속, 연락처이며 시상 및 연락 목적으로만 사용합니다.\n- 수집한 개인정보는 대회 종료 후 6개월 동안 보관한 뒤 파기합니다.\n\n■ 자주 묻는 질문\n- 팀원을 대회 도중에 바꿀 수 있나요? 리더보드 운영 기간 중간 시점까지 한 번 변경할 수 있으며, 변경 후에는 팀 병합이 불가능합니다.\n- 여러 트랙에 동시에 참가할 수 있나요? 가능합니다. 단, 트랙마다 별도로 참가 신청을 해야 합니다.\n- 노트북 환경에서도 제출할 수 있나요? 리더보드 제출은 가능하지만, 최종 검증용 코드는 스크립트 형태로 정리해 주셔야 합니다.\n\n■ 리더보드 운영 원칙\n- 공개 리더보드는 테스트 셋의 30%로 계산되며, 최종 순위는 나머지 70%의 비공개 리더보드로 결정됩니다.\n- 팀은 최종 평가에 사용할 제출 두 개를 직접 선택할 수 있습니다. 선택하지 않으면 공개 점수가 가장 높은 두 개가 자동으로 선택됩니다.\n- 동점일 경우 먼저 제출한 팀이 상위 순위가 됩니다.\n- 서버 점검 등으로 제출이 불가능했던 시간은 공지 후 제출 횟수를 보전합니다.\n\n■ 문의\n- 대회 게시판의 Q&A 탭을 이용해 주세요. 개별 메일 문의에는 답변하지 않습니다.\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/참가안내서_요약.txt",
+  "gold": {
+   "status": "planned",
+   "project": "DIALOG_SUMM_T5",
+   "evidence": "본 트랙의 과제는 구어체 다자 대화를 입력으로 받아 핵심 내용을 3문장 이내로 요약하는 추상 요약입니다."
+  },
+  "rationale": "Eligibility, schedule and submission rules would fit either competition; only the mid-document task section (multi-party dialogue summarization) decides.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-024",
+  "kind": "long_doc",
+  "catalog": {
+   "EEG_SEIZURE_SSM": {
+    "name": "뇌전도 발작 탐지 연구",
+    "desc": "CHB-MIT EEG 발작 탐지 state space model",
+    "status": "active"
+   },
+   "ECG_ARRHYTHMIA_COMP": {
+    "name": "심전도 부정맥 분류 공모전",
+    "desc": "12-lead ECG ResNet1D",
+    "status": "active"
+   },
+   "PAPER_CLUB_NLP": {
+    "name": "NLP 논문 읽기 모임",
+    "desc": "격주 언어모델 논문 발표",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "notes/ssm_reading.md",
+    "content": "# Reading notes: selective state space models for long biosignals\n\nGoal: apply a selective SSM to CHB-MIT EEG seizure detection without chopping recordings into 4 s windows.\n\n## Why SSMs at all\nAttention cost grows quadratically with sequence length, and a one-hour recording at 256 Hz is close to a million samples per channel. Most prior work sidesteps this by windowing and then classifying each window independently, which throws away slow context such as pre-ictal drift. A structured state space layer keeps a fixed-size hidden state and can be computed as a long convolution during training and as a recurrence at inference, so memory stays flat as the input grows.\n\n## What \"selective\" changes\nIn earlier S4-style layers the transition parameters are input-independent, which makes the layer a linear time-invariant filter. The selective variant makes B, C and the step size functions of the current input, so the model can decide per timestep how much to write into the state and how fast to forget. The price is that the convolutional form no longer applies; the paper replaces it with a hardware-aware parallel scan that fuses the recurrence into a single kernel and avoids materializing the full state in HBM.\n\n## Things to check before trusting the numbers\n- Their benchmarks are mostly language and genomics. Long-range arena results look good but LRA is synthetic.\n- A 2024 follow-up applied the same block to 12-lead ECG and reported gains mainly from the longer receptive field, not from selectivity; worth an ablation where the step size is frozen.\n- Channel mixing is not addressed. Multichannel biosignals probably need either a channel-wise block followed by a small mixer, or a 2D variant.\n- Initialization of the step size matters a lot according to the appendix; the default range assumes token sequences, not raw waveforms at hundreds of Hz.\n\n## Implementation notes\n- Official kernels require recent CUDA; fall back to the pure PyTorch scan for debugging on the laptop, it is slow but numerically identical within 1e-5.\n- Mixed precision: keep the state in fp32, activations can be bf16.\n- Sequence length during training can be shorter than at inference if the model is purely recurrent at test time, but the paper notes some degradation beyond 4x the training length.\n\n## Open questions\n1. Does downsampling to 64 Hz before the SSM hurt sensitivity for short spike-wave bursts?\n2. How to report latency fairly against windowed CNN baselines (per window vs per hour of signal)?\n3. Patient-specific vs cross-patient split: most reported numbers are patient-specific.\n"
+   }
+  ],
+  "context": {},
+  "target": "notes/ssm_reading.md",
+  "gold": {
+   "status": "planned",
+   "project": "EEG_SEIZURE_SSM",
+   "evidence": "Goal: apply a selective SSM to CHB-MIT EEG seizure detection without chopping recordings into 4 s windows."
+  },
+  "rationale": "The goal line at the top names CHB-MIT EEG seizure detection; the later ECG mention is a related-work remark and the rest is generic SSM notes. English evidence; host lexical support relies on CHB/MIT/EEG tokens.",
+  "source": "authored"
+ },
+ {
+  "id": "t1-025",
+  "kind": "long_doc",
+  "catalog": {
+   "BUS_ETA_GNN": {
+    "name": "버스 도착시간 예측 공공데이터 공모전",
+    "desc": "정류장 GPS 이력 그래프 신경망 도착시간 예측",
+    "status": "active"
+   },
+   "METRO_GATE_FCST": {
+    "name": "지하철 혼잡도 예측 수업 과제",
+    "desc": "역별 승하차 인원 시계열 회귀",
+    "status": "active"
+   },
+   "TEAM_TEMPLATE_INFRA": {
+    "name": "랩 공통 저장소 템플릿 관리",
+    "desc": "pre-commit·CI 설정 표준화",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/README.md",
+    "content": "# eta-forecast\n\n사내 템플릿으로 시작한 저장소입니다. 공통 설정은 그대로 두고 프로젝트별 내용만 아래 '데이터'와 '모델' 절에 적습니다.\n\n## 개발 환경\n\n```bash\nconda create -n eta python=3.11 -y\nconda activate eta\npip install -r requirements.txt\npre-commit install\n```\n\n- 코드 스타일은 ruff + black, 줄 길이 100.\n- 노트북은 `notebooks/` 아래에만 두고, 커밋 전에 출력은 비웁니다 (pre-commit 훅이 처리).\n- 비밀값은 `.env` 에만 두고 저장소에 올리지 않습니다. 예시는 `.env.example` 참고.\n\n## 디렉터리 구조\n\n```\ndata/        원본과 전처리 결과 (git 제외)\nsrc/         학습·추론 코드\nconfigs/     실험 설정\nnotebooks/   탐색용\ntests/       단위 테스트\n```\n\n## 데이터\n\n서울 시내버스 정류장 GPS 이력(2025년 1~6월, 1분 간격)으로 다음 정류장 도착시간을 예측합니다. 노선-정류장 연결은 그래프로 만들고, 정류장 간 구간 소요시간을 엣지 특성으로 씁니다. 공휴일과 우천 여부는 외부 달력과 기상청 자료에서 붙입니다.\n\n## 모델\n\n- 기준선: 구간별 과거 평균 소요시간.\n- 주 모델: 그래프 신경망 위에 시간 인코딩을 더한 회귀 모델.\n- 지표: MAE(초), 그리고 2분 이상 늦게 예측한 비율.\n\n## 실험 관리\n\n- 모든 실행은 `configs/` 의 yaml 하나와 git 커밋 해시로 재현 가능해야 합니다.\n- 실험 기록은 공용 대시보드에 남기고, 실행 이름은 `날짜_설정이름` 형식을 따릅니다.\n- 학습이 끝난 가중치는 저장소가 아니라 공용 스토리지에 올립니다.\n\n## 테스트\n\n```bash\npytest -q\n```\n\nCI 는 main 브랜치 대상 PR 에서만 돌고, 단위 테스트와 린트를 함께 확인합니다. 학습 코드는 작은 합성 데이터로 1 스텝만 도는 스모크 테스트가 있습니다.\n\n## 로깅\n\n- 학습 스크립트는 표준 출력과 파일 로그를 같이 남깁니다. 파일 로그는 `logs/날짜_설정이름.txt` 로 저장됩니다.\n- 로그 레벨은 기본 INFO 이고, 디버깅할 때는 환경변수 `LOG_LEVEL=DEBUG` 로 바꿉니다.\n- 예외가 나면 설정 파일 경로와 git 해시를 함께 출력하도록 되어 있으니, 이슈를 올릴 때 그 두 줄을 꼭 붙여 주세요.\n\n## 자주 겪는 문제\n\n- `pre-commit` 이 노트북 출력 때문에 실패하면 `nbstripout` 을 한 번 직접 실행한 뒤 다시 커밋합니다.\n- 맥에서 일부 패키지 설치가 실패하면 conda-forge 채널을 먼저 지정합니다.\n- 서버에서 `CUDA out of memory` 가 나면 설정의 배치 크기를 줄이기 전에 다른 사람이 같은 GPU 를 쓰고 있는지 먼저 확인합니다.\n- 테스트가 로컬에서만 통과하고 CI 에서 실패하면 대부분 난수 시드나 시간대 설정 차이입니다. 테스트에서는 항상 고정 시드를 씁니다.\n\n## 기여 방법\n\n1. 이슈를 먼저 만들고 담당자를 지정합니다.\n2. 기능 단위로 브랜치를 나눕니다.\n3. PR 에는 변경 이유와 확인 방법을 적고, 리뷰어 한 명 이상의 승인을 받습니다.\n\n## 배포\n\n- 추론 서버는 사내 쿠버네티스가 아니라 단일 VM 에서 컨테이너로 돌립니다. 이미지 태그는 릴리스 버전과 같게 맞춥니다.\n- 배포 전에 스테이징에서 하루 이상 실제 요청을 흘려 보고 지연 시간 분포를 확인합니다.\n- 롤백은 이전 이미지 태그로 다시 띄우는 것으로 충분합니다. 설정 파일은 이미지 안에 굽지 않고 외부에서 주입합니다.\n- 모니터링 알림은 팀 채널로 오며, 야간 알림은 당번 한 명만 받도록 설정되어 있습니다.\n\n## 릴리스\n\n- 버전은 `연도.월.순번` 형식(예: 2025.07.1)을 씁니다.\n- 릴리스 노트에는 바뀐 설정 항목과 지표 변화만 짧게 적습니다.\n- 태그를 붙이기 전에 스모크 테스트와 전체 평가 스크립트를 한 번씩 돌려 결과를 PR 에 첨부합니다.\n\n## 라이선스\n\n내부 사용 전용. 외부 공개 전에는 데이터 제공 기관의 이용 약관을 다시 확인합니다.\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/README.md",
+  "gold": {
+   "status": "planned",
+   "project": "BUS_ETA_GNN",
+   "evidence": "서울 시내버스 정류장 GPS 이력(2025년 1~6월, 1분 간격)으로 다음 정류장 도착시간을 예측합니다."
+  },
+  "rationale": "Template boilerplate (env, CI, contribution) could suggest the template project, but the README itself says it only copies the template; the middle data section is specific to bus ETA.",
+  "source": "authored"
+ }
+]

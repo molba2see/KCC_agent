@@ -1,0 +1,228 @@
+{
+  "date": "2026-11-02",
+  "scope": "static source and test inspection; no third-party programs or model calls executed",
+  "repositories": [
+    {
+      "repo": "hyperfield/ai-file-sorter",
+      "commit": "4eaccb878b09af198392f23b2fc1144640293a1a",
+      "reviewed_files": [
+        {
+          "path": "docs/architecture.md",
+          "url": "https://github.com/hyperfield/ai-file-sorter/blob/4eaccb878b09af198392f23b2fc1144640293a1a/docs/architecture.md",
+          "sha256": "bffb0b1bb79d257ae7b6cb2bb44d54589276a57ea0b9742315155487792b59ab"
+        },
+        {
+          "path": "docs/categorization-behavior.md",
+          "url": "https://github.com/hyperfield/ai-file-sorter/blob/4eaccb878b09af198392f23b2fc1144640293a1a/docs/categorization-behavior.md",
+          "sha256": "95330df9d3d82916b302d1ee4f5fef6bed3a4cd858ad01c5ded375449da16c9c"
+        },
+        {
+          "path": "app/lib/UserLearningStore.cpp",
+          "url": "https://github.com/hyperfield/ai-file-sorter/blob/4eaccb878b09af198392f23b2fc1144640293a1a/app/lib/UserLearningStore.cpp",
+          "sha256": "e5f44ecdc5e4fd2a98fc38c164f2df5d274f4ea73a46dbb4a2d5e976d4f63756"
+        },
+        {
+          "path": "app/lib/ProtectedProjectDetector.cpp",
+          "url": "https://github.com/hyperfield/ai-file-sorter/blob/4eaccb878b09af198392f23b2fc1144640293a1a/app/lib/ProtectedProjectDetector.cpp",
+          "sha256": "d0a6b21c95f06012e7dc7877a5c2513080f0b5421858b751a2968a615f641d72"
+        },
+        {
+          "path": "app/lib/UndoManager.cpp",
+          "url": "https://github.com/hyperfield/ai-file-sorter/blob/4eaccb878b09af198392f23b2fc1144640293a1a/app/lib/UndoManager.cpp",
+          "sha256": "a0a505c4e4abbd060293b6ceb5f793616e7e48af5de7b2bfe288286d87c2e585"
+        },
+        {
+          "path": "app/lib/ArtifactCategoryPolicy.cpp",
+          "url": "https://github.com/hyperfield/ai-file-sorter/blob/4eaccb878b09af198392f23b2fc1144640293a1a/app/lib/ArtifactCategoryPolicy.cpp",
+          "sha256": "1357f85e534d8f121039c3fc10097f673b630592bcf7a36e98d55971d4ae72e5"
+        },
+        {
+          "path": "tests/unit/test_user_learning_store.cpp",
+          "url": "https://github.com/hyperfield/ai-file-sorter/blob/4eaccb878b09af198392f23b2fc1144640293a1a/tests/unit/test_user_learning_store.cpp",
+          "sha256": "c7dccf6f240afd6c4a8a30708b2120185f81dd32f4a13ef46d62941e75c7140d"
+        },
+        {
+          "path": "tests/unit/test_protected_project_detector.cpp",
+          "url": "https://github.com/hyperfield/ai-file-sorter/blob/4eaccb878b09af198392f23b2fc1144640293a1a/tests/unit/test_protected_project_detector.cpp",
+          "sha256": "d347a0f199680fc90c32f5f8e91189c4540d76fea602c77a705e4d8da34c2aa8"
+        },
+        {
+          "path": "tests/live_llm/README.md",
+          "url": "https://github.com/hyperfield/ai-file-sorter/blob/4eaccb878b09af198392f23b2fc1144640293a1a/tests/live_llm/README.md",
+          "sha256": "68cdffc85e478fade6a24e0a997b1420c64800ae6321e485f7e07215ed5bdf5d"
+        }
+      ]
+    },
+    {
+      "repo": "QiuYannnn/Local-File-Organizer",
+      "commit": "a19559942a35d98e9d2168fa58f288d9ea294bc6",
+      "reviewed_files": [
+        {
+          "path": "main.py",
+          "url": "https://github.com/QiuYannnn/Local-File-Organizer/blob/a19559942a35d98e9d2168fa58f288d9ea294bc6/main.py",
+          "sha256": "8a03c15ac175b80b767cee7b4b635ab3b6633b65436d2c9c93744da5e66ab88b"
+        },
+        {
+          "path": "data_processing_common.py",
+          "url": "https://github.com/QiuYannnn/Local-File-Organizer/blob/a19559942a35d98e9d2168fa58f288d9ea294bc6/data_processing_common.py",
+          "sha256": "475c07206401476d6e42b48db7d61c0d74ff948bfa7703f3a016b1ec72592875"
+        },
+        {
+          "path": "text_data_processing.py",
+          "url": "https://github.com/QiuYannnn/Local-File-Organizer/blob/a19559942a35d98e9d2168fa58f288d9ea294bc6/text_data_processing.py",
+          "sha256": "12230d84efb01f606378f511d559c16d1f694e07258553140ae1e8d320b59204"
+        },
+        {
+          "path": "image_data_processing.py",
+          "url": "https://github.com/QiuYannnn/Local-File-Organizer/blob/a19559942a35d98e9d2168fa58f288d9ea294bc6/image_data_processing.py",
+          "sha256": "45d26c1f13c02921015cfc0a3a7149d57baf9e12ec619cb9d921d0595f9d6737"
+        },
+        {
+          "path": "file_utils.py",
+          "url": "https://github.com/QiuYannnn/Local-File-Organizer/blob/a19559942a35d98e9d2168fa58f288d9ea294bc6/file_utils.py",
+          "sha256": "b755a60ce4d6ae590315914c6ad642f07b0ac58884db317908a5aea99dc31415"
+        }
+      ]
+    },
+    {
+      "repo": "tfeldmann/organize",
+      "commit": "a736516555d0daeb83a604448fbdf5379f42f2ef",
+      "reviewed_files": [
+        {
+          "path": "docs/rules.md",
+          "url": "https://github.com/tfeldmann/organize/blob/a736516555d0daeb83a604448fbdf5379f42f2ef/docs/rules.md",
+          "sha256": "71933bc2526856ac4da94e90591473350d89cf15f2c785796d08a73d0bbaeffb"
+        },
+        {
+          "path": "organize/actions/move.py",
+          "url": "https://github.com/tfeldmann/organize/blob/a736516555d0daeb83a604448fbdf5379f42f2ef/organize/actions/move.py",
+          "sha256": "e457b4fccbd1f9d311db351671103f80688b9441a72b2a54e9d39ebbbefc9aff"
+        },
+        {
+          "path": "organize/filters/duplicate.py",
+          "url": "https://github.com/tfeldmann/organize/blob/a736516555d0daeb83a604448fbdf5379f42f2ef/organize/filters/duplicate.py",
+          "sha256": "7f2964b62fe475df887021350005e8d57ffa25d653b4f652d694b58e03d5fb3f"
+        },
+        {
+          "path": "tests/combined/test_keep_folder_structure.py",
+          "url": "https://github.com/tfeldmann/organize/blob/a736516555d0daeb83a604448fbdf5379f42f2ef/tests/combined/test_keep_folder_structure.py",
+          "sha256": "447c50182098fb39dabc24e229507c152a587171db1df931a60e3f08d64cf3ec"
+        },
+        {
+          "path": "tests/actions/test_conflict_resolution.py",
+          "url": "https://github.com/tfeldmann/organize/blob/a736516555d0daeb83a604448fbdf5379f42f2ef/tests/actions/test_conflict_resolution.py",
+          "sha256": "ebc16e0275d673950640822d199562da616e01fe480a2f6fcfea17af32dc9003"
+        }
+      ]
+    },
+    {
+      "repo": "pneelamr/ai-file-organizer",
+      "commit": "0159e74fc5b239ebda4f2a72fc025230ffd09b5b",
+      "reviewed_files": [
+        {
+          "path": "organizer.py",
+          "url": "https://github.com/pneelamr/ai-file-organizer/blob/0159e74fc5b239ebda4f2a72fc025230ffd09b5b/organizer.py",
+          "sha256": "032b48fd2573617e62d660dd7eafbe3adef862e42356ed9a0439e95f9c586579"
+        },
+        {
+          "path": "README.md",
+          "url": "https://github.com/pneelamr/ai-file-organizer/blob/0159e74fc5b239ebda4f2a72fc025230ffd09b5b/README.md",
+          "sha256": "50dc8a98a80903bb7084fa000337ea4dc8f917b290a7ef22653efcaa36872bf6"
+        }
+      ]
+    },
+    {
+      "repo": "agiresearch/AIOS-LSFS",
+      "commit": "7a5d67a3b942ba4ae35406ab553d995a59b816dc",
+      "reviewed_files": [
+        {
+          "path": "README.md",
+          "url": "https://github.com/agiresearch/AIOS-LSFS/blob/7a5d67a3b942ba4ae35406ab553d995a59b816dc/README.md",
+          "sha256": "f1aae061f4db55fd05da16f2bc4a6c2f135bad5f5bacf6cda36249c12ef12029"
+        },
+        {
+          "path": "aios/storage/filesystem/lsfs.py",
+          "url": "https://github.com/agiresearch/AIOS-LSFS/blob/7a5d67a3b942ba4ae35406ab553d995a59b816dc/aios/storage/filesystem/lsfs.py",
+          "sha256": "d92cae781e8f22f3a38b9762df01622526dfe5da043661088b23b7cb8d919ef6"
+        },
+        {
+          "path": "aios/storage/filesystem/vector_db.py",
+          "url": "https://github.com/agiresearch/AIOS-LSFS/blob/7a5d67a3b942ba4ae35406ab553d995a59b816dc/aios/storage/filesystem/vector_db.py",
+          "sha256": "b42c2480e5013f47cdbae08e4c22e631d89ceb4a96ec6b2e2822af6e1420ce88"
+        },
+        {
+          "path": "tests/README.md",
+          "url": "https://github.com/agiresearch/AIOS-LSFS/blob/7a5d67a3b942ba4ae35406ab553d995a59b816dc/tests/README.md",
+          "sha256": "8a25cd0948b4d0cc8f2fad2003c90ef9e4429dcf08befa5ddbbf652f55112d3a"
+        }
+      ]
+    },
+    {
+      "repo": "TheYellowDuck/ai-file-organizer",
+      "commit": "cf5c57c5ddd7d84493ee097e67d8287173bf63bb",
+      "reviewed_files": [
+        {
+          "path": "classifier/hierarchical.py",
+          "url": "https://github.com/TheYellowDuck/ai-file-organizer/blob/cf5c57c5ddd7d84493ee097e67d8287173bf63bb/classifier/hierarchical.py",
+          "sha256": "6eae4394fba37abf9dbc4b197bde3bbab28ff596c785e47d277c23c8ede7608e"
+        },
+        {
+          "path": "llm/classifier.py",
+          "url": "https://github.com/TheYellowDuck/ai-file-organizer/blob/cf5c57c5ddd7d84493ee097e67d8287173bf63bb/llm/classifier.py",
+          "sha256": "7d542055bf46840efd53ebe889804aa067e491e45daafc883d2a6d4737c24e99"
+        },
+        {
+          "path": "organizer/mover.py",
+          "url": "https://github.com/TheYellowDuck/ai-file-organizer/blob/cf5c57c5ddd7d84493ee097e67d8287173bf63bb/organizer/mover.py",
+          "sha256": "601e18570aa1c5859537e084189f7daf344caad4656009d556a680e8be2a3e25"
+        },
+        {
+          "path": "organizer/scanner.py",
+          "url": "https://github.com/TheYellowDuck/ai-file-organizer/blob/cf5c57c5ddd7d84493ee097e67d8287173bf63bb/organizer/scanner.py",
+          "sha256": "18f171f3c97da8437cb43f7a501d5ef22fb01cd840cdbaa194750d3d20658f8c"
+        },
+        {
+          "path": "tests/test_mover.py",
+          "url": "https://github.com/TheYellowDuck/ai-file-organizer/blob/cf5c57c5ddd7d84493ee097e67d8287173bf63bb/tests/test_mover.py",
+          "sha256": "b5e4e3aa8e52b6b514b8f162f657cde0df59ed99ee070d8ab887b9c60724d1fb"
+        },
+        {
+          "path": "tests/test_e2e.py",
+          "url": "https://github.com/TheYellowDuck/ai-file-organizer/blob/cf5c57c5ddd7d84493ee097e67d8287173bf63bb/tests/test_e2e.py",
+          "sha256": "aeb1e65e1693c12d9152a46efbef0bffb835f6008164975f2c6d9403c68fd72d"
+        },
+        {
+          "path": "tests/test_robustness.py",
+          "url": "https://github.com/TheYellowDuck/ai-file-organizer/blob/cf5c57c5ddd7d84493ee097e67d8287173bf63bb/tests/test_robustness.py",
+          "sha256": "e1924cdf22d7e8bd1d262bce0f60ea158ba86bc36eb7ddfc62827317cd654d6b"
+        }
+      ]
+    }
+  ],
+  "papers": [
+    {
+      "name": "lsfs",
+      "url": "https://arxiv.org/pdf/2410.11843v5",
+      "sha256": "ad0e9bdd30eef0419fba4912c45c95981911626b9388faab7334742a8f9e1448",
+      "reading_scope": "main methods/evaluation/conclusion; relevant appendices, not every reference or appendix line"
+    },
+    {
+      "name": "hippocamp",
+      "url": "https://arxiv.org/pdf/2604.01221v1",
+      "sha256": "66283379c0befd282681599d54fa5d96cbd011d74bd022ff2bbad4e0796ce572",
+      "reading_scope": "main methods/evaluation/conclusion; relevant appendices, not every reference or appendix line"
+    },
+    {
+      "name": "memory",
+      "url": "https://arxiv.org/pdf/2607.26637v1",
+      "sha256": "4186ea9a8ca5b5534e644a2a8c36e5594226df440b167093ea406e0e9a9bf42c",
+      "reading_scope": "main methods/evaluation/conclusion; relevant appendices, not every reference or appendix line"
+    },
+    {
+      "name": "finding",
+      "url": "https://www.ibiblio.org/msmckoy/spring2006/articles/fileOrganizationFromTheDesktop.pdf",
+      "sha256": "dff0a1efd8010df97ff34e94954983156a6981ee2a7d92d4275ce8e1bd3dece9",
+      "reading_scope": "main methods/evaluation/conclusion; relevant appendices, not every reference or appendix line"
+    }
+  ]
+}

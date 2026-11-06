@@ -1,0 +1,939 @@
+[
+ {
+  "id": "t2-01",
+  "kind": "semantic",
+  "catalog": {
+   "VIT_PRUNE_READING": {
+    "name": "비전 트랜스포머 경량화 논문 읽기 모임",
+    "desc": "토큰 프루닝·병합 기법 논문 발제",
+    "status": "active"
+   },
+   "CROSSWALK_PED_CAM": {
+    "name": "횡단보도 보행자 감지 캡스톤",
+    "desc": "엣지 카메라 YOLOv8 보행자 검출, 젯슨 배포",
+    "status": "active"
+   },
+   "FINTECH_UX_RS": {
+    "name": "핀테크 앱 UX 리서치",
+    "desc": "간편송금 사용성 인터뷰 분석",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "notes/bolya2023_notes.md",
+    "content": "# Token Merging: Your ViT But Faster (ICLR'23)\n\n**tl;dr** — instead of throwing tokens away like DynamicViT/EViT, ToMe merges redundant tokens inside each transformer block with bipartite soft matching, so it works off-the-shelf without retraining.\n\n- r tokens merged per layer (r=16 for ViT-L ~2x throughput)\n- proportional attention: weight merged tokens by their size\n- drop in acc: ~0.2-0.4% on IN-1k when applied w/o training\n\nQs to bring on Thu:\n1. why does merging beat pruning at the same FLOPs?\n2. does it still help for dense tasks (seg/det) where every token matters?\n"
+   }
+  ],
+  "context": {},
+  "target": "notes/bolya2023_notes.md",
+  "gold": {
+   "status": "planned",
+   "project": "VIT_PRUNE_READING",
+   "evidence": "ToMe merges redundant tokens inside each transformer block"
+  },
+  "rationale": "English paper notes on token merging vs pruning in ViTs with discussion questions match the ViT token pruning/merging reading group; the catalog says 프루닝·병합 in Korean only.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-02",
+  "kind": "semantic",
+  "catalog": {
+   "KAGGLE_ISIC_SKIN": {
+    "name": "Kaggle ISIC 2024 피부암 판별",
+    "desc": "3D 전신 촬영 병변 크롭 이미지 이진분류, 부분 AUC 평가",
+    "status": "active"
+   },
+   "KO_TTS_DUB": {
+    "name": "한국어 더빙 TTS 토이",
+    "desc": "VITS 화자 적응으로 애니 더빙",
+    "status": "active"
+   },
+   "GRAD_SCHOOL_APPS": {
+    "name": "대학원 지원 준비",
+    "desc": "SOP 초안·추천서 일정 관리",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/discussion_copy.txt",
+    "content": "copied from the competition Discussion tab, 'Why GBDT on metadata beats CNN on crops (so far)'\n--------\nThe metric only rewards the region above 80% TPR, so the leaderboard is decided by how you rank the hard positives, not overall AUC. With ~400k crops and only ~400 malignant, most CNNs I tried overfit in 2 epochs.\nWhat worked: LightGBM on the tbp_lv_* columns + patient-normalized features (value / patient mean). Adding a small EfficientNet-B0 OOF prob as one extra feature gave +0.004.\nreply: same here, also try stratified group k-fold by patient_id or your CV will lie.\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/discussion_copy.txt",
+  "gold": {
+   "status": "planned",
+   "project": "KAGGLE_ISIC_SKIN",
+   "evidence": "The metric only rewards the region above 80% TPR"
+  },
+  "rationale": "Partial-AUC above 80% TPR, ~400 malignant out of 400k crops and tbp_lv_ columns describe ISIC 2024; the copy never names the competition and the catalog wording is Korean.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-03",
+  "kind": "semantic",
+  "catalog": {
+   "PORT_CRANE_SAFETY": {
+    "name": "항만 크레인 작업자 안전 감지",
+    "desc": "CCTV 영상으로 안전모 미착용 작업자 탐지",
+    "status": "active"
+   },
+   "ROADKILL_THERMAL": {
+    "name": "고속도로 로드킬 예방 연구",
+    "desc": "열화상 카메라로 야생동물 검출 후 경고",
+    "status": "active"
+   },
+   "BOOK_CLUB_LOG": {
+    "name": "독서 모임 기록",
+    "desc": "월간 책 발제 메모",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/yolo_train_v4.yaml",
+    "content": "# 안전모미착용 객체탐지 학습설정 — 크레인 하부 CCTV 4ch 프레임\npath: ./frames_1024\ntrain: images/train\nval: images/val\nnames:\n  0: head_nohelmet\n  1: head_helmet\n  2: person\nimgsz: 1024\nepochs: 120\nmosaic: 0.5\n# 야간(조명탑만) 프레임 비율 18%, val에도 동일 비율 유지\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/yolo_train_v4.yaml",
+  "gold": {
+   "status": "planned",
+   "project": "PORT_CRANE_SAFETY",
+   "evidence": "안전모미착용 객체탐지 학습설정 — 크레인 하부 CCTV 4ch 프레임"
+  },
+  "rationale": "Helmet/no-helmet classes on crane CCTV frames fit the port crane safety project; the compound 안전모미착용/객체탐지 differs from the spaced catalog wording and both catalog projects are detection.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-04",
+  "kind": "semantic",
+  "catalog": {
+   "LIVER_CT_SEG": {
+    "name": "간 CT 종양 분할 연구",
+    "desc": "3D nnU-Net 간·종양 영역 분할, 다이스 평가",
+    "status": "active"
+   },
+   "RETINA_OCT_CLS": {
+    "name": "망막 OCT 질환 분류",
+    "desc": "OCT B-scan 4클래스 분류 EfficientNet",
+    "status": "active"
+   },
+   "BIOETHICS_ESSAY": {
+    "name": "생명윤리 교양 기말 에세이",
+    "desc": "의료 AI 책임 소재 논술",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "results/fold2_metrics.csv",
+    "content": "case_id,liver_dsc,tumor_dsc,hd95_mm,n_slices\nvolume-27,0.962,0.711,4.8,131\nvolume-33,0.957,0.648,7.1,98\nvolume-41,0.966,0.802,3.2,215\nvolume-58,0.949,0.000,nan,74\nvolume-102,0.971,0.755,2.9,188\nmean,0.961,0.583,,\n"
+   }
+  ],
+  "context": {},
+  "target": "results/fold2_metrics.csv",
+  "gold": {
+   "status": "planned",
+   "project": "LIVER_CT_SEG",
+   "evidence": "case_id,liver_dsc,tumor_dsc,hd95_mm,n_slices"
+  },
+  "rationale": "Per-volume liver/tumor Dice and HD95 in English column names correspond to the Korean 간·종양 분할 project; the OCT classifier would not report Dice.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-05",
+  "kind": "semantic",
+  "catalog": {
+   "S1_VESSEL_WAKE": {
+    "name": "Sentinel-1 선박 항적 검출 졸업논문",
+    "desc": "SAR 영상에서 선박 웨이크 선형 구조 검출",
+    "status": "active"
+   },
+   "MARITIME_AIS_ETA": {
+    "name": "AIS 기반 선박 입항 시간 예측",
+    "desc": "AIS 궤적 시퀀스로 ETA 회귀",
+    "status": "active"
+   },
+   "OPTICAL_FLOOD_MAP": {
+    "name": "위성영상 침수 지역 분석",
+    "desc": "광학 위성 NDWI 침수 지역 추출",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "notes/labeling_memo_1103.md",
+    "content": "## 라벨링 메모 (11/3)\n- SAR선박 주변 V자 패턴: VV편파에서만 Kelvin arm이 선명, VH는 거의 안 보임\n- turbulent wake(중앙 어두운 줄) vs Kelvin arm 따로 라벨 → class 2개\n- Radon 변환 후 peak 2개 이상이면 후보로 남기기, 저속선은 wake 거의 없음\n- 다음주: 풍속 7m/s 이상 장면 제외 기준 교수님께 확인\n"
+   }
+  ],
+  "context": {},
+  "target": "notes/labeling_memo_1103.md",
+  "gold": {
+   "status": "planned",
+   "project": "S1_VESSEL_WAKE",
+   "evidence": "turbulent wake(중앙 어두운 줄) vs Kelvin arm 따로 라벨"
+  },
+  "rationale": "Kelvin arm / turbulent wake labeling on VV-pol SAR is the ship wake thesis; the AIS ETA project is also about ships but uses no imagery.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-06",
+  "kind": "semantic",
+  "catalog": {
+   "UNFAIR_TOS_COMP": {
+    "name": "약관 불공정 조항 탐지 공모전",
+    "desc": "약관 문장 단위 불공정 조항 분류 KLUE-RoBERTa",
+    "status": "active"
+   },
+   "PODCAST_SUMM": {
+    "name": "팟캐스트 요약 사이드 프로젝트",
+    "desc": "Whisper 전사 후 LLM 요약",
+    "status": "active"
+   },
+   "LAB_GPU_QUOTA": {
+    "name": "연구실 GPU 사용량 정리",
+    "desc": "주간 GPU 점유 리포트",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/README_baseline.md",
+    "content": "# Baseline\n\nSentence-level classification of potentially unfair clauses in Terms of Service. Each sentence is labeled with zero or more of 8 categories: arbitration, unilateral change, content removal, jurisdiction, choice of law, limitation of liability, unilateral termination, contract by using.\n\n## Run\n```bash\npip install -r requirements.txt\npython train.py --model klue/roberta-base --max_len 256 --epochs 5\n```\n\nMacro-F1 on dev: 0.71 (baseline). Korean sentences are translated by the organizers; see data/README for licence.\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/README_baseline.md",
+  "gold": {
+   "status": "planned",
+   "project": "UNFAIR_TOS_COMP",
+   "evidence": "Sentence-level classification of potentially unfair clauses in Terms of Service"
+  },
+  "rationale": "An English README for classifying unfair Terms of Service clauses is the 약관 불공정 조항 competition baseline; no Korean catalog word appears verbatim.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-07",
+  "kind": "semantic",
+  "catalog": {
+   "MIC_ARRAY_DOA": {
+    "name": "마이크 어레이 음원 방향 추정 실험",
+    "desc": "4채널 원형 어레이 도래각 추정",
+    "status": "active"
+   },
+   "VOICE_PHISH_DET": {
+    "name": "보이스피싱 통화 탐지 공모전",
+    "desc": "통화 전사 텍스트 사기 여부 분류",
+    "status": "active"
+   },
+   "DORM_ENERGY_VIZ": {
+    "name": "기숙사 전력 절감 캠페인 분석",
+    "desc": "층별 전력량 비교 대시보드",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "src/tdoa_utils.py",
+    "content": "import numpy as np\n\nC = 343.0  # m/s\n\ndef gcc_phat(sig, ref, fs, max_tau=None, interp=16):\n    \"\"\"Generalized cross-correlation with phase transform weighting.\"\"\"\n    n = sig.shape[0] + ref.shape[0]\n    R = np.fft.rfft(sig, n=n) * np.conj(np.fft.rfft(ref, n=n))\n    cc = np.fft.irfft(R / (np.abs(R) + 1e-12), n=interp * n)\n    max_shift = int(interp * n / 2) if max_tau is None else min(int(interp * fs * max_tau), int(interp * n / 2))\n    cc = np.concatenate((cc[-max_shift:], cc[:max_shift + 1]))\n    return (np.argmax(np.abs(cc)) - max_shift) / float(interp * fs)\n\ndef tau_to_angle(tau, d=0.058):\n    # 마이크 간 시간지연(TDOA)으로 음원 입사각 계산, d=마이크 간격(m)\n    return np.degrees(np.arcsin(np.clip(tau * C / d, -1, 1)))\n"
+   }
+  ],
+  "context": {},
+  "target": "src/tdoa_utils.py",
+  "gold": {
+   "status": "planned",
+   "project": "MIC_ARRAY_DOA",
+   "evidence": "# 마이크 간 시간지연(TDOA)으로 음원 입사각 계산"
+  },
+  "rationale": "GCC-PHAT delay estimation converted to an incidence angle is direction-of-arrival work; 입사각/TDOA are paraphrases of the catalog 도래각.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-08",
+  "kind": "semantic",
+  "catalog": {
+   "DACON_DAEGU_ACC": {
+    "name": "데이콘 대구 교통사고 피해 예측",
+    "desc": "사고 정형 데이터로 ECLO 회귀, RMSLE",
+    "status": "active"
+   },
+   "DACON_BLDG_POWER": {
+    "name": "데이콘 건물 전력사용량 예측",
+    "desc": "100개 건물 시계열 SMAPE",
+    "status": "completed"
+   },
+   "CAMPUS_LOSTPET": {
+    "name": "캠퍼스 유기동물 제보 웹",
+    "desc": "제보 지도 Flask 앱",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/토크_복사본.txt",
+    "content": "[토크 게시판 복사] 타깃 직접 계산해보니 맞네요\n\n사망자수×10 + 중상자수×5 + 경상자수×3 + 부상자수×1\n\ntest에는 피해 인원 컬럼이 없어서 train에서만 쓸 수 있음. log1p 변환 후 학습하면 평가지표랑 바로 맞아서 편함.\n구(區)·동 단위 target encoding은 leak 조심 — fold 안에서만 계산할 것.\n  └ 댓글: 기상상태=눈 인 행이 train에 31개뿐이라 그냥 '기타'로 묶었어요\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/토크_복사본.txt",
+  "gold": {
+   "status": "planned",
+   "project": "DACON_DAEGU_ACC",
+   "evidence": "사망자수×10 + 중상자수×5 + 경상자수×3 + 부상자수×1"
+  },
+  "rationale": "The weighted casualty formula is the ECLO target definition, and log1p matching the metric implies RMSLE; neither ECLO nor 대구 is written in the file.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-09",
+  "kind": "weights_referenced",
+  "catalog": {
+   "DOC_LAYOUT_PARSE": {
+    "name": "논문 PDF 레이아웃 분석 연구",
+    "desc": "문서 이미지에서 표·그림·본문 영역 검출",
+    "status": "active"
+   },
+   "MENU_OCR_TRANS": {
+    "name": "식당 메뉴판 번역 앱",
+    "desc": "메뉴 OCR 후 다국어 번역",
+    "status": "active"
+   },
+   "RUN_TRAINING_LOG": {
+    "name": "마라톤 훈련 기록",
+    "desc": "주간 러닝 거리 정리",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "weights/dit_base_e40.pth",
+    "binary_bytes": 4096
+   },
+   {
+    "path": "configs/finetune_publaynet.yaml",
+    "content": "# fine-tune DiT-base on PubLayNet + our 600 KCI pages\nmodel:\n  backbone: dit-base\n  num_classes: 5  # text, title, list, table, figure\nresume_from: weights/dit_base_e40.pth\nsolver:\n  base_lr: 0.0002\n  max_iter: 60000\n"
+   }
+  ],
+  "context": {
+   "configs/finetune_publaynet.yaml": {
+    "project": "DOC_LAYOUT_PARSE",
+    "refs": [
+     "weights/dit_base_e40.pth"
+    ]
+   }
+  },
+  "target": "weights/dit_base_e40.pth",
+  "gold": {
+   "status": "planned",
+   "project": "DOC_LAYOUT_PARSE",
+   "evidence": "resume_from: weights/dit_base_e40.pth"
+  },
+  "rationale": "The checkpoint is only attributable via the registered layout fine-tune config that resumes from it; the config is in English and says PubLayNet, not 레이아웃.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-10",
+  "kind": "long_doc",
+  "catalog": {
+   "CREDIT_FAIRNESS_RA": {
+    "name": "신용평가 공정성 연구 조교",
+    "desc": "대출 승인 모델의 집단 간 편향 측정·완화",
+    "status": "active"
+   },
+   "ROBOT_VAC_SLAM": {
+    "name": "로봇청소기 SLAM 과제",
+    "desc": "2D LiDAR 점유 격자 지도 작성",
+    "status": "active"
+   },
+   "WEB_A11Y_CLUB": {
+    "name": "웹 접근성 점검 동아리",
+    "desc": "학교 홈페이지 WCAG 점검",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "meetings/2026-10-28_sync.md",
+    "content": "# Weekly sync — 2026-10-28\n\nAttendees: J., S., M., prof. (last 20 min)\n\n## Admin\n- Room 304 booked for the whole of November, Wed 4-6pm. If someone needs the projector, bring the HDMI-C adapter, the one in the drawer is broken.\n- Server: /data2 is at 91%. Everyone please move finished experiment dumps to cold storage by Friday. S. will send the rsync one-liner.\n- Reimbursement forms for the October conference trip are due on the 7th; receipts must be originals.\n\n## Reading\n- Next week: M. presents the calibration paper (temperature scaling vs. isotonic). Keep it to 25 min.\n- Someone asked to add a session on causal inference basics; prof. suggested the Hernan & Robins book chapters 1-3.\n\n## Project updates\n- J.: reran the baseline with the new income bins. The equalized-odds gap between age bands on the loan-approval classifier went from 0.11 to 0.07 after reweighing, with AUC dropping only 0.004. Demographic parity barely moved, which matches what we saw in September.\n- J. will try the post-processing approach (threshold per group) next, but prof. asked to first check whether the 60+ band is just too small (n=812) for the gap to be stable; bootstrap CIs before anything else.\n- S.: still waiting for the data use agreement amendment; nothing to report.\n\n## Misc\n- Lab dinner moved to Nov 14.\n- Reminder: the shared calendar is the source of truth for room bookings, not the group chat.\n- M. found a cheaper GPU cloud option, will share pricing next week. Spot instances only, so checkpoints every 30 min.\n- Prof. will be away Nov 18-22; async updates in the doc during that week.\n- Whiteboard markers are out again. Whoever passes by the office supply room, grab a box.\n- Next sync: Nov 4, same time. M. takes notes.\n"
+   }
+  ],
+  "context": {},
+  "target": "meetings/2026-10-28_sync.md",
+  "gold": {
+   "status": "planned",
+   "project": "CREDIT_FAIRNESS_RA",
+   "evidence": "equalized-odds gap between age bands on the loan-approval classifier"
+  },
+  "rationale": "Long English lab notes; the only project-specific line sits mid-document under Project updates, surrounded by admin noise: an equalized-odds gap on a loan-approval classifier, which is the credit fairness RA work.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-11",
+  "kind": "semantic",
+  "catalog": {
+   "KO_SPELL_FIX": {
+    "name": "한국어 맞춤법 교정 모델",
+    "desc": "띄어쓰기·맞춤법 오류 문장 seq2seq 교정",
+    "status": "active"
+   },
+   "KPOP_LYRICS_GEN": {
+    "name": "가사 생성 토이",
+    "desc": "K-pop 가사 스타일 GPT 파인튜닝",
+    "status": "active"
+   },
+   "TOEFL_SPEAK_PREP": {
+    "name": "토플 스피킹 준비",
+    "desc": "매일 녹음 피드백",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "runs/export_summary.json",
+    "content": "{\n  \"run\": \"kobart-gec-r3\",\n  \"task\": \"grammatical error correction\",\n  \"src_lang\": \"ko\",\n  \"train_pairs\": 412000,\n  \"pair_source\": \"synthetic noise (spacing drop, jamo swap) + 9k human-edited pairs\",\n  \"metrics\": {\n    \"GLEU\": 0.613,\n    \"M2_F0.5\": 0.552,\n    \"copy_rate\": 0.71\n  },\n  \"notes\": \"over-corrects 받침 in proper nouns; add NE masking\"\n}"
+   }
+  ],
+  "context": {},
+  "target": "runs/export_summary.json",
+  "gold": {
+   "status": "planned",
+   "project": "KO_SPELL_FIX",
+   "evidence": "grammatical error correction"
+  },
+  "rationale": "An English run summary for Korean grammatical error correction with GLEU/M2 matches the 맞춤법 교정 project; the lyrics model shares only generic Korean-generation vocabulary.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-12",
+  "kind": "semantic",
+  "catalog": {
+   "CLINIC_NOSHOW": {
+    "name": "병원 예약 노쇼 예측",
+    "desc": "외래 예약 환자 미방문 여부 이진분류",
+    "status": "completed"
+   },
+   "ER_WAIT_SIM": {
+    "name": "응급실 대기시간 시뮬레이션",
+    "desc": "이산사건 시뮬레이션 SimPy",
+    "status": "active"
+   },
+   "HANJA_EXAM": {
+    "name": "한자 2급 준비",
+    "desc": "주간 암기 기록",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "analysis/월별요약.txt",
+    "content": "월별 요약 (2025.01~2025.12)\n\n- 예약 부도(당일 미내원) 비율: 평균 12.4%, 월요일 오전 19.1%로 최고\n- 전날 문자 리마인더 받은 군은 부도율 -6.2%p\n- 예약~진료일 간격 21일 넘으면 부도율 두 배 가까이\n- 피처 중요도 1위: 직전 부도 횟수, 2위: 예약 간격, 3위: 나이대\n"
+   }
+  ],
+  "context": {},
+  "target": "analysis/월별요약.txt",
+  "gold": {
+   "status": "planned",
+   "project": "CLINIC_NOSHOW",
+   "evidence": "예약 부도(당일 미내원) 비율"
+  },
+  "rationale": "예약 부도/미내원 is a paraphrase of 노쇼/미방문 with no shared token; the ER simulation does not involve appointments.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-13",
+  "kind": "explicit",
+  "catalog": {
+   "CAMPUS_PM_SENSOR": {
+    "name": "캠퍼스 미세먼지 센서망",
+    "desc": "저가 광산란 센서 값을 기준 측정기로 보정",
+    "status": "active"
+   },
+   "DORM_ENERGY_VIZ": {
+    "name": "기숙사 전력 절감 캠페인 분석",
+    "desc": "층별 전력량 비교 대시보드",
+    "status": "active"
+   },
+   "CAFE_MENU_BOT": {
+    "name": "학생식당 메뉴 알림봇",
+    "desc": "디스코드 메뉴 알림",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "data/raw/node07_1101.csv",
+    "content": "ts,raw_a,raw_b,rh,temp\n2026-11-01T00:00,23,25,71,8.4\n2026-11-01T00:10,27,24,72,8.2\n2026-11-01T00:20,31,30,74,8.1\n"
+   },
+   {
+    "path": "docs/README.md",
+    "content": "## 노드 목록\n| file | 위치 | 비고 |\n|---|---|---|\n| node03_*.csv | 도서관 앞 | 2채널 |\n| node07_1101.csv | 공대 옥상, BAM-1020 바로 옆에 병치 | 보정용 co-location 기간 |\n| node11_*.csv | 정문 | 습도 센서 고장 |\n"
+   }
+  ],
+  "context": {
+   "docs/README.md": {
+    "project": "CAMPUS_PM_SENSOR",
+    "refs": [
+     "data/raw/node07_1101.csv"
+    ]
+   }
+  },
+  "target": "data/raw/node07_1101.csv",
+  "gold": {
+   "status": "planned",
+   "project": "CAMPUS_PM_SENSOR",
+   "evidence": "node07_1101.csv | 공대 옥상, BAM-1020 바로 옆에 병치"
+  },
+  "rationale": "The CSV columns are anonymous; the registered sensor README lists this file as the node co-located with a BAM reference monitor for calibration, reachable via find_related_files on the file name.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-14",
+  "kind": "semantic",
+  "catalog": {
+   "LECTURE_CAPTION": {
+    "name": "강의 자동자막 프로젝트",
+    "desc": "강의 녹화 음성인식 후 자막 싱크 맞추기",
+    "status": "active"
+   },
+   "KIDS_STORY_TTS": {
+    "name": "아동 동화 낭독 앱",
+    "desc": "캐릭터 목소리 TTS 합성",
+    "status": "active"
+   },
+   "STAT_HW6": {
+    "name": "통계학 과제 6",
+    "desc": "분산분석 연습문제",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "eval/per_lecture.csv",
+    "content": "lecture_id,minutes,WER,CER,srt_offset_ms\nML-03,74,0.142,0.071,-120\nML-04,81,0.188,0.096,340\nOS-11,69,0.121,0.060,85\nOS-12,77,0.233,0.131,910\n"
+   }
+  ],
+  "context": {},
+  "target": "eval/per_lecture.csv",
+  "gold": {
+   "status": "planned",
+   "project": "LECTURE_CAPTION",
+   "evidence": "lecture_id,minutes,WER,CER,srt_offset_ms"
+  },
+  "rationale": "WER/CER per lecture plus an SRT timing offset is speech recognition evaluation for lecture subtitles; the TTS app would not measure WER on lectures.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-15",
+  "kind": "semantic",
+  "catalog": {
+   "DIST_SYS_RAFT": {
+    "name": "분산시스템 기말 프로젝트",
+    "desc": "합의 알고리즘 Go 구현과 장애 테스트",
+    "status": "active"
+   },
+   "PL_SCHEME_INTERP": {
+    "name": "프로그래밍언어 과제 2",
+    "desc": "OCaml로 Scheme 인터프리터 구현",
+    "status": "active"
+   },
+   "PHOTO_CLUB_EXHIBIT": {
+    "name": "사진 동아리 전시 준비",
+    "desc": "작품 선정·인쇄 일정",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/lab_handout_partB.md",
+    "content": "## Part B: log\n\nImplement the leader and follower code to append new log entries, so that the `go test -run 3B` tests pass.\n\nHints:\n- Your first goal should be to pass `TestBasicAgree3B()`. Start by implementing `Start()`, then write the code to send and receive new log entries via `AppendEntries` RPCs.\n- You will need to implement the election restriction (section 5.4.1 in the paper).\n- Don't busy-wait; use condition variables or sleep for a few ms in each loop iteration.\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/lab_handout_partB.md",
+  "gold": {
+   "status": "planned",
+   "project": "DIST_SYS_RAFT",
+   "evidence": "send and receive new log entries via `AppendEntries` RPCs"
+  },
+  "rationale": "A Go lab handout on leader log replication via AppendEntries is Raft; the catalog only says 합의 알고리즘 in Korean.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-16",
+  "kind": "no_evidence",
+  "catalog": {
+   "BEE_HIVE_AUDIO": {
+    "name": "양봉 벌통 소리 모니터링",
+    "desc": "벌통 마이크 데이터로 여왕벌 부재 탐지",
+    "status": "active"
+   },
+   "TENNIS_SERVE_POSE": {
+    "name": "테니스 서브 자세 분석",
+    "desc": "포즈 추정 모델로 서브 동작 비교",
+    "status": "active"
+   },
+   "HANJA_EXAM": {
+    "name": "한자 2급 준비",
+    "desc": "주간 암기 기록",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/데이터_정리_최종.txt",
+    "content": "데이터 폴더 정리함.\n모델 결과 파일은 result/ 로 따로 뺐고 원본은 그대로 둠\n중복 같은 건 _old 붙여놓음\n월요일에 다시 확인하기\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/데이터_정리_최종.txt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "Only generic words (데이터, 모델, 결과) overlap the catalog; nothing indicates hive audio or tennis pose, so the user must be asked with no candidates.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-17",
+  "kind": "no_evidence",
+  "catalog": {
+   "KO_SPELL_FIX": {
+    "name": "한국어 맞춤법 교정 모델",
+    "desc": "띄어쓰기·맞춤법 오류 문장 seq2seq 교정",
+    "status": "active"
+   },
+   "CLINIC_NOSHOW": {
+    "name": "병원 예약 노쇼 예측",
+    "desc": "외래 예약 환자 미방문 여부 이진분류",
+    "status": "completed"
+   },
+   "ROBOT_VAC_SLAM": {
+    "name": "로봇청소기 SLAM 과제",
+    "desc": "2D LiDAR 점유 격자 지도 작성",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "scratch/quick_train.py",
+    "content": "import pandas as pd\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.ensemble import RandomForestClassifier\n\ndef load_data(path):\n    df = pd.read_csv(path)\n    return df.drop(columns=['y']), df['y']\n\nX, y = load_data('data.csv')\nXtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.2, random_state=0)\nmodel = RandomForestClassifier(n_estimators=300).fit(Xtr, ytr)\nprint('acc', model.score(Xte, yte))\n# 결과 저장은 나중에\n"
+   }
+  ],
+  "context": {},
+  "target": "scratch/quick_train.py",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "A generic binary classifier on an unnamed data.csv; it could be any tabular task (no-show is binary too, but no column or wording points there), so no candidate is singled out.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-18",
+  "kind": "ambiguous",
+  "catalog": {
+   "WAFER_MAP_DEFECT": {
+    "name": "반도체 웨이퍼 결함 분류",
+    "desc": "웨이퍼맵 이미지 9클래스 불균형 분류",
+    "status": "active"
+   },
+   "CARD_FRAUD_DET": {
+    "name": "카드 이상거래 탐지 공모전",
+    "desc": "극단적 클래스 불균형 이진분류",
+    "status": "active"
+   },
+   "BOOK_CLUB_LOG": {
+    "name": "독서 모임 기록",
+    "desc": "월간 책 발제 메모",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "notes/focal_loss_summary.md",
+    "content": "### Focal Loss (Lin et al., 2017) — quick summary\n\nFL(p_t) = -alpha_t (1 - p_t)^gamma log(p_t)\n\n- down-weights easy examples so the rare class isn't drowned out\n- defaults: gamma=2, alpha=0.25 (tune alpha per class if multi-class)\n- vs. oversampling: no duplicated rows, but sensitive to label noise\n\nTODO: try on our imbalanced set, compare against class-weighted CE at the same epochs\n"
+   }
+  ],
+  "context": {},
+  "target": "notes/focal_loss_summary.md",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "WAFER_MAP_DEFECT",
+    "CARD_FRAUD_DET"
+   ]
+  },
+  "rationale": "Focal loss for an imbalanced set applies equally to the imbalanced wafer classifier and the fraud detector; the note mentions multi-class only as an option.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-19",
+  "kind": "ambiguous",
+  "catalog": {
+   "ROOFTOP_PV_SEG": {
+    "name": "옥상 태양광 패널 세그멘테이션",
+    "desc": "항공사진에서 패널 영역 분할",
+    "status": "active"
+   },
+   "WOUND_AREA_APP": {
+    "name": "상처 부위 분할 앱",
+    "desc": "스마트폰 사진 상처 영역 분할 후 면적 계산",
+    "status": "active"
+   },
+   "TENNIS_SERVE_POSE": {
+    "name": "테니스 서브 자세 분석",
+    "desc": "포즈 추정 모델로 서브 동작 비교",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "configs/seg_b2.yaml",
+    "content": "model: segformer-b2\npretrained: nvidia/mit-b2\nimg_size: 512\nclasses: [background, target]\nloss: dice+bce\naug:\n  hflip: true\n  color_jitter: 0.2\n  rotate: 15\noptimizer: adamw\nlr: 6.0e-5\nepochs: 80\n"
+   }
+  ],
+  "context": {},
+  "target": "configs/seg_b2.yaml",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "ROOFTOP_PV_SEG",
+    "WOUND_AREA_APP"
+   ]
+  },
+  "rationale": "A binary SegFormer config with generic augmentations fits both segmentation projects; nothing names aerial tiles or wound photos.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-20",
+  "kind": "no_evidence",
+  "catalog": {
+   "HCI_KIOSK_STUDY": {
+    "name": "노인 키오스크 사용성 연구",
+    "desc": "고령자 주문 과업 관찰 연구",
+    "status": "active"
+   },
+   "CAFE_MENU_BOT": {
+    "name": "학생식당 메뉴 알림봇",
+    "desc": "디스코드 메뉴 알림",
+    "status": "completed"
+   },
+   "GRAD_SCHOOL_APPS": {
+    "name": "대학원 지원 준비",
+    "desc": "SOP 초안·추천서 일정 관리",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/결과_v3.csv",
+    "content": "run,score\nA,0.812\nB,0.809\nC,0.774\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/결과_v3.csv",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "Three run scores with no names or units; the file name word 결과 is the only content-like signal and none of the projects trains models.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-21",
+  "kind": "ambiguous",
+  "catalog": {
+   "KAGGLE_LLM_PREF": {
+    "name": "Kaggle 챗봇 응답 선호도 예측",
+    "desc": "응답 쌍 중 사람이 고른 쪽 3분류",
+    "status": "active"
+   },
+   "KAGGLE_EEG_HARM": {
+    "name": "Kaggle 뇌파 유해 활동 분류",
+    "desc": "EEG 스펙트로그램 6클래스 분류",
+    "status": "active"
+   },
+   "PHOTO_CLUB_EXHIBIT": {
+    "name": "사진 동아리 전시 준비",
+    "desc": "작품 선정·인쇄 일정",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/kaggle_thread_trust_cv.txt",
+    "content": "Thread: Trust your CV (again)\n\nPublic LB is computed on a small slice of the test set, so a 0.003 jump there is mostly noise. My last three subs went up on public and down on my 5-fold CV; I'm picking the CV ones for final.\n\n> reply: agree. also make sure folds are grouped by whatever id repeats across rows, otherwise leakage inflates CV too.\n> reply: blend of 3 seeds smoothed things a lot for me.\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/kaggle_thread_trust_cv.txt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "KAGGLE_LLM_PREF",
+    "KAGGLE_EEG_HARM"
+   ]
+  },
+  "rationale": "A generic Kaggle CV-vs-LB thread copied from a discussion fits either active Kaggle competition; no metric, modality or data name narrows it.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-22",
+  "kind": "ambiguous",
+  "catalog": {
+   "FLOWER_CLS_HW": {
+    "name": "딥러닝 과제 3 꽃 이미지 분류",
+    "desc": "102종 꽃 사진 전이학습 분류",
+    "status": "active"
+   },
+   "MASK_WEAR_CLS": {
+    "name": "마스크 착용 상태 분류 대회",
+    "desc": "얼굴 사진 착용 상태·성별·나이 다중분류",
+    "status": "active"
+   },
+   "HANJA_EXAM": {
+    "name": "한자 2급 준비",
+    "desc": "주간 암기 기록",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/model_card.md",
+    "content": "## Model card (draft)\n\n- 입력: RGB 이미지 224x224\n- 백본: ResNet-50 (ImageNet 사전학습)\n- 출력: 클래스별 확률 (softmax)\n- 학습: 25 epoch, label smoothing 0.1\n- 성능: 결과 표 참고 (아직 안 붙임)\n- 한계: 조명 어두운 사진에서 오분류 많음\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/model_card.md",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "FLOWER_CLS_HW",
+    "MASK_WEAR_CLS"
+   ]
+  },
+  "rationale": "A ResNet-50 image classifier card with no class names or counts fits both image classification projects; 모델/결과/이미지 are the only overlaps.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-23",
+  "kind": "no_evidence",
+  "catalog": {
+   "VOICE_PHISH_DET": {
+    "name": "보이스피싱 통화 탐지 공모전",
+    "desc": "통화 전사 텍스트 사기 여부 분류",
+    "status": "active"
+   },
+   "ROADKILL_THERMAL": {
+    "name": "고속도로 로드킬 예방 연구",
+    "desc": "열화상 카메라로 야생동물 검출 후 경고",
+    "status": "active"
+   },
+   "KIDS_STORY_TTS": {
+    "name": "아동 동화 낭독 앱",
+    "desc": "캐릭터 목소리 TTS 합성",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/이상탐지_결과_1102.txt",
+    "content": "서버 접속 로그 이상 탐지 결과 (11/02)\n- 03:00~03:40 ssh 로그인 실패 412건, 대부분 같은 /24 대역\n- 웹 서버 5xx 비율 평소 0.3% → 2.1% (02:50 배포 직후)\n- fail2ban 차단 목록 갱신 완료\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/이상탐지_결과_1102.txt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "A server-log anomaly report shares only the generic word 탐지 with the phishing and roadkill projects; it belongs to neither, so ask with no candidates.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-24",
+  "kind": "no_evidence",
+  "catalog": {
+   "DOC_LAYOUT_PARSE": {
+    "name": "논문 PDF 레이아웃 분석 연구",
+    "desc": "문서 이미지에서 표·그림·본문 영역 검출",
+    "status": "active"
+   },
+   "LECTURE_CAPTION": {
+    "name": "강의 자동자막 프로젝트",
+    "desc": "강의 녹화 음성인식 후 자막 싱크 맞추기",
+    "status": "active"
+   },
+   "BEE_HIVE_AUDIO": {
+    "name": "양봉 벌통 소리 모니터링",
+    "desc": "벌통 마이크 데이터로 여왕벌 부재 탐지",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "notes/todo_misc.md",
+    "content": "- [ ] re-download the dataset (link expired?)\n- [ ] model weights too big for gdrive, try the lab NAS\n- [x] results look fine, send the table on Fri\n- [ ] renew VPN cert\n"
+   }
+  ],
+  "context": {},
+  "target": "notes/todo_misc.md",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "An English to-do list with only dataset/model/results; nothing ties it to layout analysis, lecture captions or hive audio.",
+  "source": "authored"
+ },
+ {
+  "id": "t2-25",
+  "kind": "ambiguous",
+  "catalog": {
+   "MARITIME_AIS_ETA": {
+    "name": "AIS 기반 선박 입항 시간 예측",
+    "desc": "AIS 궤적 시퀀스로 ETA 회귀",
+    "status": "active"
+   },
+   "RIDER_ETA_COMP": {
+    "name": "배달 도착시간 예측 공모전",
+    "desc": "주문·거리 피처 GBM 도착시간 회귀",
+    "status": "active"
+   },
+   "WEB_A11Y_CLUB": {
+    "name": "웹 접근성 점검 동아리",
+    "desc": "학교 홈페이지 WCAG 점검",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "analysis/eta_residuals.md",
+    "content": "## 도착시간 잔차 분석\n\n- MAPE 11.8% → 9.6% (haversine 거리 + 출발 시각대 피처 추가)\n- 거리 상위 10% 구간에서 과소예측 심함 → 구간별 bias 보정 테스트 예정\n- 출발지별 평균 잔차 편차 큼, target encoding 해볼 것\n"
+   }
+  ],
+  "context": {},
+  "target": "analysis/eta_residuals.md",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "MARITIME_AIS_ETA",
+    "RIDER_ETA_COMP"
+   ]
+  },
+  "rationale": "Residual analysis with haversine distance and departure-hour features fits both ETA projects; no vessel, port, rider or order word breaks the tie.",
+  "source": "authored"
+ }
+]

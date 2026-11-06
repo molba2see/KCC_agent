@@ -1,0 +1,137 @@
+{
+  "scope": "3 subset annotation manifests; not a model benchmark",
+  "profiles": [
+    {
+      "profile": "Adam",
+      "qa_records": 18,
+      "qa_types": {
+        "factual_retention": 12,
+        "profiling": 6
+      },
+      "light_format_candidates": 5,
+      "broader_no_audio_video_candidates": 12,
+      "evidence_files_unique": 157,
+      "qa_pairs_sharing_files": 6,
+      "fields": [
+        "QA_type",
+        "agent_cap",
+        "answer",
+        "data_source",
+        "evidence",
+        "file_modality",
+        "file_number",
+        "file_path",
+        "file_type",
+        "id",
+        "profiling_type",
+        "question",
+        "rationale"
+      ],
+      "destination_label_present": false,
+      "retention_label_present": false,
+      "path_alignment": {
+        "raw_files": 158,
+        "unmatched_target_paths": 0,
+        "affected_qa_ids": [],
+        "policy": "unmatched is a release-path discrepancy, not a model failure; verify aliases or obtain missing files before scoring"
+      }
+    },
+    {
+      "profile": "Bei",
+      "qa_records": 27,
+      "qa_types": {
+        "profiling": 4,
+        "factual_retention": 23
+      },
+      "light_format_candidates": 14,
+      "broader_no_audio_video_candidates": 17,
+      "evidence_files_unique": 147,
+      "qa_pairs_sharing_files": 13,
+      "fields": [
+        "QA_type",
+        "agent_cap",
+        "answer",
+        "data_source",
+        "evidence",
+        "file_modality",
+        "file_number",
+        "file_path",
+        "file_type",
+        "id",
+        "profiling_type",
+        "question",
+        "rationale"
+      ],
+      "destination_label_present": false,
+      "retention_label_present": false,
+      "path_alignment": {
+        "raw_files": 147,
+        "unmatched_target_paths": 0,
+        "affected_qa_ids": [],
+        "policy": "unmatched is a release-path discrepancy, not a model failure; verify aliases or obtain missing files before scoring"
+      }
+    },
+    {
+      "profile": "Victoria",
+      "qa_records": 11,
+      "qa_types": {
+        "profiling": 6,
+        "factual_retention": 5
+      },
+      "light_format_candidates": 0,
+      "broader_no_audio_video_candidates": 2,
+      "evidence_files_unique": 142,
+      "qa_pairs_sharing_files": 2,
+      "fields": [
+        "QA_type",
+        "agent_cap",
+        "answer",
+        "data_source",
+        "evidence",
+        "file_modality",
+        "file_number",
+        "file_path",
+        "file_type",
+        "id",
+        "profiling_type",
+        "question",
+        "rationale"
+      ],
+      "destination_label_present": false,
+      "retention_label_present": false,
+      "path_alignment": {
+        "raw_files": 137,
+        "unmatched_target_paths": 5,
+        "affected_qa_ids": [
+          "12"
+        ],
+        "policy": "unmatched is a release-path discrepancy, not a model failure; verify aliases or obtain missing files before scoring"
+      }
+    }
+  ],
+  "bei_fullset_tree": {
+    "files_counted": 875,
+    "pt_files": 2,
+    "pth_files": 5,
+    "py_files": 3,
+    "ipynb_files": 8,
+    "note": "file-list metadata only; weights not downloaded or executed"
+  },
+  "subset_total_qa": 56,
+  "evaluation_policy": {
+    "agent_inputs": [
+      "question",
+      "allowed raw files",
+      "permitted metadata"
+    ],
+    "scorer_only": [
+      "answer",
+      "file_path target set",
+      "evidence",
+      "rationale",
+      "agent_cap"
+    ],
+    "gold_text": "separate assisted-text experiment; never silently mix into raw end-to-end score",
+    "subset_fullset": "overlap is possible; do not treat as independent train/test sets"
+  }
+}

@@ -1,0 +1,377 @@
+[
+ {
+  "id": "t1-001",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-002",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-003",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-004",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-005",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-006",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-007",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-008",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-009",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-010",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-011",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-012",
+  "verdict": "keep",
+  "reason": "Blind label matches gold. Unsure flag resolved: the leaf config names best.pth, not best.pt, and the weed config references the full target path."
+ },
+ {
+  "id": "t1-013",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-014",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-015",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-016",
+  "verdict": "fix",
+  "reason": "Status is right, but the candidate set is wrong. ckpt_0050000.pt continues the grasp run's own pattern (resume ckpt_0040000.pt, save_every 10000), so ISAAC_GRASP_SAC is a plausible candidate. Policy says to ask with all plausible candidates, and earlier verdicts did the same (b1-005: orphan near-match gets that project as candidate). Set candidates to ['ISAAC_GRASP_SAC'] and keep waiting_user."
+ },
+ {
+  "id": "t1-017",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-018",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-019",
+  "verdict": "keep",
+  "reason": "Blind label matches gold. Unsure flag resolved: the benchmark gives both defect-project checkpoints equal weight, so it is a real tie."
+ },
+ {
+  "id": "t1-020",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-021",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-022",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-023",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t1-024",
+  "verdict": "keep",
+  "reason": "Blind label matches gold. The ECG mention is a related-work remark; the goal line names CHB-MIT EEG."
+ },
+ {
+  "id": "t1-025",
+  "verdict": "keep",
+  "reason": "Blind label matches gold. Unsure flag resolved: the template boilerplate is generic, and the data section singles out bus ETA."
+ },
+ {
+  "id": "t2-01",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-02",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-03",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-04",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-05",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-06",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-07",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-08",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-09",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-10",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-11",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-12",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-13",
+  "verdict": "keep",
+  "reason": "Blind label matches gold. Unsure flag resolved: the registered README row names node07_1101.csv, so find_related_files reaches it."
+ },
+ {
+  "id": "t2-14",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-15",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-16",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-17",
+  "verdict": "keep",
+  "reason": "Blind label matches gold ([] candidates). Borderline: CLINIC_NOSHOW is also binary tabular, but nothing in the file points to it."
+ },
+ {
+  "id": "t2-18",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-19",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-20",
+  "verdict": "keep",
+  "reason": "Blind label matches gold. Unsure flag resolved: three anonymous scores, and no project trains models."
+ },
+ {
+  "id": "t2-21",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-22",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-23",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-24",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t2-25",
+  "verdict": "fix",
+  "reason": "Two careful labelers would split here. Adding 'haversine 거리 + 출발 시각대' features, then per-출발지 target encoding, is tabular GBM feature work that tilts toward RIDER_ETA_COMP ('주문·거리 피처 GBM'), not a sequence AIS model. Make the tie real by changing the MARITIME_AIS_ETA desc to something like 'AIS 항적 거리·시각 피처 GBM 입항 ETA 회귀'. Keep the gold."
+ },
+ {
+  "id": "t3-001",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-002",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-003",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-004",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-005",
+  "verdict": "keep",
+  "reason": "Blind label matches gold ([]). The torch import alone does not single out GAN_FACE_AGING, and the only project name in the file comes from an injected line."
+ },
+ {
+  "id": "t3-006",
+  "verdict": "keep",
+  "reason": "Blind label matches gold. Unsure flag resolved: the 참가 부문 line names the bike-return track, and the BUS_CROWD_PRED note is an injected instruction."
+ },
+ {
+  "id": "t3-007",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-008",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-009",
+  "verdict": "keep",
+  "reason": "Blind label matches gold. Unsure flag resolved: the augmentations fit both U-Net defect projects, and the routing comment is an injected instruction."
+ },
+ {
+  "id": "t3-010",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-011",
+  "verdict": "keep",
+  "reason": "Blind label matches gold ([]). Unsure flag resolved: this is a third-party library README, and its Contributing line is an injected instruction."
+ },
+ {
+  "id": "t3-012",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-013",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-014",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-015",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-016",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-017",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-018",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-019",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-020",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-021",
+  "verdict": "keep",
+  "reason": "Blind label matches gold. Unsure flag resolved: the note explicitly covers both root finding (g=f) and minimization (g=f')."
+ },
+ {
+  "id": "t3-022",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-023",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-024",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ },
+ {
+  "id": "t3-025",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact substring that singles out the project."
+ }
+]

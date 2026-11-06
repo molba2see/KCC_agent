@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+experiments/
+prototype/bin/
+.env
+.env.*
+!.env.example
+demo_workspace/
+sft/train.jsonl
+sft/lora_*/

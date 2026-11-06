@@ -1,0 +1,502 @@
+[
+ {
+  "id": "b1-001",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-002",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-003",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-004",
+  "verdict": "fix",
+  "reason": "Label format image_id,label (type classes) is classification output, which tilts to INSUR_DAMAGE_GRADE over a segmentation competition, so careful humans may not both say ask. Change CAR_DAMAGE_SEG desc to a classification task (e.g. '쏘카 차량 사진 파손 유형 4종 분류') so the tie is real; keep gold."
+ },
+ {
+  "id": "b1-005",
+  "verdict": "fix",
+  "reason": "Status right, candidate set inconsistent with b1-015/b1-022 (orphan weights with a same-project near-match ref get that project as candidate). Set candidates to ['KO_SENTI_DISTILL'] (only HF-format model project; config saves to outputs/student_l4)."
+ },
+ {
+  "id": "b1-006",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-007",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-008",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-009",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-010",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-011",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-012",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-013",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-014",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-015",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-016",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-017",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-018",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-019",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-020",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-021",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-022",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-023",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-024",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b1-025",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-001",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-002",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-003",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-004",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-005",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-006",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-007",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-008",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-009",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-010",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-011",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-012",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-013",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-014",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-015",
+  "verdict": "fix",
+  "reason": "Weekly report is mostly about the co-authored rebuttal (CONF_REBUTTAL_TTA, active) and server move; RS_PADDY_SEG appears only in the last section, so two labelers could split. Replace CONF_REBUTTAL_TTA in the catalog with an unrelated project (rebuttal becomes non-catalog work) or cut section 2/4 rebuttal text; keep gold RS_PADDY_SEG."
+ },
+ {
+  "id": "b2-016",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-017",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-018",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-019",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-020",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-021",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-022",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-023",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-024",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b2-025",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-001",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-002",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-003",
+  "verdict": "fix",
+  "reason": "multi_logloss + occyp_type (the literal column of the public DACON credit-card delinquency comp) single out DACON_CARD_DELINQ, whose desc alone says 다중분류. Either relabel planned DACON_CARD_DELINQ (evidence '\"metric\": \"multi_logloss\"') or, to keep it ambiguous, make DACON_LOAN_REPAY desc also '다중분류, logloss' and replace cat_features with neutral ones (e.g. gender, income_type)."
+ },
+ {
+  "id": "b3-004",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-005",
+  "verdict": "fix",
+  "reason": "A 5-user usability test with next dev actions does not fit a completed 48-hour hackathon MVP; many labelers would pick CAPSTONE_MEAL_APP. Make HACKATHON_MEAL_BOT active with a desc implying ongoing post-hackathon development (e.g. '해커톤 이후 정식 출시 준비 중') so the tie is real."
+ },
+ {
+  "id": "b3-006",
+  "verdict": "drop",
+  "reason": "Note covers exactly DDPM + DDIM and plans a sampling-speed comparison table, which matches VISION_SEMINAR_DIFF's desc 'DDPM/DDIM 논문 리뷰 발표 자료' almost verbatim; one labeler picks the seminar, another asks. Genuinely debatable."
+ },
+ {
+  "id": "b3-007",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-008",
+  "verdict": "fix",
+  "reason": "bitsandbytes is the QLoRA 4bit signature and LORA_MED_CHAT is the only QLoRA 4bit project, tilting the tie. Remove the bitsandbytes line (or make LORA_LEGAL_QA desc QLoRA too); keep gold."
+ },
+ {
+  "id": "b3-009",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-010",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-011",
+  "verdict": "fix",
+  "reason": "Status right, but KOR_OCR_RECEIPT (receipt key-value extraction) is a plausible candidate for a receipt text, so [] is debatable. Set candidates to ['KOR_OCR_RECEIPT'] (or swap that project for an unrelated one and keep [])."
+ },
+ {
+  "id": "b3-012",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-013",
+  "verdict": "fix",
+  "reason": "Blank weekly-report template; LAB_WEEKLY_MEETING ('교수님 주간 미팅 발표 슬라이드') is an obvious plausible candidate. Set candidates to ['LAB_WEEKLY_MEETING']."
+ },
+ {
+  "id": "b3-014",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-015",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-016",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-017",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-018",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-019",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-020",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-021",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-022",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-023",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-024",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b3-025",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-001",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-002",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-003",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-004",
+  "verdict": "fix",
+  "reason": "Candidate convention inconsistent: generic DL artifacts elsewhere (b1-008 requirements, b1-018 OOM log, b4-006, b4-019) get [], here two DL projects are listed. Set candidates to [] to match the majority convention (or fix all generic cases the other way, consistently)."
+ },
+ {
+  "id": "b4-005",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-006",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-007",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-008",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-009",
+  "verdict": "fix",
+  "reason": "Evidence is a log line that paraphrases the catalog desc ('위성영상 건물 footprint 분할 (SpaceNet 서울 타일)'), which no real training stdout prints; makes the case trivial string matching. Replace with a natural cue such as 'data=spacenet_seoul_tiles/val' and update evidence."
+ },
+ {
+  "id": "b4-010",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-011",
+  "verdict": "fix",
+  "reason": "Label correct, but log timestamps go backwards (21:15:50, 21:15:40, 21:15:30 ... repeating), an obvious generation artifact. Make timestamps monotonic."
+ },
+ {
+  "id": "b4-012",
+  "verdict": "drop",
+  "reason": "Lecture note for a course with no catalog project; ownership by CS_MRI_RECON rests on a personal memo, and a careful labeler could ask instead. Also ~85 blank padding lines are an artificial long-doc artifact."
+ },
+ {
+  "id": "b4-013",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-014",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-015",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-016",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-017",
+  "verdict": "fix",
+  "reason": "Blank '주간 보고' template; WEEKLY_LAB_REPORT ('연구실 주간 보고') is an obvious plausible candidate. Set candidates to ['WEEKLY_LAB_REPORT']; injection part is fine."
+ },
+ {
+  "id": "b4-018",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-019",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-020",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-021",
+  "verdict": "fix",
+  "reason": "LINALG_TA_2026 desc '연습문제 풀이 준비' lexically matches the file title '연습문제 풀이', tilting the tie to TA. Change TA desc to e.g. '퀴즈 출제·채점과 질의응답' so both remain equally plausible; keep gold."
+ },
+ {
+  "id": "b4-022",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-023",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-024",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ },
+ {
+  "id": "b4-025",
+  "verdict": "keep",
+  "reason": "Blind label matches gold (status, project/candidates); evidence is an exact quote that singles out the project."
+ }
+]

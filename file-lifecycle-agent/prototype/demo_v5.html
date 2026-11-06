@@ -1,0 +1,83 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>임시 자료 정리 에이전트 데모</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f6fa;color:#14213a;font:15px/1.55 -apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif}
+main{max-width:1180px;margin:auto;padding:28px}h1{font-size:28px;margin:4px 0}.sub{color:#5b6b85}.eyebrow{font-weight:700;color:#4f46e5;font-size:13px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:18px 0}button{cursor:pointer;background:#fff;color:#273758;border:1px solid #cbd5e1;border-radius:8px;padding:7px 12px;font:inherit}
+button:hover{background:#eef2ff}button:disabled{opacity:.5;cursor:default}.primary{background:#4f46e5;color:#fff;border-color:#4f46e5}.primary:hover{background:#4338ca}.danger{color:#b42318}
+.grid{display:grid;grid-template-columns:1fr 300px;gap:18px}.panel,article{background:#fff;border:1px solid #e0e6ef;border-radius:14px;padding:16px}
+article{margin-bottom:12px}article h3{margin:0 0 4px;font-size:16px;word-break:break-all}.tag{display:inline-block;white-space:nowrap;padding:2px 8px;border-radius:6px;background:#edf2fa;font-size:12px;margin:0 4px 4px 0}
+.planned{background:#e0e7ff;color:#3730a3}.waiting{background:#fff0cd;color:#975a0c}.archive{background:#dcfce7;color:#166534}.keep{background:#e0f2fe;color:#075985}.defer{background:#f1f5f9;color:#475569}.done{background:#166534;color:#fff}
+.ev{background:#f8fafc;border-left:3px solid #4f46e5;padding:6px 10px;margin:8px 0;font-size:13px;white-space:pre-wrap}.q{border-color:#d97706}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}details{margin-top:8px;font-size:13px}ol{padding-left:20px;margin:6px 0}li{margin:3px 0;word-break:break-all}.err{color:#b42318}
+table{width:100%;border-collapse:collapse;font-size:13px}#journal{table-layout:fixed}#journal td{word-break:break-all}#journal td:last-child{width:58px;text-align:right}td{border-bottom:1px solid #edf0f5;padding:5px 2px;vertical-align:top}#msg{position:sticky;top:8px;z-index:2;padding:10px 14px;background:#eef2ff;border-radius:10px;display:none}
+code{font-size:12px;background:#f1f5f9;padding:1px 4px;border-radius:4px}@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0}.stat{background:#fff;border:1px solid #e0e6ef;border-radius:12px;padding:10px 14px;cursor:pointer}.stat.on{border-color:#4f46e5;box-shadow:0 0 0 2px #e0e7ff}.stat strong{display:block;font-size:24px}
+.why{margin:8px 0;padding:8px 12px;background:#f8fafc;border-radius:8px;font-size:13px}.why ol{margin:4px 0}.why li:last-child{font-weight:600}#q{flex:1;min-width:200px;border:1px solid #ccd4e2;border-radius:8px;padding:7px 10px;font:inherit}
+.step{display:inline-block;min-width:118px;color:#4f46e5;font-weight:600}
+</style>
+<main>
+<div class="eyebrow" id="ctl"></div><h1>임시 자료 정리 에이전트</h1>
+<p class="sub">에이전트는 도구를 골라 근거를 찾고 계획만 제안합니다. 파일은 <b>사용자가 승인한 것만</b> 실행기가 옮기며, 언제든 되돌릴 수 있습니다.</p>
+<div id="msg" role="status"></div>
+<div class="bar"><button class="primary" id="all">전체 분석</button><button id="bulk">보관 권장 일괄 승인</button><button id="reset" class="danger">데모 폴더 초기화</button><span class="sub" id="root"></span></div>
+<div class="stats" id="stats"></div>
+<div class="bar"><input id="q" placeholder="파일명·프로젝트 검색" aria-label="파일명 또는 프로젝트 검색"><span class="sub" id="dist"></span></div>
+<div class="grid"><div id="cards"></div>
+<aside><div class="panel"><b>프로젝트</b><table id="cat"></table></div><div class="panel" style="margin-top:12px"><b>실행 기록 (저널)</b><table id="journal"></table></div></aside></div>
+</main>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ACT={archive:'보관(archive)',keep:'유지(keep)',defer:'보류(defer)'},WHY={'explicit completed project':'완료된 프로젝트의 자료','active project':'진행 중인 프로젝트의 자료','active reference':'진행 중인 프로젝트 설정이 이 파일을 참조함','user keep':'사용자가 유지를 선택함','reference-bearing file requires bundle-preserving move':'다른 파일을 참조하는 파일이라 묶음 이동이 필요함'},JS={done:'이동',undone:'되돌림',prepared:'진행 중',rolled_back:'취소'};let S=null,F='all';const STEP={inspect_file:'파일 정보 확인',read_content:'내용 읽기',search_projects:'프로젝트 검색',find_related_files:'관련 파일 탐색',assign_project:'프로젝트 지정',check_references:'참조 확인',ask_user:'사용자에게 질문',preview_plan:'계획 생성',finish:'계획 확정'};
+function msg(t){$('#msg').textContent=t;$('#msg').style.display=t?'block':'none'}
+async function post(u,d={}){const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});const j=await r.json();if(!j.ok)throw Error(j.error);return j.result}
+async function load(){S=await (await fetch('/api/state')).json();render()}
+function name(id){const c=S.catalog.find(x=>x.id===id);return c?`${c.name} (${id})`:id}
+function bucket(a){return a.archived?'archived':!a.run?'new':a.run.status==='waiting_user'&&!a.project?'ask':a.plan?a.plan.action:'ask'}
+function render(){
+ const B={all:['전체',S.assets.length]};for(const [k,t] of [['keep','유지 권장'],['archive','보관 권장'],['ask','확인 필요'],['archived','보관됨']])B[k]=[t,S.assets.filter(a=>bucket(a)===k).length];
+ $('#stats').innerHTML=Object.entries(B).map(([k,[t,n]])=>`<div class="stat ${F===k?'on':''}" data-f="${k}"><span class="sub">${t}</span><strong>${n}</strong></div>`).join('');
+ const dist={};S.assets.forEach(a=>{if(a.project)dist[a.project]=(dist[a.project]||0)+1});$('#dist').textContent='프로젝트별: '+(Object.entries(dist).map(([k,n])=>`${k} ${n}`).join(' · ')||'아직 없음');
+ const q=$('#q').value.trim().toLowerCase();
+ $('#ctl').textContent='CONTROLLER · '+S.controller;$('#root').textContent='폴더: '+S.root;
+ $('#cat').innerHTML=S.catalog.map(c=>`<tr><td><b>${esc(c.id)}</b><br><span class="sub">${esc(c.name)}</span></td><td><span class="tag ${c.status==='completed'?'archive':'keep'}">${c.status==='completed'?'완료':'진행 중'}</span></td></tr>`).join('');
+ $('#journal').innerHTML=S.journal.slice().reverse().map(j=>`<tr><td>${esc(j.src)} → ${esc(j.dst)}</td><td>${esc(JS[j.state]||j.state)}</td></tr>`).join('')||'<tr><td class="sub" colspan="2" style="text-align:left">아직 이동 없음</td></tr>';
+ $('#cards').innerHTML=S.assets.filter(a=>(F==='all'||bucket(a)===F)&&(!q||(a.original+' '+(a.project||'')).toLowerCase().includes(q))).map(card).join('')||'<p class="sub">조건에 맞는 파일이 없습니다.</p>';
+}
+function card(a){
+ const r=a.run,p=a.plan,tags=[],body=[],acts=[];
+ if(a.archived){tags.push('<span class="tag done">보관됨</span>');body.push(`<p class="sub">현재 위치: <code>${esc(a.path)}</code></p>`);acts.push(['undo','되돌리기'])}
+ else if(!r){tags.push('<span class="tag">미분석</span>');acts.push(['analyze','분석'])}
+ else{
+  tags.push(r.answered?'':r.status==='planned'?'<span class="tag planned">에이전트 계획</span>':r.status==='waiting_user'?'<span class="tag waiting">사용자 확인 필요</span>':`<span class="tag err">${esc(r.status)}</span>`);
+  if(r.answered)tags.push('<span class="tag">사용자 답변 반영</span>');if(r.trigger==='watch')tags.push('<span class="tag planned">자동 감지</span>');
+  if(a.why?.length)body.push(`<div class="why"><b>판단 근거</b><ol>${a.why.map(w=>`<li>${esc(w)}</li>`).join('')}</ol></div>`);
+  if(r.status==='waiting_user'&&!a.project){body.push(`<div class="ev q"><b>질문</b> ${esc(r.question)}</div>`);
+   const cands=r.candidates?.length?r.candidates:[];body.push(`<div class="actions">${cands.map(c=>`<button data-act="answer" data-pid="${esc(c)}">${esc(name(c))}</button>`).join('')}<select data-sel><option value="">다른 프로젝트 선택…</option>${S.catalog.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('')}</select></div>`)}
+  acts.push(['analyze','다시 분석']);
+ }
+ if(a.project&&!a.archived)body.unshift(`<p>프로젝트: <b>${esc(name(a.project))}</b></p>`);
+ if(p&&!a.archived){tags.push(`<span class="tag ${p.action}">${ACT[p.action]}</span>`);body.push(`<p class="sub">이유: ${esc(WHY[p.reason]||p.reason)}${p.target?` · 이동 위치 <code>${esc(p.target)}</code>`:''}</p>`);
+  if(p.action==='archive')acts.unshift(['approve','승인하고 보관'],['keep','계속 유지'])}
+ const trace=r?`<details><summary>에이전트 실행 과정 · 도구 호출 ${r.trace.length}회 · 오류 ${r.errors}회 · ${r.seconds}초${Object.keys(r.stats||{}).length?' · '+esc(JSON.stringify(r.stats)):''}</summary><ol>${r.trace.map(h=>`<li><span class="step">${esc(STEP[h.tool]||'형식 오류')}</span><code>${esc(h.tool??'')}(${esc(JSON.stringify(h.arguments))})</code><br><span class="${String(h.result).startsWith('오류')?'err':'sub'}">${esc(h.result)}</span></li>`).join('')}</ol></details>`:'';
+ return `<article data-id="${a.id}"><h3>${esc(a.original)}</h3>${tags.join('')}${body.join('')}<div class="actions">${acts.map(([k,t])=>`<button data-act="${k}">${t}</button>`).join('')}</div>${trace}</article>`;
+}
+async function run(act,id,extra={}){
+ const a=S.assets.find(x=>x.id===id);
+ try{msg(act==='analyze'?`${a.original} 분석 중…`:'처리 중…');
+  await post('/api/'+act,{id,...extra,...(act==='approve'?{plan:a.plan}:{})});msg('');await load()}
+ catch(e){msg('거절됨: '+e.message);await load()}
+}
+$('#cards').onclick=e=>{const b=e.target.closest('button');if(!b)return;const id=b.closest('article').dataset.id;
+ if(b.dataset.act==='answer')run('answer',id,{project_id:b.dataset.pid});else run(b.dataset.act,id)};
+$('#cards').onchange=e=>{if(e.target.dataset.sel!==undefined&&e.target.value)run('answer',e.target.closest('article').dataset.id,{project_id:e.target.value})};
+$('#all').onclick=async()=>{$('#all').disabled=true;for(const a of S.assets.filter(x=>!x.run&&!x.archived)){msg(`${a.original} 분석 중…`);try{await post('/api/analyze',{id:a.id})}catch(e){}await load()}msg('');$('#all').disabled=false};
+$('#reset').onclick=async()=>{if(!confirm('데모 폴더를 처음 상태로 되돌릴까요?'))return;await post('/api/reset');await load()};
+$('#stats').onclick=e=>{const d=e.target.closest('[data-f]');if(d){F=d.dataset.f;render()}};$('#q').oninput=render;
+$('#bulk').onclick=async()=>{const xs=S.assets.filter(a=>bucket(a)==='archive');if(!xs.length)return msg('보관 권장 파일이 없습니다.');
+ if(!confirm(`보관 권장 ${xs.length}개를 보관할까요?\n`+xs.map(a=>'· '+a.original+' → '+a.plan.target).join('\n')))return;let ok=0,bad=[];
+ for(const a of xs){try{await post('/api/approve',{id:a.id,plan:a.plan});ok++}catch(e){bad.push(a.original+': '+e.message)}}msg(`보관 ${ok}개 완료`+(bad.length?` · 거절 ${bad.length}개 (${bad.join('; ')})`:''));await load()};
+let V=null;async function poll(){try{const e=await (await fetch('/api/events')).json();
+ if(e.watch)$('#root').textContent='폴더: '+S.root+' · 자동 감지 켜짐 (downloads, screenshots)';
+ if(V!==null&&e.version!==V){const x=e.events[e.events.length-1];msg(`새 파일 감지: ${x.path} → ${x.text}`);await load()}V=e.version}catch(_){}}
+load().then(poll);setInterval(poll,2000);
+</script></html>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1100" viewBox="0 0 1400 1100">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#94a3b8" stroke-width="1.5"/></marker></defs>
+<rect width="1400" height="1100" rx="24" fill="#f5f7fb"/>
+<g font-family="Apple SD Gothic Neo, Noto Sans KR, sans-serif">
+<text x="60" y="62" font-size="15" font-weight="700" fill="#2563eb">BASELINE v0.1 · 2026.11.02 · 설계안</text>
+<text x="60" y="112" font-size="36" font-weight="800" fill="#0f172a">임시 자료 라이프사이클 관리</text>
+<text x="60" y="148" font-size="19" fill="#475569">평소처럼 저장하면, 필요한 때 다시 꺼내고 사용이 끝난 뒤 정리까지 연결합니다.</text><text x="60" y="190" font-size="19" font-weight="700" fill="#2563eb">A  자동 수집과 내용 이해</text><text x="510" y="190" font-size="19" font-weight="700" fill="#7c3aed">B  자료 연결과 상태 관리</text><text x="960" y="190" font-size="19" font-weight="700" fill="#047857">C  재사용과 정리 실행</text><rect x="60" y="210" width="380" height="140" rx="16" fill="white" stroke="#dce3ee"/>
+    <rect x="60" y="226" width="5" height="108" rx="2" fill="#2563eb"/>
+    <text x="82" y="242" font-size="14" font-weight="700" fill="#2563eb">STEP 01</text>
+    <text x="82" y="274" font-size="23" font-weight="700" fill="#0f172a">새 자료 감지</text>
+    <text x="82" y="306" font-size="16" fill="#334155">다운로드 · 스크린샷 폴더</text>
+    <text x="82" y="331" font-size="14" fill="#64748b">파일 저장 완료를 확인한 뒤 처리</text><path d="M250,354 V382" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/><rect x="60" y="390" width="380" height="140" rx="16" fill="white" stroke="#dce3ee"/>
+    <rect x="60" y="406" width="5" height="108" rx="2" fill="#2563eb"/>
+    <text x="82" y="422" font-size="14" font-weight="700" fill="#2563eb">STEP 02</text>
+    <text x="82" y="454" font-size="23" font-weight="700" fill="#0f172a">중복 검사 · 원문 읽기</text>
+    <text x="82" y="486" font-size="16" fill="#334155">해시 검사 → PDF 추출 / OCR</text>
+    <text x="82" y="511" font-size="14" fill="#64748b">동일 파일은 연결, 다른 버전은 보존</text><path d="M250,534 V562" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/><rect x="60" y="570" width="380" height="140" rx="16" fill="white" stroke="#dce3ee"/>
+    <rect x="60" y="586" width="5" height="108" rx="2" fill="#2563eb"/>
+    <text x="82" y="602" font-size="14" font-weight="700" fill="#2563eb">STEP 03</text>
+    <text x="82" y="634" font-size="23" font-weight="700" fill="#0f172a">AI 구조화 추출</text>
+    <text x="82" y="666" font-size="16" fill="#334155">자료 종류 · 목적 · 행동 · 기한</text>
+    <text x="82" y="691" font-size="14" fill="#64748b">페이지와 원문 근거를 함께 저장</text><rect x="510" y="210" width="380" height="140" rx="16" fill="white" stroke="#dce3ee"/>
+    <rect x="510" y="226" width="5" height="108" rx="2" fill="#7c3aed"/>
+    <text x="532" y="242" font-size="14" font-weight="700" fill="#7c3aed">STEP 04</text>
+    <text x="532" y="274" font-size="23" font-weight="700" fill="#0f172a">근거 검증 · 확인</text>
+    <text x="532" y="306" font-size="16" fill="#334155">날짜 종류 · 필수 필드 · 모순 검사</text>
+    <text x="532" y="331" font-size="14" fill="#64748b">모호하면 미분류함에서 최소 확인</text><path d="M700,354 V382" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/><rect x="510" y="390" width="380" height="140" rx="16" fill="white" stroke="#dce3ee"/>
+    <rect x="510" y="406" width="5" height="108" rx="2" fill="#7c3aed"/>
+    <text x="532" y="422" font-size="14" font-weight="700" fill="#7c3aed">STEP 05</text>
+    <text x="532" y="454" font-size="23" font-weight="700" fill="#0f172a">관련 자료 묶기</text>
+    <text x="532" y="486" font-size="16" fill="#334155">같은 행사 · 과제의 안내와 양식 연결</text>
+    <text x="532" y="511" font-size="14" fill="#64748b">유사 제목만으로 자동 병합하지 않음</text><path d="M700,534 V562" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/><rect x="510" y="570" width="380" height="140" rx="16" fill="white" stroke="#dce3ee"/>
+    <rect x="510" y="586" width="5" height="108" rx="2" fill="#7c3aed"/>
+    <text x="532" y="602" font-size="14" font-weight="700" fill="#7c3aed">STEP 06</text>
+    <text x="532" y="634" font-size="23" font-weight="700" fill="#0f172a">상태와 다음 행동 결정</text>
+    <text x="532" y="666" font-size="16" fill="#334155">기한 + 작업 상태 + 사용자 보관 기준</text>
+    <text x="532" y="691" font-size="14" fill="#64748b">수정 공고는 기존 예약을 취소·교체</text><rect x="960" y="210" width="380" height="140" rx="16" fill="white" stroke="#dce3ee"/>
+    <rect x="960" y="226" width="5" height="108" rx="2" fill="#047857"/>
+    <text x="982" y="242" font-size="14" font-weight="700" fill="#047857">STEP 07</text>
+    <text x="982" y="274" font-size="23" font-weight="700" fill="#0f172a">필요한 때 다시 제시</text>
+    <text x="982" y="306" font-size="16" fill="#334155">기한 알림 · 검색 · 관련 자료 함께 보기</text>
+    <text x="982" y="331" font-size="14" fill="#64748b">완료 · 미루기 · 거절을 상태에 반영</text><path d="M1150,354 V382" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/><rect x="960" y="390" width="380" height="140" rx="16" fill="white" stroke="#dce3ee"/>
+    <rect x="960" y="406" width="5" height="108" rx="2" fill="#047857"/>
+    <text x="982" y="422" font-size="14" font-weight="700" fill="#047857">STEP 08</text>
+    <text x="982" y="454" font-size="23" font-weight="700" fill="#0f172a">완료 확인 · 정리 제안</text>
+    <text x="982" y="486" font-size="16" fill="#334155">안내문은 정리 검토, 증빙은 기준대로 유지</text>
+    <text x="982" y="511" font-size="14" fill="#64748b">기한 경과나 파일 열기만으로 완료 판정 금지</text><path d="M1150,534 V562" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/><rect x="960" y="570" width="380" height="140" rx="16" fill="white" stroke="#dce3ee"/>
+    <rect x="960" y="586" width="5" height="108" rx="2" fill="#047857"/>
+    <text x="982" y="602" font-size="14" font-weight="700" fill="#047857">STEP 09</text>
+    <text x="982" y="634" font-size="23" font-weight="700" fill="#0f172a">승인 후 보관 · 되돌리기</text>
+    <text x="982" y="666" font-size="16" fill="#334155">충돌 검사 → 이동 → 해시 검증 → 이력</text>
+    <text x="982" y="691" font-size="14" fill="#64748b">실패 복구 · 원래 위치로 되돌리기</text><path d="M440,640 H475 V280 H502" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/><path d="M890,640 H925 V280 H952" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/><rect x="60" y="755" width="1280" height="95" rx="16" fill="#e8eef8"/>
+<text x="85" y="789" font-size="20" font-weight="700" fill="#0f172a">공유 기억 · SQLite</text>
+<text x="85" y="820" font-size="17" fill="#475569">원본 경로 / 해시 / 근거 / 자료 묶음 / 작업 상태 / 기한 버전 / 알림 / 사용자 사건 / 이동 이력</text>
+<text x="60" y="903" font-size="22" font-weight="700" fill="#0f172a">상태가 달라지면, 다음 행동도 달라집니다.</text>
+<text x="60" y="945" font-size="20" fill="#475569">미분류 → 사용 대기 → 진행 중 → 완료 → 정리 검토 → 보관</text>
+<text x="60" y="982" font-size="17" fill="#475569">마감 변경: 알림 교체   ·   완료: 행동 알림 취소   ·   유지: 같은 정리 제안 억제   ·   실패: 복구</text>
+<rect x="60" y="1015" width="1280" height="48" rx="12" fill="#fff1df"/>
+<text x="82" y="1046" font-size="17" font-weight="600" fill="#92400e">AI는 의미·후보·근거를 추출하고, 코드는 상태·예약·파일 실행을 검증합니다. 보관 이동은 사용자 승인 후 실행합니다.</text>
+</g></svg>

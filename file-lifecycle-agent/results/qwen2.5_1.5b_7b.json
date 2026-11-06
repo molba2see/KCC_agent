@@ -1,0 +1,2285 @@
+{
+  "scope": "30 authored cases; 3 repeated patterns; deterministic + native Qwen tool-calling controllers",
+  "summary": {
+    "fixed": {
+      "n": 30,
+      "correct": 30,
+      "tool_calls": 150,
+      "questions": 20,
+      "unexpected_file_mutations": 0
+    },
+    "adaptive_rule": {
+      "n": 30,
+      "correct": 30,
+      "tool_calls": 130,
+      "questions": 20,
+      "unexpected_file_mutations": 0
+    },
+    "qwen2.5_1.5b": {
+      "n": 30,
+      "correct": 0,
+      "tool_calls": 30,
+      "questions": 0,
+      "unexpected_file_mutations": 0
+    },
+    "qwen2.5_7b": {
+      "n": 30,
+      "correct": 20,
+      "tool_calls": 100,
+      "questions": 10,
+      "unexpected_file_mutations": 0
+    }
+  },
+  "rows": [
+    {
+      "mode": "fixed",
+      "case": 0,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1.4336612075567245,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 1,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.884239561855793,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 2,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.689229927957058,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 3,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9640296921133995,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 4,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8570998907089233,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 5,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6882799789309502,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 6,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1.0013803839683533,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 7,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8599609136581421,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 8,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7990505546331406,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 9,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9568016976118088,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 10,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8526397868990898,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 11,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6788894534111023,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 12,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9480202570557594,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 13,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8531901985406876,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 14,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.690000131726265,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 15,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1.0010097175836563,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 16,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8568195626139641,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 17,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7012495771050453,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 18,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9546400979161263,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 19,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8894391357898712,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 20,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6805611774325371,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 21,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9407401084899902,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 22,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8409507572650909,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 23,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6852895021438599,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 24,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9380104020237923,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 25,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8496297523379326,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 26,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7012207061052322,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 27,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9573502466082573,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 28,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8677998557686806,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 29,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6828503683209419,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 0,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9642699733376503,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 1,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8502798154950142,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 2,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.5913497880101204,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 3,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 2.520481124520302,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 4,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7914099842309952,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 5,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6097499281167984,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 6,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.957501120865345,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 7,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.762169249355793,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 8,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.5925102159380913,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 9,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9758993983268738,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 10,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7616709917783737,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 11,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6131194531917572,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 12,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9606210514903069,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 13,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.850440002977848,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 14,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.596391037106514,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 15,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1.0559791699051857,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 16,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7569408044219017,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 17,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.5972497165203094,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 18,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9925812482833862,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 19,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7601901888847351,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 20,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6192298606038094,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 21,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9659398347139359,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 22,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7629599422216415,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 23,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.5932096391916275,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 24,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9546494111418724,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 25,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7538395002484322,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 26,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.5893800407648087,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 27,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.973070040345192,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 28,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.756499357521534,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 29,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.5915900692343712,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 0,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 2172.4487766623497,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 1,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1270.6359885632992,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 2,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1111.2002013251185,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 3,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1274.752140045166,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 4,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1269.6478981524706,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 5,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1115.363302640617,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 6,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1271.4695390313864,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 7,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1273.0557806789875,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 8,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1106.7382097244263,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 9,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1269.0178975462914,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 10,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1269.8486484587193,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 11,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1106.3316082581878,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 12,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1272.5746594369411,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 13,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1270.4966384917498,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 14,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1107.2677597403526,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 15,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1269.9229372665286,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 16,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1268.1909371167421,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 17,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1105.587288737297,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 18,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1267.7676985040307,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 19,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1269.5742892101407,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 20,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1107.0286091417074,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 21,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1270.6855991855264,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 22,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1269.5523090660572,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 23,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1106.196889653802,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 24,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1271.4943084865808,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 25,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1268.0293284356594,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 26,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1110.1769506931305,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 27,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1270.3681187704206,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 28,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1269.102749414742,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_1.5b",
+      "case": 29,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1107.671169564128,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: invalid action schema"
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 0,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3495.2465519309044,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 1,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3006.4875660464168,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 2,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1125.5250750109553,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: content route prohibited"
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 3,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3491.9216502457857,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 4,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 2998.3150931075215,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 5,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1123.485674150288,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: content route prohibited"
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 6,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3483.16543828696,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 7,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3005.067255347967,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 8,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1125.7450450211763,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: content route prohibited"
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 9,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3493.7775218859315,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 10,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3003.496195189655,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 11,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1132.285537198186,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: content route prohibited"
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 12,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3499.0284126251936,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 13,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3006.9696959108114,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 14,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1130.0066160038114,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: content route prohibited"
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 15,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3505.48645388335,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 16,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3009.127846919,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 17,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1128.1440258026123,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: content route prohibited"
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 18,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3505.197923630476,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 19,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3011.8571668863297,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 20,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1127.8324658051133,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: content route prohibited"
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 21,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3505.49937505275,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 22,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3007.001705467701,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 23,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1130.5394964292645,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: content route prohibited"
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 24,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3503.319243900478,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 25,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3011.609397828579,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 26,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1130.518306978047,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: content route prohibited"
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 27,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3511.306987144053,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 28,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3011.9190476834774,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen2.5_7b",
+      "case": 29,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "blocked",
+      "correct": false,
+      "tool_calls": 1,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1133.0691780894995,
+      "tools": [
+        "inspect_file",
+        null
+      ],
+      "error": "ValueError: content route prohibited"
+    }
+  ]
+}

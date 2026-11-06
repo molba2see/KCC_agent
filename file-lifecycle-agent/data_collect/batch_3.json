@@ -1,0 +1,982 @@
+[
+ {
+  "id": "b3-001",
+  "kind": "ambiguous",
+  "catalog": {
+   "LAB_RAG_SEMINAR": {
+    "name": "연구실 RAG 세미나 발표",
+    "desc": "한국어 검색 증강 생성 retriever 비교 발표 준비",
+    "status": "active"
+   },
+   "MALPYEONG_RAG_2026": {
+    "name": "국립국어원 AI 말평 RAG 과제 참가",
+    "desc": "한국어 질의응답 retriever + generator 파이프라인 제출",
+    "status": "active"
+   },
+   "OPSYS_PINTOS": {
+    "name": "운영체제 Pintos 프로젝트",
+    "desc": "Pintos 스레드 우선순위 스케줄링 구현",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/retriever_비교_메모.md",
+    "content": "## dense retriever 비교 (한국어 QA dev 500문항)\n\n| model | recall@5 | recall@20 | latency(ms) |\n|---|---|---|---|\n| bge-m3 | 0.781 | 0.902 | 41 |\n| multilingual-e5-large | 0.744 | 0.881 | 38 |\n| BM25 (mecab) | 0.612 | 0.799 | 7 |\n\n- bge-m3 + reranker 붙이면 recall@5 0.83까지 올라감\n- chunk size 512 → 256 로 줄였을 때 오히려 떨어짐 ㅠ\n- TODO: hybrid (BM25 0.3 + dense 0.7) 다시 돌려보기\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/retriever_비교_메모.md",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "LAB_RAG_SEMINAR",
+    "MALPYEONG_RAG_2026"
+   ]
+  },
+  "rationale": "한국어 QA retriever 비교 결과는 세미나 발표와 RAG 과제 제출 양쪽에 똑같이 들어맞고, 어느 쪽인지 가리키는 단서가 없다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-002",
+  "kind": "ambiguous",
+  "catalog": {
+   "PATTERN_RECOG_COURSE": {
+    "name": "패턴인식 수업",
+    "desc": "ISLR 기반 분류기 이론 과제와 중간고사",
+    "status": "active"
+   },
+   "STAT_LEARNING_STUDY": {
+    "name": "통계학습 스터디 (ISLR 완독)",
+    "desc": "주 1회 ISLR 챕터 발제 스터디",
+    "status": "active"
+   },
+   "BUS_ARRIVAL_API": {
+    "name": "버스 도착정보 알림 봇",
+    "desc": "공공데이터 버스 도착 API 텔레그램 알림",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "notes/ch9_SVM_정리.md",
+    "content": "# Ch.9 Support Vector Machines\n\n1. maximal margin classifier — separating hyperplane 이 여러 개일 때 margin 최대인 것\n2. support vector classifier — slack ε_i, tuning parameter C (budget) 클수록 margin 넓어짐 (책 표기 주의! sklearn C 랑 반대 의미)\n3. kernel trick: polynomial, radial(γ)\n\n질문거리\n- one-versus-one vs one-versus-all 언제 뭐 씀?\n- logistic regression 이랑 hinge loss 비교 그림 (Fig 9.12)\n"
+   }
+  ],
+  "context": {},
+  "target": "notes/ch9_SVM_정리.md",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "PATTERN_RECOG_COURSE",
+    "STAT_LEARNING_STUDY"
+   ]
+  },
+  "rationale": "ISLR 9장 SVM 정리는 ISLR 기반 수업과 ISLR 스터디 모두의 자료일 수 있어 하나로 단정할 근거가 없다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-003",
+  "kind": "ambiguous",
+  "catalog": {
+   "DACON_CARD_DELINQ": {
+    "name": "데이콘 신용카드 연체 등급 예측",
+    "desc": "고객 정형 데이터 CatBoost 다중분류, logloss",
+    "status": "completed"
+   },
+   "DACON_LOAN_REPAY": {
+    "name": "데이콘 개인 대출 상환 예측",
+    "desc": "정형 금융 데이터 CatBoost/LightGBM 앙상블, logloss",
+    "status": "active"
+   },
+   "KOR_POETRY_GEN": {
+    "name": "한시 생성 토이 프로젝트",
+    "desc": "GPT-2 로 한국 현대시 스타일 생성",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/optuna_best_params.json",
+    "content": "{\n  \"study\": \"catboost_tpe_200trials\",\n  \"best_value\": 0.6871,\n  \"metric\": \"multi_logloss\",\n  \"params\": {\n    \"depth\": 7,\n    \"learning_rate\": 0.0412,\n    \"l2_leaf_reg\": 5.3,\n    \"bagging_temperature\": 0.71,\n    \"iterations\": 3000,\n    \"od_wait\": 200\n  },\n  \"cat_features\": [\"gender\", \"occyp_type\", \"house_type\"]\n}\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/optuna_best_params.json",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "DACON_CARD_DELINQ",
+    "DACON_LOAN_REPAY"
+   ]
+  },
+  "rationale": "CatBoost logloss 튜닝 결과와 범용 고객 범주형 피처만 있어 두 정형 금융 대회 중 어느 쪽인지 구분되지 않는다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-004",
+  "kind": "ambiguous",
+  "catalog": {
+   "DIALECT_ASR": {
+    "name": "방언 음성인식 파인튜닝",
+    "desc": "AI Hub 방언 발화 Whisper 파인튜닝 CER 측정",
+    "status": "active"
+   },
+   "DIALECT_TTS": {
+    "name": "방언 스타일 음성합성",
+    "desc": "AI Hub 방언 발화로 VITS 화자/억양 스타일 학습",
+    "status": "active"
+   },
+   "THESIS_PROPOSAL": {
+    "name": "석사 학위논문 계획서",
+    "desc": "연구 계획서 작성 및 지도교수 면담",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "configs/asr_whisper.yaml",
+    "content": "model: openai/whisper-small\ndata_root: data/aihub_dialect\nsample_rate: 16000\nlang: ko\nbatch_size: 16\n"
+   },
+   {
+    "path": "configs/tts_vits.yaml",
+    "content": "model: vits\ndata_root: data/aihub_dialect\nsample_rate: 22050\nspeaker_embed: true\n"
+   },
+   {
+    "path": "logs/preprocess_1014.txt",
+    "content": "[2026-10-14 02:11:07] scanning data/aihub_dialect ...\n[2026-10-14 02:13:52] found 34112 utterances (경상 11203 / 전라 9874 / 충청 6630 / 제주 6405)\n[2026-10-14 02:14:01] dropped 412 clips (duration > 20s)\n[2026-10-14 02:14:01] dropped 88 clips (empty transcript)\n[2026-10-14 02:19:30] wrote manifest -> data/aihub_dialect/manifest_clean.jsonl\n"
+   }
+  ],
+  "context": {
+   "configs/asr_whisper.yaml": {
+    "project": "DIALECT_ASR",
+    "refs": []
+   },
+   "configs/tts_vits.yaml": {
+    "project": "DIALECT_TTS",
+    "refs": []
+   }
+  },
+  "target": "logs/preprocess_1014.txt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "DIALECT_ASR",
+    "DIALECT_TTS"
+   ]
+  },
+  "rationale": "전처리 로그가 가리키는 data/aihub_dialect 경로는 ASR 과 TTS 설정 파일이 똑같이 쓰고 있어 동률이다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-005",
+  "kind": "ambiguous",
+  "catalog": {
+   "CAPSTONE_MEAL_APP": {
+    "name": "캡스톤디자인: 학식 메뉴 추천 앱",
+    "desc": "Flutter 학식 메뉴 추천 및 알림 앱",
+    "status": "active"
+   },
+   "HACKATHON_MEAL_BOT": {
+    "name": "교내 해커톤 학식 알림 서비스",
+    "desc": "48시간 해커톤 학식 메뉴 푸시 알림 MVP",
+    "status": "completed"
+   },
+   "CRYPTO_HW": {
+    "name": "암호학 과제",
+    "desc": "RSA/ECC 구현 리포트",
+    "status": "active"
+   },
+   "GRAD_ADMIN": {
+    "name": "대학원 행정",
+    "desc": "장학금, 수강신청 등 행정 서류",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/사용성테스트_피드백.txt",
+    "content": "사용성 테스트 피드백 정리 (5명)\n\n- 메인에서 오늘 메뉴가 바로 안 보임 → 스크롤 해야 함. 첫 화면 카드로 올리자\n- 푸시 알림 시간 11:30 고정인데 바꾸고 싶다는 의견 3명\n- 학생식당/교직원식당 탭 구분 헷갈림\n- 알레르기 표시 아이콘 너무 작음\n- \"내일 메뉴 미리보기\" 있으면 좋겠다\n\n다음 액션: 알림 시간 설정 화면 추가, 탭 라벨 변경\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/사용성테스트_피드백.txt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "CAPSTONE_MEAL_APP",
+    "HACKATHON_MEAL_BOT"
+   ]
+  },
+  "rationale": "학식 메뉴 푸시 알림 앱의 사용성 피드백으로 캡스톤 앱과 해커톤 서비스 모두에 해당하며 구분 단서가 없다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-006",
+  "kind": "ambiguous",
+  "catalog": {
+   "THESIS_MED_DIFFUSION": {
+    "name": "학위논문: 확산모델 기반 의료영상 합성",
+    "desc": "흉부 X-ray 데이터 증강용 diffusion 모델",
+    "status": "active"
+   },
+   "VISION_SEMINAR_DIFF": {
+    "name": "비전 세미나 발표: Diffusion 기초",
+    "desc": "DDPM/DDIM 논문 리뷰 발표 자료",
+    "status": "active"
+   },
+   "PARKING_IOT": {
+    "name": "주차장 IoT 센서 과제",
+    "desc": "초음파 센서 아두이노 주차 감지",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "notes/DDPM_수식정리.md",
+    "content": "DDPM (Ho et al., 2020) 다시 읽으면서\n\nforward: q(x_t | x_{t-1}) = N(sqrt(1-β_t) x_{t-1}, β_t I)\nclosed form: x_t = sqrt(ᾱ_t) x_0 + sqrt(1-ᾱ_t) ε\n\nloss 가 결국 ||ε - ε_θ(x_t, t)||² 로 단순화되는 부분 — variational bound 에서 L_simple 로 넘어가는 논리 아직 헷갈림\n\nDDIM 은 non-Markovian 으로 바꿔서 step 50 으로 줄여도 FID 비슷\n→ 샘플링 속도 비교 표 하나 만들 것\n"
+   }
+  ],
+  "context": {},
+  "target": "notes/DDPM_수식정리.md",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "THESIS_MED_DIFFUSION",
+    "VISION_SEMINAR_DIFF"
+   ]
+  },
+  "rationale": "DDPM/DDIM 이론 노트는 확산모델 학위논문 공부와 Diffusion 세미나 발표 준비 양쪽에 다 쓰일 수 있다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-007",
+  "kind": "ambiguous",
+  "catalog": {
+   "TA_DATASTRUCT": {
+    "name": "자료구조 조교 (2026-2)",
+    "desc": "자료구조 실습 과제 채점 및 Q&A",
+    "status": "active"
+   },
+   "TA_ALGORITHM": {
+    "name": "알고리즘 조교 (2026-2)",
+    "desc": "알고리즘 프로그래밍 과제 채점",
+    "status": "active"
+   },
+   "FEDLEARN_PAPER": {
+    "name": "연합학습 논문 투고",
+    "desc": "non-IID 클라이언트 연합학습 실험",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/채점기준_공통.csv",
+    "content": "항목,배점,감점기준\n컴파일,0,컴파일 오류 시 해당 문항 0점\n정답 테스트케이스,70,케이스당 균등 배분\n코드 가독성,10,주석/변수명 부족 시 최대 -5\n보고서,20,분석 누락 시 -10\n지각,,1일당 -10% (최대 3일)\n표절,,적발 시 과제 전체 0점 및 담당 교수 보고\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/채점기준_공통.csv",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "TA_DATASTRUCT",
+    "TA_ALGORITHM"
+   ]
+  },
+  "rationale": "과목명이 없는 공통 채점 기준표라 두 조교 업무 중 어느 쪽인지 정할 수 없다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-008",
+  "kind": "ambiguous",
+  "catalog": {
+   "LORA_LEGAL_QA": {
+    "name": "법률 상담 QA LoRA 파인튜닝",
+    "desc": "판례 기반 법률 질의응답 sLLM LoRA 학습",
+    "status": "active"
+   },
+   "LORA_MED_CHAT": {
+    "name": "의료 상담 챗봇 QLoRA",
+    "desc": "의료 상담 대화 데이터 QLoRA 4bit 학습",
+    "status": "active"
+   },
+   "SAT_CLOUD_MASK": {
+    "name": "위성영상 구름 마스킹",
+    "desc": "Sentinel-2 구름 분할 U-Net",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/requirements.txt",
+    "content": "torch==2.4.1\ntransformers==4.46.2\npeft==0.13.2\nbitsandbytes==0.44.1\naccelerate==1.0.1\ndatasets==3.0.1\ntrl==0.11.4\nsentencepiece\nwandb\n# flash-attn 은 서버에서 따로 빌드\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/requirements.txt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "LORA_LEGAL_QA",
+    "LORA_MED_CHAT"
+   ]
+  },
+  "rationale": "peft/bitsandbytes/trl 의존성은 두 LLM 파인튜닝 프로젝트 모두에 해당하고 구름 마스킹과는 무관하다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-009",
+  "kind": "ambiguous",
+  "catalog": {
+   "KLUE_NLI_ABLATION": {
+    "name": "KLUE NLI ablation 실험",
+    "desc": "RoBERTa-large 자연어추론 레이어 동결 실험",
+    "status": "active"
+   },
+   "KLUE_NER_DISTILL": {
+    "name": "KLUE NER 지식증류",
+    "desc": "RoBERTa-large 교사로 개체명 인식 경량화",
+    "status": "active"
+   },
+   "HOME_BUDGET": {
+    "name": "가계부 정리",
+    "desc": "개인 지출 엑셀 정리",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "configs/nli_freeze.yaml",
+    "content": "task: klue-nli\ninit_from: ckpt/klue_roberta_large_ft0.bin\nfreeze_layers: 12\nlr: 1e-5\n"
+   },
+   {
+    "path": "configs/ner_teacher.yaml",
+    "content": "task: klue-ner\nteacher: ckpt/klue_roberta_large_ft0.bin\nstudent: klue/roberta-small\ntemperature: 2.0\n"
+   },
+   {
+    "path": "ckpt/klue_roberta_large_ft0.bin",
+    "binary_bytes": 4096
+   }
+  ],
+  "context": {
+   "configs/nli_freeze.yaml": {
+    "project": "KLUE_NLI_ABLATION",
+    "refs": [
+     "ckpt/klue_roberta_large_ft0.bin"
+    ]
+   },
+   "configs/ner_teacher.yaml": {
+    "project": "KLUE_NER_DISTILL",
+    "refs": [
+     "ckpt/klue_roberta_large_ft0.bin"
+    ]
+   }
+  },
+  "target": "ckpt/klue_roberta_large_ft0.bin",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "KLUE_NLI_ABLATION",
+    "KLUE_NER_DISTILL"
+   ]
+  },
+  "rationale": "같은 가중치 파일을 서로 다른 프로젝트의 설정 두 개가 참조하므로 소유 프로젝트가 동률이다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-010",
+  "kind": "ambiguous",
+  "catalog": {
+   "DACON_PLANT_DISEASE": {
+    "name": "작물 병해 분류 경진대회",
+    "desc": "잎 이미지 5클래스 분류, macro F1",
+    "status": "completed"
+   },
+   "DACON_ART_STYLE": {
+    "name": "미술 작품 화풍 분류 경진대회",
+    "desc": "그림 이미지 5클래스 분류, macro F1",
+    "status": "active"
+   },
+   "SEMINAR_SCHEDULE": {
+    "name": "연구실 세미나 운영",
+    "desc": "주간 세미나 발표 순서 관리",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/submission_final_v3 (1).csv",
+    "content": "ID,label\nTEST_0000,3\nTEST_0001,0\nTEST_0002,4\nTEST_0003,4\nTEST_0004,1\nTEST_0005,2\nTEST_0006,0\nTEST_0007,3\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/submission_final_v3 (1).csv",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": [
+    "DACON_PLANT_DISEASE",
+    "DACON_ART_STYLE"
+   ]
+  },
+  "rationale": "ID,label 형식의 5클래스 제출 파일은 두 이미지 분류 대회 모두와 맞고 대회를 특정할 정보가 없다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-011",
+  "kind": "no_evidence",
+  "catalog": {
+   "GNN_TRAFFIC": {
+    "name": "GNN 교통량 예측",
+    "desc": "도로 센서 그래프 STGCN 예측",
+    "status": "active"
+   },
+   "KOR_OCR_RECEIPT": {
+    "name": "한국어 영수증 OCR 정보추출",
+    "desc": "영수증 이미지에서 상호/금액 key-value 추출 모델",
+    "status": "active"
+   },
+   "COMPILER_HW": {
+    "name": "컴파일러 과제",
+    "desc": "LLVM IR 최적화 패스 구현",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/카드매출전표_1021.txt",
+    "content": "[카드 매출전표]\n가맹점: 정문앞 커피\n거래일시: 2026-10-21 08:47\n카드번호: ****-****-****-1234\n승인번호: 00000000\n----------------------\n아이스 아메리카노 x2   9,000\n베이글             3,800\n----------------------\n합계              12,800\n부가세포함\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/카드매출전표_1021.txt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "개인 커피 영수증일 뿐이며, 영수증 OCR 프로젝트와 표면적 주제만 겹칠 뿐 학습 데이터나 실험 산출물이라는 단서가 없다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-012",
+  "kind": "no_evidence",
+  "catalog": {
+   "ROBOT_ARM_RL": {
+    "name": "로봇팔 강화학습",
+    "desc": "MuJoCo pick-and-place SAC 학습",
+    "status": "active"
+   },
+   "NEWS_TOPIC_CLS": {
+    "name": "뉴스 토픽 분류",
+    "desc": "연합뉴스 제목 토픽 분류 KoBERT",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/eduroam_설정방법.md",
+    "content": "# 도서관 무선랜(eduroam) 접속 안내\n\n1. Wi-Fi 목록에서 eduroam 선택\n2. EAP 방식: PEAP / 2단계 인증: MSCHAPv2\n3. ID: 포털아이디@학교도메인 형식으로 입력\n4. 인증서: '검증 안 함' 선택 (안드로이드)\n\n※ 열람실 3층은 AP 교체 공사로 11/3~11/7 접속 불안정\n문의: 도서관 정보시스템팀\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/eduroam_설정방법.md",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "학교 무선랜 접속 안내문으로 어떤 연구 프로젝트와도 관련이 없다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-013",
+  "kind": "no_evidence",
+  "catalog": {
+   "SPEECH_EMOTION": {
+    "name": "음성 감정 인식",
+    "desc": "wav2vec2 감정 4분류",
+    "status": "active"
+   },
+   "LAB_WEEKLY_MEETING": {
+    "name": "연구실 정기 미팅 자료",
+    "desc": "교수님 주간 미팅 발표 슬라이드 모음",
+    "status": "active"
+   },
+   "ECON_TA": {
+    "name": "경제수학 조교",
+    "desc": "경제수학 퀴즈 채점",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/주간보고_양식(빈칸).md",
+    "content": "# 주간 연구 보고\n\n- 작성자: \n- 기간: 2026.  .   ~ 2026.  .  \n- 프로젝트명: \n\n## 이번 주 한 일\n1. \n2. \n\n## 다음 주 계획\n1. \n\n## 이슈 / 도움 필요\n- \n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/주간보고_양식(빈칸).md",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "아무것도 채워지지 않은 빈 보고 양식이라 특정 프로젝트를 가리킬 내용이 없다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-014",
+  "kind": "no_evidence",
+  "catalog": {
+   "WEATHER_NOWCAST": {
+    "name": "강수 나우캐스팅",
+    "desc": "레이더 영상 ConvLSTM 단기 강수 예측",
+    "status": "active"
+   },
+   "STOCK_SENTIMENT": {
+    "name": "주식 게시판 감성 지표",
+    "desc": "종목토론방 텍스트 감성 점수와 수익률 상관",
+    "status": "active"
+   },
+   "LINALG_STUDY": {
+    "name": "선형대수 복습",
+    "desc": "Strang 강의 노트 정리",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/untitled.py",
+    "content": "import numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.linspace(0, 2 * np.pi, 200)\nplt.plot(x, np.sin(x), label='sin')\nplt.plot(x, np.cos(x), '--', label='cos')\nplt.legend()\nplt.title('test')\nplt.savefig('test.png', dpi=150)\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/untitled.py",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "sin/cos 를 그려보는 matplotlib 테스트 스크립트로 어떤 프로젝트의 데이터나 목적도 드러나지 않는다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-015",
+  "kind": "no_evidence",
+  "catalog": {
+   "MULTIMODAL_VQA": {
+    "name": "멀티모달 VQA 연구",
+    "desc": "한국어 시각 질의응답 LLaVA 파인튜닝",
+    "status": "active"
+   },
+   "EDGE_TPU_DEPLOY": {
+    "name": "Edge TPU 경량화 배포",
+    "desc": "Coral 보드 INT8 양자화 객체탐지",
+    "status": "active"
+   },
+   "CLUB_WEBSITE": {
+    "name": "동아리 홈페이지 리뉴얼",
+    "desc": "Next.js 정적 사이트",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/[대학원] 2026-2 종합시험 신청 안내.txt",
+    "content": "2026학년도 2학기 대학원 종합시험 신청 안내\n\n1. 신청기간: 2026. 11. 10.(화) ~ 11. 14.(토)\n2. 신청방법: 대학원 행정시스템 > 학위 > 종합시험 신청\n3. 대상: 석사 2학기 이상 / 박사 3학기 이상 이수(예정)자\n4. 시험과목: 전공 2과목 + 외국어(영어)\n   - 외국어 시험은 공인 성적 제출로 대체 가능\n5. 유의사항: 지도교수 승인 후 신청이 확정됩니다.\n\n학과사무실\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/[대학원] 2026-2 종합시험 신청 안내.txt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "대학원 행정 공지로 카탈로그의 연구/동아리 프로젝트 어느 것과도 연결되지 않는다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-016",
+  "kind": "no_evidence",
+  "catalog": {
+   "PROTEIN_FOLD_REVIEW": {
+    "name": "단백질 구조 예측 리뷰 논문",
+    "desc": "AlphaFold 계열 서베이 작성",
+    "status": "active"
+   },
+   "SMART_FARM_SENSOR": {
+    "name": "스마트팜 센서 데이터 분석",
+    "desc": "온습도 센서 이상탐지",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/회식날짜 투표 (응답).csv",
+    "content": "타임스탬프,가능한 날짜,메뉴 선호,기타 의견\n2026/10/27 14:02:11,11/6(목);11/7(금),고기,\n2026/10/27 14:05:40,11/7(금),상관없음,늦게 합류 가능\n2026/10/27 15:21:09,11/6(목),회,\n2026/10/27 18:44:57,11/6(목);11/7(금),고기,술 못 마심\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/회식날짜 투표 (응답).csv",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "연구실 회식 날짜 설문 응답이며 어느 프로젝트의 산출물도 아니다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-017",
+  "kind": "no_evidence",
+  "catalog": {
+   "LEGAL_DOC_SUMM": {
+    "name": "판결문 요약 연구",
+    "desc": "장문 판결문 추상 요약 Longformer",
+    "status": "active"
+   },
+   "INDOOR_LOCALIZATION": {
+    "name": "실내 측위 과제",
+    "desc": "BLE 비콘 RSSI 기반 위치 추정",
+    "status": "completed"
+   },
+   "MUSIC_GEN_TOY": {
+    "name": "음악 생성 토이",
+    "desc": "MIDI 트랜스포머 멜로디 생성",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/arxiv_digest_cs_LG.txt",
+    "content": "arXiv cs.LG new submissions (weekly digest)\n\n[1] Scaling Laws for Sparse Mixture Routers Under Token Dropping\n[2] A Note on Warmup Schedules in Adaptive Optimizers\n[3] Calibration of Tabular Foundation Models Under Covariate Shift\n[4] Benchmarking Graph Neural Networks on Molecular Property Prediction: Pitfalls Revisited\n[5] Low-Rank Gradient Projection for Memory-Efficient Pretraining\n[6] When Does Data Pruning Help? An Empirical Study on Vision Transformers\n\n-- You are receiving this because you subscribed to cs.LG --\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/arxiv_digest_cs_LG.txt",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "일반 ML 논문 다이제스트로, 판결문 요약·실내 측위·음악 생성 어느 주제와도 직접 맞는 항목이 없다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-018",
+  "kind": "no_evidence",
+  "catalog": {
+   "BRAIN_MRI_SEG": {
+    "name": "뇌 MRI 종양 분할",
+    "desc": "BraTS nnU-Net 재현",
+    "status": "active"
+   },
+   "SUBWAY_CROWD": {
+    "name": "지하철 혼잡도 예측",
+    "desc": "역별 승하차 시계열 Prophet",
+    "status": "active"
+   },
+   "TOEFL_PREP": {
+    "name": "토플 준비",
+    "desc": "스피킹 템플릿과 단어장",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/VPN_접속매뉴얼.md",
+    "content": "# 교외 접속(SSL VPN) 매뉴얼\n\n교외에서 학내 전용 서비스(전자저널, 연구실 서버 등)에 접속하려면 VPN 을 사용하세요.\n\n1. 포털 > 정보서비스 > VPN 클라이언트 다운로드 (Windows / macOS)\n2. 서버 주소: 포털 공지 참조\n3. 로그인: 포털 계정 + OTP\n\nFAQ\n- 접속은 되는데 저널 사이트가 안 열려요 → 브라우저 캐시 삭제\n- macOS Sonoma 이상에서 확장 프로그램 허용 필요\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/VPN_접속매뉴얼.md",
+  "gold": {
+   "status": "waiting_user",
+   "project": null,
+   "candidates": []
+  },
+  "rationale": "학교 VPN 사용 매뉴얼로 연구실 서버를 언급하지만 특정 프로젝트를 가리키지 않는다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-019",
+  "kind": "other",
+  "catalog": {
+   "DRONE_CROP_SEG": {
+    "name": "드론 작물 영역 분할",
+    "desc": "드론 RGB 정사영상 논/밭 SegFormer 분할",
+    "status": "active"
+   },
+   "BIRD_SOUND_CLS": {
+    "name": "야생 조류 울음소리 분류",
+    "desc": "조류 울음 mel-spectrogram EfficientNet 분류, macro-F1",
+    "status": "active"
+   },
+   "CAREER_PREP": {
+    "name": "취업 준비",
+    "desc": "자기소개서와 코딩테스트 정리",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/drone_seg_results.txt",
+    "content": "fold별 결과 (EfficientNet-B0, 5s 윈도우, 32kHz)\nfold0 macro-F1 0.712\nfold1 macro-F1 0.698\nfold2 macro-F1 0.731\nfold3 macro-F1 0.705\nfold4 macro-F1 0.719\nmean 0.713\n\n메모: 조류 울음 mel-spectrogram 에 SpecAugment(time mask 2개) 넣은 게 +0.02 정도 효과.\n배경 소음(바람) 클립 많은 종은 여전히 recall 낮음.\n파일명은 공유폴더에서 받다가 잘못 저장함\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/drone_seg_results.txt",
+  "gold": {
+   "status": "planned",
+   "project": "BIRD_SOUND_CLS",
+   "evidence": "조류 울음 mel-spectrogram"
+  },
+  "rationale": "파일명은 드론 분할을 암시하지만 내용은 조류 울음 mel-spectrogram 분류 fold 결과라 조류 프로젝트에 속한다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-020",
+  "kind": "other",
+  "catalog": {
+   "KOR_SIGN_TRANSLATE": {
+    "name": "한국 수어 번역 연구",
+    "desc": "수어 영상 키포인트 → 한국어 문장 번역 트랜스포머",
+    "status": "active"
+   },
+   "HAND_GESTURE_HW": {
+    "name": "손동작 인식 과제",
+    "desc": "MediaPipe 손 랜드마크 제스처 5종 분류",
+    "status": "completed"
+   },
+   "LAB_SERVER_ADMIN": {
+    "name": "연구실 서버 관리",
+    "desc": "GPU 서버 계정 및 디스크 관리",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "drafts/rebuttal_draft.md",
+    "content": "# Rebuttal draft (R2 대응)\n\nR2: \"키포인트 추출을 MediaPipe 로 한 것이 단순 손동작 분류 과제 수준 아닌가\"\n→ 손동작 인식 과제에서 쓴 코드와는 무관함을 명시. 우리는 얼굴·상체 키포인트까지 포함한 연속 수어 문장을 다룸.\n\nR2: gloss 없이 end-to-end 로 번역하는 근거?\n→ 수어 영상 키포인트에서 한국어 문장으로 직접 번역할 때 BLEU-4 가 gloss 경유 대비 +1.8 (Table 3)\n\nR3: 데이터 공개 여부 → 승인 후 공개 예정이라고 답변\n"
+   }
+  ],
+  "context": {},
+  "target": "drafts/rebuttal_draft.md",
+  "gold": {
+   "status": "planned",
+   "project": "KOR_SIGN_TRANSLATE",
+   "evidence": "수어 영상 키포인트에서 한국어 문장으로 직접 번역"
+  },
+  "rationale": "손동작 인식 과제는 리뷰어 지적에 대한 반박으로 지나가듯 언급될 뿐, 문서 자체는 수어 번역 논문의 rebuttal 이다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-021",
+  "kind": "other",
+  "catalog": {
+   "OPSYS_HW2": {
+    "name": "운영체제 과제 2",
+    "desc": "페이지 교체 알고리즘(LRU/Clock) 시뮬레이터 C 구현",
+    "status": "active"
+   },
+   "APT_PRICE_DASH": {
+    "name": "아파트 실거래가 대시보드",
+    "desc": "공공데이터 아파트 매매 실거래가 수집 및 Streamlit 시각화",
+    "status": "active"
+   },
+   "JP_STUDY": {
+    "name": "일본어 공부",
+    "desc": "JLPT N2 단어 정리",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/OS_hw2_final.py",
+    "content": "# 아파트 매매 실거래가 월별 수집 스크립트\n# (파일명 OS 과제랑 헷갈려서 나중에 바꿀 것)\nimport requests, time\nimport pandas as pd\n\nSERVICE_KEY = 'YOUR_SERVICE_KEY'\nURL = 'https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade'\n\ndef fetch(lawd_cd, ym):\n    r = requests.get(URL, params={'serviceKey': SERVICE_KEY, 'LAWD_CD': lawd_cd, 'DEAL_YMD': ym, 'numOfRows': 1000})\n    r.raise_for_status()\n    return r.text\n\nfor ym in ['202607', '202608', '202609']:\n    xml = fetch('11680', ym)\n    time.sleep(0.5)\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/OS_hw2_final.py",
+  "gold": {
+   "status": "planned",
+   "project": "APT_PRICE_DASH",
+   "evidence": "아파트 매매 실거래가 월별 수집 스크립트"
+  },
+  "rationale": "파일명은 운영체제 과제를 가리키지만 코드는 아파트 매매 실거래가 API 수집기라 대시보드 프로젝트 소유다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-022",
+  "kind": "other",
+  "catalog": {
+   "LORA_LAWQA": {
+    "name": "법령 QA LoRA",
+    "desc": "법령 조문 질의응답 LoRA 학습",
+    "status": "active"
+   },
+   "LORA_MEDCHAT": {
+    "name": "의료 상담 LoRA",
+    "desc": "의료 상담 멀티턴 대화 LoRA 학습",
+    "status": "active"
+   },
+   "THESIS_WRITING": {
+    "name": "학위논문 집필",
+    "desc": "논문 본문 및 그림 정리",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "configs/lawqa_lora.yaml",
+    "content": "base: beomi/Llama-3-Open-Ko-8B\nlora_r: 16\ndata: data/lawqa_train.jsonl\nmax_len: 2048\n"
+   },
+   {
+    "path": "configs/medchat_lora.yaml",
+    "content": "base: beomi/Llama-3-Open-Ko-8B\nlora_r: 32\ndata: data/medchat_multiturn.jsonl\nmax_len: 4096\n"
+   },
+   {
+    "path": "logs/train_lawqa.txt",
+    "content": "2026-10-30 21:04:11 | INFO | loading config configs/medchat_lora.yaml\n2026-10-30 21:04:15 | INFO | base model beomi/Llama-3-Open-Ko-8B (bf16)\n2026-10-30 21:05:02 | INFO | dataset data/medchat_multiturn.jsonl: 18,230 dialogues, max_len 4096\n2026-10-30 21:05:02 | INFO | lora_r=32 alpha=64 dropout=0.05\n2026-10-30 23:41:57 | INFO | epoch 1 | train_loss 1.284 | eval_loss 1.311\n2026-10-31 02:18:40 | INFO | epoch 2 | train_loss 1.102 | eval_loss 1.247\n"
+   }
+  ],
+  "context": {
+   "configs/lawqa_lora.yaml": {
+    "project": "LORA_LAWQA",
+    "refs": []
+   },
+   "configs/medchat_lora.yaml": {
+    "project": "LORA_MEDCHAT",
+    "refs": []
+   }
+  },
+  "target": "logs/train_lawqa.txt",
+  "gold": {
+   "status": "planned",
+   "project": "LORA_MEDCHAT",
+   "evidence": "loading config configs/medchat_lora.yaml"
+  },
+  "rationale": "로그 파일명은 lawqa 지만 실제로 의료 상담 설정과 데이터로 학습한 기록이라 LORA_MEDCHAT 에 속한다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-023",
+  "kind": "other",
+  "catalog": {
+   "BATTERY_SOH": {
+    "name": "배터리 SOH 추정",
+    "desc": "EV 배터리 충방전 사이클 잔존수명 회귀",
+    "status": "completed"
+   },
+   "SOLAR_FORECAST": {
+    "name": "태양광 발전량 예측",
+    "desc": "기상 예보(일사량/운량) 기반 익일 발전량 예측",
+    "status": "active"
+   },
+   "READING_GROUP": {
+    "name": "독서 모임",
+    "desc": "월 1회 책 토론",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "projects/battery_soh/notes.md",
+    "content": "폴더 정리 전이라 일단 여기 둠\n\n익일 발전량 예측 실험 메모\n- 입력: 기상청 단기예보 일사량, 운량, 기온 (3시간 간격) → 1시간 보간\n- 타깃: 발전소 시간별 발전량 kWh\n- LightGBM baseline NMAE 8.9%, 운량 lag 피처 추가 시 8.1%\n- 장마철(7월) 오차 급증 → 별도 모델 고려\n"
+   }
+  ],
+  "context": {},
+  "target": "projects/battery_soh/notes.md",
+  "gold": {
+   "status": "planned",
+   "project": "SOLAR_FORECAST",
+   "evidence": "익일 발전량 예측 실험 메모"
+  },
+  "rationale": "경로는 배터리 SOH 폴더지만 내용은 일사량·운량 기반 발전량 예측 실험이라 태양광 프로젝트 것이다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-024",
+  "kind": "other",
+  "catalog": {
+   "NLP_COURSE_FINAL": {
+    "name": "자연어처리 수업 기말 프로젝트",
+    "desc": "공감형 감정 대화 생성 모델",
+    "status": "active"
+   },
+   "DB_COURSE_FINAL": {
+    "name": "데이터베이스 수업 기말 프로젝트",
+    "desc": "동아리방 예약 시스템 ERD 설계와 SQL 구현",
+    "status": "active"
+   },
+   "INTERNSHIP_LOG": {
+    "name": "여름 인턴십 기록",
+    "desc": "인턴 업무 일지",
+    "status": "completed"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/final_report_자연어처리.md",
+    "content": "# 기말 프로젝트 보고서 (초안)\n\n자연어처리 기말이랑 마감이 같은 주라 일단 이것부터 씀.\n\n## 1. 요구사항\n동아리방 예약 시스템: 동아리 회원이 시간 단위로 방을 예약하고, 관리자가 승인한다.\n\n## 2. ERD\nMEMBER(member_id PK, club_id FK, name) / CLUB(club_id PK, club_name) / ROOM(room_id PK) / RESERVATION(res_id PK, room_id FK, member_id FK, start_at, end_at, status)\n\n## 3. 정규화\nRESERVATION 에서 club_name 제거 → 3NF. 겹치는 시간 예약은 트리거로 막음.\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/final_report_자연어처리.md",
+  "gold": {
+   "status": "planned",
+   "project": "DB_COURSE_FINAL",
+   "evidence": "동아리방 예약 시스템"
+  },
+  "rationale": "파일명과 첫 줄은 자연어처리 기말을 언급하지만 본문은 동아리방 예약 시스템 ERD/정규화 보고서라 DB 수업 프로젝트다.",
+  "source": "authored"
+ },
+ {
+  "id": "b3-025",
+  "kind": "other",
+  "catalog": {
+   "KTX_DELAY_ANALYSIS": {
+    "name": "철도 지연 원인 분석",
+    "desc": "열차 운행 기록 지연 원인 분류 및 시각화",
+    "status": "active"
+   },
+   "FOOD_DELIVERY_ETA": {
+    "name": "배달 도착시간 예측",
+    "desc": "주문/라이더/날씨 피처 기반 ETA 회귀",
+    "status": "active"
+   },
+   "GUITAR_PRACTICE": {
+    "name": "기타 연습",
+    "desc": "코드 진행 연습 기록",
+    "status": "active"
+   }
+  },
+  "files": [
+   {
+    "path": "downloads/ktx_weather_join.csv",
+    "content": "order_id,rider_id,distance_km,prep_min,rain_mm,actual_eta_min,pred_eta_min\nO_00121,R_17,2.3,12,0.0,28,26.4\nO_00122,R_04,4.8,9,3.5,41,35.9\nO_00123,R_17,1.1,15,3.5,24,25.2\nO_00124,R_22,6.0,7,0.0,37,38.8\n"
+   }
+  ],
+  "context": {},
+  "target": "downloads/ktx_weather_join.csv",
+  "gold": {
+   "status": "planned",
+   "project": "FOOD_DELIVERY_ETA",
+   "evidence": "rider_id,distance_km,prep_min,rain_mm,actual_eta_min"
+  },
+  "rationale": "파일명은 철도 데이터를 암시하지만 컬럼은 주문·라이더·조리시간·ETA 로 배달 도착시간 예측 데이터다.",
+  "source": "authored"
+ }
+]

@@ -1,0 +1,1788 @@
+{
+  "scope": "30 authored cases; 3 repeated patterns; deterministic + native Qwen tool-calling controllers",
+  "summary": {
+    "fixed": {
+      "n": 30,
+      "correct": 30,
+      "tool_calls": 150,
+      "questions": 20,
+      "unexpected_file_mutations": 0
+    },
+    "adaptive_rule": {
+      "n": 30,
+      "correct": 30,
+      "tool_calls": 130,
+      "questions": 20,
+      "unexpected_file_mutations": 0
+    },
+    "qwen3_8b": {
+      "n": 30,
+      "correct": 30,
+      "tool_calls": 130,
+      "questions": 20,
+      "unexpected_file_mutations": 0
+    }
+  },
+  "rows": [
+    {
+      "mode": "fixed",
+      "case": 0,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1.3174805790185928,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 1,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9019104763865471,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 2,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7091499865055084,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 3,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9813299402594566,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 4,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8663497865200043,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 5,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6978306919336319,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 6,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9729601442813873,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 7,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.920221209526062,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 8,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7839100435376167,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 9,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9760214015841484,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 10,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8625797927379608,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 11,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6964914500713348,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 12,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9674001485109329,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 13,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8565997704863548,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 14,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7045194506645203,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 15,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9571602568030357,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 16,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8575394749641418,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 17,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6915098056197166,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 18,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9617507457733154,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 19,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8557895198464394,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 20,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7445709779858589,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 21,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9537599980831146,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 22,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8523212745785713,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 23,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6930697709321976,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 24,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.973820686340332,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 25,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8875597268342972,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 26,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6868606433272362,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 27,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9883502498269081,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 28,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 5,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8849296718835831,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "fixed",
+      "case": 29,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7570413872599602,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "check_references",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 0,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9696101769804955,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 1,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9057307615876198,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 2,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6116200238466263,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 3,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.988551415503025,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 4,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7981602102518082,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 5,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.632929615676403,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 6,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1.0010898113250732,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 7,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7584197446703911,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 8,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.5969395861029625,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 9,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1.0042106732726097,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 10,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7827002555131912,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 11,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.5942704156041145,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 12,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9874310344457626,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 13,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7593296468257904,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 14,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.5973903462290764,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 15,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 1.0542795062065125,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 16,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7734112441539764,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 17,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.5932105705142021,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 18,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.970001332461834,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 19,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8356096222996712,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 20,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.5934415385127068,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 21,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9535001590847969,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 22,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7632412016391754,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 23,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6014294922351837,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 24,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.960920937359333,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 25,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.7624300196766853,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 26,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6079599261283875,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 27,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.9588701650500298,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 28,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.8311597630381584,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "adaptive_rule",
+      "case": 29,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 0.6065899506211281,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 0,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 5936.793368309736,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 1,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3418.8835490494967,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 2,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 2522.401040419936,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 3,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 5105.10354116559,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 4,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3412.3770967125893,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 5,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 2522.0840610563755,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 6,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 5099.199359305203,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 7,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3439.293375238776,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 8,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 2519.9787011370063,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 9,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 5104.580910876393,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 10,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3422.2649997100234,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 11,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 2522.192010655999,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 12,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 5107.736611738801,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 13,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3417.5099190324545,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 14,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 2524.426942691207,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 15,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 5141.373012214899,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 16,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3420.7713389769197,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 17,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 2524.8053818941116,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 18,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 5107.09997266531,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 19,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3424.6208807453513,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 20,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 2527.0441127941012,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 21,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 5104.588011279702,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 22,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3417.547257617116,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 23,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 2529.4874543324113,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 24,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 5123.285416513681,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 25,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3421.553480438888,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 26,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 2531.0862734913826,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 27,
+      "kind": "explicit",
+      "expected": "planned",
+      "status": "planned",
+      "correct": true,
+      "tool_calls": 6,
+      "questions": 0,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 5106.438752263784,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "check_references",
+        "preview_plan",
+        "finish"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 28,
+      "kind": "unknown",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 4,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 3437.549563124776,
+      "tools": [
+        "inspect_file",
+        "read_content",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    },
+    {
+      "mode": "qwen3_8b",
+      "case": 29,
+      "kind": "weights",
+      "expected": "waiting_user",
+      "status": "waiting_user",
+      "correct": true,
+      "tool_calls": 3,
+      "questions": 1,
+      "unexpected_file_mutations": 0,
+      "elapsed_ms": 2525.1893419772387,
+      "tools": [
+        "inspect_file",
+        "search_projects",
+        "ask_user"
+      ],
+      "error": null
+    }
+  ]
+}

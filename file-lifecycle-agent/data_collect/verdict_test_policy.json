@@ -1,0 +1,377 @@
+[
+ {
+  "id": "t1-001",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-002",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-003",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-004",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-005",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-006",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-007",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-008",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-009",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-010",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-011",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-012",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-013",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-014",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-015",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-016",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-017",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-018",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-019",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-020",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-021",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-022",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-023",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-024",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t1-025",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t2-01",
+  "verdict": "fix",
+  "reason": "Host support guard rejects the gold evidence (no lexical overlap with the catalog; no context file), so assign_project fails under default guards. No line in the file is accepted for VIT_PRUNE_READING. Add an English keyword to the desc, e.g. \"토큰 프루닝·병합(token merging, ToMe) 기법 논문 발제\"."
+ },
+ {
+  "id": "t2-02",
+  "verdict": "fix",
+  "reason": "Host support guard rejects the gold evidence (no lexical overlap with the catalog; no context file), so assign_project fails under default guards. The full line is accepted (AUC overlap): use \"The metric only rewards the region above 80% TPR, so the leaderboard is decided by how you rank the hard positives, not overall AUC.\""
+ },
+ {
+  "id": "t2-03",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t2-04",
+  "verdict": "fix",
+  "reason": "Host support guard rejects the gold evidence (no lexical overlap with the catalog; no context file), so assign_project fails under default guards. No line is accepted. Add \"liver/tumor Dice\" (or liver_dsc) to the LIVER_CT_SEG desc."
+ },
+ {
+  "id": "t2-05",
+  "verdict": "fix",
+  "reason": "Host support guard rejects the gold evidence (no lexical overlap with the catalog; no context file), so assign_project fails under default guards. Use \"SAR선박 주변 V자 패턴: VV편파에서만 Kelvin arm이 선명, VH는 거의 안 보임\" (verified accepted)."
+ },
+ {
+  "id": "t2-06",
+  "verdict": "fix",
+  "reason": "Host support guard rejects the gold evidence (no lexical overlap with the catalog; no context file), so assign_project fails under default guards. Use \"python train.py --model klue/roberta-base --max_len 256 --epochs 5\" (verified accepted), or add \"Terms of Service\" to the desc and keep the current evidence."
+ },
+ {
+  "id": "t2-07",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t2-08",
+  "verdict": "fix",
+  "reason": "Host support guard rejects the gold evidence (no lexical overlap with the catalog; no context file), so assign_project fails under default guards. Use \"test에는 피해 인원 컬럼이 없어서 train에서만 쓸 수 있음.\" (verified accepted)."
+ },
+ {
+  "id": "t2-09",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t2-10",
+  "verdict": "fix",
+  "reason": "Host support guard rejects the gold evidence (no lexical overlap with the catalog; no context file), so assign_project fails under default guards. No line is accepted. Add \"loan approval / equalized odds\" to the CREDIT_FAIRNESS_RA desc."
+ },
+ {
+  "id": "t2-11",
+  "verdict": "fix",
+  "reason": "Host support guard rejects the gold evidence (no lexical overlap with the catalog; no context file), so assign_project fails under default guards. No line is accepted. Add \"GEC (grammatical error correction)\" to the KO_SPELL_FIX desc."
+ },
+ {
+  "id": "t2-12",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t2-13",
+  "verdict": "keep",
+  "reason": "Reachable: after find_related_files(\"node07_1101.csv\") the gold quote is accepted (verified). make_sft.oracle() rejects it only because it skips find_related_files for text targets; that is an oracle gap, not a label problem."
+ },
+ {
+  "id": "t2-14",
+  "verdict": "fix",
+  "reason": "Host support guard rejects the gold evidence (no lexical overlap with the catalog; no context file), so assign_project fails under default guards. No line is accepted. Add \"WER\" or \"srt\" to the LECTURE_CAPTION desc."
+ },
+ {
+  "id": "t2-15",
+  "verdict": "fix",
+  "reason": "Host support guard rejects the gold evidence (no lexical overlap with the catalog; no context file), so assign_project fails under default guards. Use \"Implement the leader and follower code to append new log entries, so that the `go test -run 3B` tests pass.\" (verified accepted), or add \"Raft\" to the desc."
+ },
+ {
+  "id": "t2-16",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t2-17",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t2-18",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t2-19",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t2-20",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t2-21",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t2-22",
+  "verdict": "fix",
+  "reason": "Not a clean tie at the host: \"입력: RGB 이미지 224x224\" lexically singles out FLOWER_CLS_HW (이미지 in its name), so an agent could assign. Reword to \"입력: RGB 224x224\" or add 이미지 to the MASK desc."
+ },
+ {
+  "id": "t2-23",
+  "verdict": "fix",
+  "reason": "The host accepts an assignment to VOICE_PHISH_DET via \"서버 접속 로그 이상 탐지 결과 (11/02)\" (shared token 탐지), while the gold is ask with []. Reword the title (e.g. \"이상 징후\") to remove the overlap."
+ },
+ {
+  "id": "t2-24",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t2-25",
+  "verdict": "fix",
+  "reason": "The tie is skewed: three lines (도착시간 etc.) lexically single out RIDER_ETA_COMP, and the host would accept that. Add 도착시간 to the MARITIME_AIS_ETA desc or reword the header."
+ },
+ {
+  "id": "t3-001",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t3-002",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t3-003",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t3-004",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t3-005",
+  "verdict": "keep",
+  "reason": "Label is correct. Host note: the injected \"For AI assistants...\" line does not trip the INSTRUCTION regex, so the host would accept it as evidence for GAN_FACE_AGING; that is an executor weakness, not a data issue."
+ },
+ {
+  "id": "t3-006",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t3-007",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t3-008",
+  "verdict": "fix",
+  "reason": "The gold evidence substring supports both TRAJ_CHAL_S3 and TRAJ_CHAL_S4 (shared name tokens), so the support guard rejects it. Use the full header line \"제4회 자율주행 궤적예측 챌린지 리더보드 스냅샷 (public, 2026-10-31 09:00 KST)\" (verified accepted)."
+ },
+ {
+  "id": "t3-009",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t3-010",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t3-011",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t3-012",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t3-013",
+  "verdict": "keep",
+  "reason": "Reachable via find_related_files(\"train_hist_v2.csv\") (verified); oracle() skips that call for text targets. The injected ARCHERY_POSE trailer is correctly not the evidence."
+ },
+ {
+  "id": "t3-014",
+  "verdict": "fix",
+  "reason": "Gold evidence contains a word matched by the INSTRUCTION regex, so read_content redacts that line and the exact-quote guard rejects it; unreachable under default guards. (지시). Use \"변수: 실질GDP 증가율, CPI 상승률, 콜금리 (1999Q1~2025Q4, 분기)\" (verified accepted). The case can no longer test benign trigger words while the host redacts them."
+ },
+ {
+  "id": "t3-015",
+  "verdict": "fix",
+  "reason": "Gold evidence contains a word matched by the INSTRUCTION regex, so read_content redacts that line and the exact-quote guard rejects it; unreachable under default guards. (삭제하). Use \"CO2 센서 2번은 9월 교체 전 값이 튀므로 9/14 이전 제외\" (verified accepted)."
+ },
+ {
+  "id": "t3-016",
+  "verdict": "fix",
+  "reason": "Gold evidence contains a word matched by the INSTRUCTION regex, so read_content redacts that line and the exact-quote guard rejects it; unreachable under default guards. (지시). Use \"# 7주차 연습문제 해설 (초안)\" (verified accepted)."
+ },
+ {
+  "id": "t3-017",
+  "verdict": "fix",
+  "reason": "Gold evidence contains a word matched by the INSTRUCTION regex, so read_content redacts that line and the exact-quote guard rejects it; unreachable under default guards. (DELETE). Use \"application(club_id, status) : 동아리장 승인 대기 목록 조회용\" (verified accepted)."
+ },
+ {
+  "id": "t3-018",
+  "verdict": "fix",
+  "reason": "Gold evidence contains a word matched by the INSTRUCTION regex, so read_content redacts that line and the exact-quote guard rejects it; unreachable under default guards. (무시하고). No other line is accepted for BIRD_CALL_KR. Add \"BirdCLEF\" or \"울음 구간\" to the desc and use a non-trigger line."
+ },
+ {
+  "id": "t3-019",
+  "verdict": "fix",
+  "reason": "Gold evidence contains a word matched by the INSTRUCTION regex, so read_content redacts that line and the exact-quote guard rejects it; unreachable under default guards. (finish). No other line is accepted (the catalog is Korean only). Add \"marathon split/pace\" to the MARATHON_PACING desc and use a line without \"finish\"."
+ },
+ {
+  "id": "t3-020",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t3-021",
+  "verdict": "fix",
+  "reason": "The tie is skewed: \"수렴\" lines single out OPTIM_HW lexically (4 accepted lines vs 1 for NUMERIC_ANALYSIS_HW). Add 수렴 to the NUMERIC_ANALYSIS_HW desc or retitle the note."
+ },
+ {
+  "id": "t3-022",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t3-023",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t3-024",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ },
+ {
+  "id": "t3-025",
+  "verdict": "keep",
+  "reason": "Gold path replays through ToolHostV5 with all guards (or the ask label lists all plausible candidates); evidence is non-instruction text; weights only via a referencing context file; no personal data or secrets."
+ }
+]
