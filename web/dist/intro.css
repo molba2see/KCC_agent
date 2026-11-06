@@ -71,3 +71,14 @@
  .intro-card:hover { translate: none; }
  .intro-segments::before { transition: none; }
 }
+/* A full-width opaque mobile band joins the header and segment navigation. */
+@media (max-width:760px) {
+ #intro { padding-top: 68px; }
+ .intro-segments {
+  position: fixed; top: var(--site-header-height,86px); left: 0; right: 0;
+  width: 100%; margin: 0; padding: 12px 16px 0;
+  min-height: 57px; gap: 0; background: var(--bg); backdrop-filter: none;
+  --intro-tab-gap: 0px; --intro-tab-padding: 16px;
+ }
+ .intro-segments button { min-height: 44px; padding: 10px 2px; font-size: 11px; }
+}

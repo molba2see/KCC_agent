@@ -1,5 +1,10 @@
 /* Application navigation and filters for the connected Mac workspace. */
 const $=selector=>document.querySelector(selector);
+// Keep mobile segment tabs directly below the header as account controls resize it.
+const siteHeader=document.querySelector('.site-header');
+if(siteHeader&&window.ResizeObserver){
+ new ResizeObserver(()=>document.documentElement.style.setProperty('--site-header-height',`${siteHeader.getBoundingClientRect().height}px`)).observe(siteHeader);
+}
 let fileFilter='all';
 // Drop only obsolete sample data; account sessions and connection settings are untouched.
 try{for(const key of ['moa-operations-demo-v2','moa-draft-v1'])localStorage.removeItem(key)}catch{}

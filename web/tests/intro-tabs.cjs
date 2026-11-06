@@ -10,6 +10,19 @@ const {chromium}=require('playwright');const path=require('node:path');const ass
    return route.fulfill({path:path.join(__dirname,'../dist',url.pathname==='/'?'index.html':url.pathname.slice(1))});
   });
   await page.goto('http://localhost/#intro');await page.locator('.header-signup').waitFor();
+  if(width<760){
+   assert.equal(await page.locator('.mobile-bar').isVisible(),false);
+   const before=await page.locator('.intro-segments').boundingBox();
+   await page.evaluate(()=>scrollTo(0,500));
+   const after=await page.locator('.intro-segments').boundingBox();
+   const header=await page.locator('.site-header').boundingBox();
+   assert(Math.abs(before.y-after.y)<1,'Mobile segments must stay fixed while scrolling');
+   assert(Math.abs(after.y-(header.y+header.height))<1,'Segments must meet the header without a gap');
+   assert.equal(after.x,0);assert.equal(after.width,width);
+   assert.equal(await page.locator('.intro-segments').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(250, 248, 245)');
+   assert.equal(await page.locator('.site-header').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(250, 248, 245)');
+   await page.evaluate(()=>scrollTo(0,0));
+  }
   assert.deepEqual(await page.locator('.intro-segments [role=tab]').allTextContents(),['서비스 소개','문제 정의','기술 과정','서비스 사용법']);
   for(const key of ['overview','problem','technology','guide']){
    await page.locator('#intro-tab-'+key).click();

@@ -41,7 +41,7 @@ body { background: var(--bg); color: var(--ink); }
 body::after { opacity: 0; }
 a, .text-link, .media-row article > a { color: var(--link); }
 code { color: var(--link); }
-.site-header { background: #faf8f5f2; border-color: var(--line); }
+.site-header { background: var(--bg); border-color: var(--line); }
 .desktop-nav button, .mobile-menu button, .menu-toggle { color: var(--muted); }
 .desktop-nav button, .mobile-menu button { position: relative; }
 .desktop-nav button.active, .mobile-menu button.active {
@@ -149,6 +149,11 @@ code { color: var(--link); }
 .mobile-bar button.active { background: transparent; border-color: transparent; color: var(--ink); font-weight: 600; }
 .mobile-bar button::after { content: ''; position: absolute; bottom: 2px; left: 50%; width: 14px; height: 2px; border-radius: 2px; background: var(--ink); opacity: 0; transform: translateX(-50%); }
 .mobile-bar button.active::after { opacity: 1; }
+@media (max-width:760px) {
+ .mobile-bar { display: none; }
+ main { padding-bottom: calc(28px + env(safe-area-inset-bottom)); }
+ .site-header { backdrop-filter: none; }
+}
 input:focus, select:focus, textarea:focus { border-color: var(--focus); box-shadow: 0 0 0 3px #6f9be026; }
 button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible,
 a:focus-visible { outline-color: var(--focus); }
