@@ -10,7 +10,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 
-ACTIONS = {"answer", "approve", "keep", "undo", "restore_trashed", "cleanup_confirm", "cleanup_dismiss", "cleanup_retry"}
+ACTIONS = {"preview", "answer", "approve", "keep", "undo", "restore_trashed", "cleanup_confirm", "cleanup_dismiss", "cleanup_retry"}
 
 
 def post(url, body, token=None):
@@ -39,6 +39,7 @@ def public_state(raw):
     """Send only the fields needed by the web UI and command validator."""
     assets = sorted(raw.get("assets", []), key=lambda asset: asset.get("received_at") or 0, reverse=True)
     result = {
+        "capabilities": [name for name in ('preview',) if name in raw.get('capabilities', [])],
         "assets": [{"id": a.get("id"), "name": Path(a.get("original") or a.get("path") or "").name,
                     "source_kind": a.get("source_kind"), "source_mtime": a.get("source_mtime"), "project": a.get("project"), "archived": bool(a.get("archived")), "keep": bool(a.get("keep")),
                     "plan": a.get("plan"),

@@ -109,7 +109,15 @@ def queue_command(request):
     snapshot = link.snapshot or {}
     assets = {str(a.get("id")): a for a in snapshot.get("assets", []) if isinstance(a, dict)}
     payload = {}
-    if action in {"answer", "approve", "keep", "undo"}:
+    if action == 'preview':
+        if 'preview' not in snapshot.get('capabilities', []):
+            return Response({'detail': 'Mac 연결 앱을 최신 버전으로 다시 설치한 뒤 미리보기를 사용해 주세요.'}, status=409)
+        cleanup = snapshot.get('cleanup') or {}
+        group_ids = {file.get('id') for group in cleanup.get('groups', []) for file in group.get('files', [])}
+        if not isinstance(asset_id, str) or (asset_id not in assets and asset_id not in group_ids):
+            return Response({'detail': 'Unknown asset'}, status=400)
+        payload['id'] = asset_id
+    elif action in {"answer", "approve", "keep", "undo"}:
         if not isinstance(asset_id, str) or asset_id not in assets:
             return Response({"detail": "Unknown asset"}, status=400)
         asset = assets[asset_id]

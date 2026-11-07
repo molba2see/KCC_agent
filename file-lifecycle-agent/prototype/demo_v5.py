@@ -312,7 +312,7 @@ class Demo:
                            'source_kind': origin.get('kind'), 'received_at': origin.get('received_at', 0), 'source_mtime': origin.get('source_mtime'), 'keep': a['keep'], 'archived': a['path'] != a['original'], 'plan': plan, 'run': r,
                            'why': explain(e, a, r, plan) if r else []})
         assets.sort(key=lambda x: x['original'])
-        return {'controller': self.name, 'root': str(self.root), 'assets': assets, 'journal': e.data['journal'][-20:],
+        return {'capabilities': ['preview'], 'controller': self.name, 'root': str(self.root), 'assets': assets, 'journal': e.data['journal'][-20:],
                 'catalog': [{'id': k, 'name': v['name'], 'desc': v['desc'], 'status': e.data['projects'].get(k)} for k, v in CAT.items()],
                 'cleanup': self.cleanup.public() if self.cleanup else None,
                 'digest': self.digest, 'pending': len(self.pending()),
@@ -521,6 +521,9 @@ def serve(demo, port, origins=()):
                 aid = d.get('id')
                 with demo.lock:
                     if self.path == '/api/analyze': out = demo.analyze(aid)
+                    elif self.path == '/api/preview':
+                        from file_preview import preview
+                        out = preview(demo.engine(), aid)
                     elif self.path == '/api/answer': out = demo.answer(aid, d.get('project_id'))
                     elif self.path == '/api/keep': out = demo.keep(aid)
                     elif self.path in ('/api/cleanup_confirm', '/api/cleanup_dismiss'):

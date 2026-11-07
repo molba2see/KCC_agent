@@ -32,6 +32,23 @@ class AgentBridgeTests(TestCase):
         self.assertTrue(status['connected'])
         self.assertEqual(status['commands'][0]['status'], 'done')
 
+    def test_preview_uses_registered_ids_and_requires_updated_helper(self):
+        self.mac.post('/api/v1/agent/bridge/poll/', {'snapshot': self.snapshot}, format='json')
+        body = {'link_id': str(self.link.id), 'action': 'preview', 'asset_id': 'asset-1', 'path': '/etc/passwd'}
+        self.assertEqual(self.browser.post('/api/v1/agent/commands/', body, format='json').status_code, 409)
+        self.snapshot['capabilities'] = ['preview']
+        self.mac.post('/api/v1/agent/bridge/poll/', {'snapshot': self.snapshot}, format='json')
+        response = self.browser.post('/api/v1/agent/commands/', body, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['payload'], {'id': 'asset-1'})
+        AgentCommand.objects.all().delete()
+        body['asset_id'] = 'unknown'
+        self.assertEqual(self.browser.post('/api/v1/agent/commands/', body, format='json').status_code, 400)
+        self.snapshot['cleanup'] = {'groups': [{'files': [{'id': 'group-only'}]}]}
+        self.mac.post('/api/v1/agent/bridge/poll/', {'snapshot': self.snapshot}, format='json')
+        body['asset_id'] = 'group-only'
+        self.assertEqual(self.browser.post('/api/v1/agent/commands/', body, format='json').status_code, 201)
+
     def test_invalid_token_owner_and_plan_are_rejected(self):
         self.assertEqual(APIClient().post('/api/v1/agent/bridge/poll/', {'snapshot':self.snapshot}, format='json').status_code, 403)
         self.mac.post('/api/v1/agent/bridge/poll/', {'snapshot':self.snapshot}, format='json')
