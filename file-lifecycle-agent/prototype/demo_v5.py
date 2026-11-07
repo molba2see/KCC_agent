@@ -229,6 +229,7 @@ class Watcher(threading.Thread):
                 if hasattr(self.d, 'origins'):
                     self.d.origins[str(copy_to.relative_to(self.d.root))] = {'kind': 'icloud' if p.parent in self.auto_inboxes else 'screenshot' if p.parent in self.screenshot_inboxes else 'download', 'received_at': time.time(), 'source_mtime': p.stat().st_mtime,
                         'initial_import': self.initial_files.get(str(p)) == self.fingerprint(p)}
+                    self.d.origins[str(copy_to.relative_to(self.d.root))].update(source_folder=str(p.parent), source_name=p.name)
                     self.d.save_origins()
                 urls = where_froms(p)
                 if urls: self.d.sources[str(copy_to.relative_to(self.d.root))] = urls; self.d.save_sources()

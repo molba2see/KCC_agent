@@ -39,6 +39,15 @@ class PrivacyTests(unittest.TestCase):
         for private in ('/private', 'secret-hash', 'secret body'):
             self.assertNotIn(private, str(result))
 
+    def test_cleanup_file_mapping_survives_relay_without_private_source_metadata(self):
+        cleanup = {'groups': [{'id': 'g', 'new_folder': True, 'destination_path': 'iCloud Drive / 모아 / 제주여행',
+            'files': [{'id': 'a', 'name': '예약.pdf', 'source': '내 Mac (~) / Downloads', 'source_name': 'booking.pdf',
+                       'target_name': '예약.pdf', 'destination': 'iCloud Drive / 모아 / 제주여행', 'source_folder': '/private/user/Downloads', 'hash': 'private-hash'}]}]}
+        result = public_state({'assets': [], 'catalog': [], 'cleanup': cleanup})['cleanup']
+        self.assertEqual(result['groups'][0]['files'][0]['destination'], 'iCloud Drive / 모아 / 제주여행')
+        self.assertEqual(result['groups'][0]['files'][0]['source_name'], 'booking.pdf')
+        self.assertNotIn('/private', str(result)); self.assertNotIn('private-hash', str(result))
+
     def test_bulk_snapshot_is_bounded_but_counts_and_new_icloud_arrival_are_kept(self):
         files = [{'id': str(i), 'original': f'file-{i}.txt', 'why': ['긴 설명' * 300], 'received_at': i} for i in range(2000)]
         files.append({'id': 'phone', 'original': 'new-phone.png', 'received_at': 5000, 'source_kind': 'icloud'})

@@ -77,8 +77,10 @@ def public_expiry(value):
 def public_cleanup(value):
     if not isinstance(value, dict): return None
     result = {key: value.get(key) for key in ('status', 'detail', 'total', 'processed', 'classified', 'remaining', 'model_processed', 'pending_groups', 'deferred_count')}
-    result['groups'] = [{**{key: group.get(key) for key in ('id', 'name', 'purpose', 'status', 'new_folder', 'destination')},
-                         'files': [{'id': file.get('id'), 'name': Path(str(file.get('name') or '')).name} for file in group.get('files', [])]}
+    result['groups'] = [{**{key: group.get(key) for key in ('id', 'name', 'purpose', 'status', 'new_folder', 'destination', 'destination_path', 'project_id')},
+                         'files': [{'id': file.get('id'), **{key: file.get(key) for key in ('source', 'destination') if key in file},
+                                    'name': Path(str(file.get('name') or '')).name,
+                                    **{key: Path(str(file.get(key) or '')).name for key in ('source_name', 'target_name') if key in file}} for file in group.get('files', [])]}
                         for group in value.get('groups', []) if isinstance(group, dict)]
     return result
 

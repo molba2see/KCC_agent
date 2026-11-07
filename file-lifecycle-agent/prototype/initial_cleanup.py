@@ -27,6 +27,17 @@ def safe_name(value):
             and not re.search(r'[/\\:\x00-\x1f]', value) and not INSTRUCTION.search(value))
 
 
+def display_folder(path, home=None):
+    """A readable location without publishing the Mac account's absolute home path."""
+    path = Path(path).expanduser()
+    home = Path.home() if home is None else Path(home)
+    cloud = home / 'Library/Mobile Documents/com~apple~CloudDocs'
+    for root, label in ((cloud, 'iCloud Drive'), (home, '내 Mac (~)'), (Path('/Volumes'), '외부 저장소')):
+        if path.is_relative_to(root):
+            return ' / '.join([label, *path.relative_to(root).parts])
+    return '선택한 위치 / ' + path.name
+
+
 class InitialCleanup:
     def __init__(self, demo, catalog, python, worker, destination, request_id=None):
         self.demo, self.catalog = demo, catalog
@@ -170,7 +181,12 @@ class InitialCleanup:
                 with tempfile.NamedTemporaryFile(prefix='.cleanup-', suffix='.' + suffix + '.json', dir=self.demo.root, delete=False) as handle:
                     if suffix == 'request': request_path = Path(handle.name)
                     else: response_path = Path(handle.name)
-            atomic(request_path, {'catalog': catalog, 'files': files})
+            reserved = []
+            if self.destination.is_dir() and not self.destination.is_symlink() and self.destination.resolve() == self.destination:
+                for folder in self.destination.iterdir():
+                    if folder.is_dir(): reserved.append(folder.name)
+                    if len(reserved) >= 200: break
+            atomic(request_path, {'catalog': catalog, 'files': files, 'reserved_names': reserved})
             with (self.demo.root / 'cleanup-model.log').open('a') as log:
                 process = subprocess.Popen([str(self.python), str(self.worker), '--request', str(request_path), '--response', str(response_path), '--parent-pid', str(os.getpid())],
                                            stdin=subprocess.DEVNULL, stdout=log, stderr=log)
@@ -250,6 +266,8 @@ class InitialCleanup:
                 raise ValueError('Invalid proposal description')
             if target == 'new' and any(item['name'].casefold() == name.casefold() for item in self.catalog.values()):
                 raise ValueError('Existing folder name')
+            if target == 'new' and ((self.destination / name).exists() or (self.destination / name).is_symlink()):
+                raise ValueError('Proposed folder already exists')
             group_id = hashlib.sha256(json.dumps([self.data.get('scan_id', 'initial'), target, name, purpose, sorted((aid, by_id[aid]['hash']) for aid in ids)], ensure_ascii=False).encode()).hexdigest()[:32]
             if group_id in existing_ids: continue
             if any(aid in claimed for aid in ids): raise ValueError('Duplicate proposal files')
@@ -264,6 +282,11 @@ class InitialCleanup:
         groups = []
         changed = False
         for group in self.data['groups']:
+            if group['status'] == 'pending' and group['project_id'] == 'new':
+                reused = any(old['status'] == 'approved' and old['name'] == group['name'] and old.get('created_project') in self.catalog for old in self.data['groups'])
+                if not reused and ((self.destination / group['name']).exists() or (self.destination / group['name']).is_symlink()):
+                    group['status'] = 'stale'; changed = True
+                    self.data['deferred_count'] = self.data.get('deferred_count', 0) + len(group['asset_ids'])
             if group['status'] == 'pending' and any(
                 aid not in assets or not self.eligible(assets[aid])
                 or assets[aid].get('hash') != group['hashes'].get(aid)
@@ -277,10 +300,23 @@ class InitialCleanup:
         pending = [group for group in self.data['groups'] if group['status'] == 'pending']
         for group in pending[:20]:
             reused = next((old.get('created_project') for old in self.data['groups'] if old['status'] == 'approved' and old['name'] == group['name'] and old.get('created_project') in self.catalog), None)
+            new_folder = group['project_id'] == 'new' and not reused
+            pid = reused or group['project_id']
+            target = self.destination / group['name'] if new_folder else Path(engine.data['folders'].get(pid, self.destination / group['name'])).expanduser()
+            destination = display_folder(target)
+            files = []
+            for aid in group['asset_ids']:
+                if aid not in assets: continue
+                asset = assets[aid]; name = Path(asset['original']).name
+                origin = getattr(self.demo, 'origins', {}).get(asset['original'], {})
+                if not isinstance(origin, dict): origin = {'kind': origin}
+                source = display_folder(origin['source_folder']) if isinstance(origin.get('source_folder'), str) else {'download': '다운로드', 'screenshot': '스크린샷 저장 폴더', 'icloud': 'iCloud Drive / KCC-inbox'}.get(origin.get('kind'), '모아 작업 사본')
+                files.append({'id': aid, 'name': name, 'source': source,
+                              'source_name': origin.get('source_name') or name,
+                              'destination': destination, 'target_name': name})
             groups.append({key: group[key] for key in ('id', 'name', 'purpose', 'status')})
-            groups[-1].update(new_folder=group['project_id'] == 'new' and not reused,
-                              destination='iCloud Drive / 모아' if group['project_id'] == 'new' else '선택한 폴더',
-                              files=[{'id': aid, 'name': Path(assets[aid]['original']).name} for aid in group['asset_ids'] if aid in assets])
+            groups[-1].update(new_folder=new_folder, destination=display_folder(target.parent), destination_path=destination,
+                              project_id=None if new_folder else pid, files=files)
         visible = [asset for asset in assets.values() if not asset.get('context')]
         return {'status': self.data['status'], 'detail': self.data.get('detail', ''),
                 'deferred_count': self.data.get('deferred_count', 0),

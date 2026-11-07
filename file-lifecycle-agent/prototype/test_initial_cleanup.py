@@ -8,7 +8,7 @@ import threading
 import unittest
 from unittest.mock import patch
 
-from initial_cleanup import InitialCleanup
+from initial_cleanup import InitialCleanup, display_folder
 from lifecycle_v3 import Lifecycle
 
 
@@ -73,6 +73,32 @@ class InitialCleanupTests(unittest.TestCase):
         self.cleanup.decide(group, True)
         self.assertEqual(len(list(self.target.iterdir())), 2)
         self.assertFalse(self.cleanup.destination.exists())
+
+    def test_preview_maps_each_file_to_the_exact_folder_before_creation(self):
+        self.demo.origins = {name: {'kind': 'download', 'source_folder': str(Path.home() / 'Downloads'), 'source_name': name}
+                             for name in ['회의록_1.txt', '회의록_2.txt']}
+        self.propose()
+        group = self.cleanup.public()['groups'][0]
+        self.assertTrue(group['new_folder'])
+        self.assertTrue(group['destination_path'].endswith('회의록'))
+        for file in group['files']:
+            self.assertEqual(file['destination'], group['destination_path'])
+            self.assertEqual(file['target_name'], file['name'])
+            self.assertIn('Downloads', file['source'])
+            self.assertNotIn(str(Path.home()), file['source'])
+        self.assertFalse(self.cleanup.destination.exists())
+        self.assertEqual(display_folder(self.base / 'Desktop' / '수업', home=self.base), '내 Mac (~) / Desktop / 수업')
+        cloud = self.base / 'Library/Mobile Documents/com~apple~CloudDocs/모아/회의록'
+        self.assertEqual(display_folder(cloud, home=self.base), 'iCloud Drive / 모아 / 회의록')
+
+    def test_new_folder_reuse_reports_the_actual_existing_destination(self):
+        assets = list(self.demo.engine().data['assets'].values())
+        self.cleanup.accept_groups([{'project_id': 'new', 'name': '회의록', 'purpose': '회의 내용을 보관합니다.', 'files': [aid]} for aid in self.ids], assets)
+        first = self.cleanup.data['groups'][0]['id']; self.cleanup.decide(first, True)
+        group = self.cleanup.public()['groups'][0]
+        self.assertFalse(group['new_folder'])
+        self.assertEqual(group['project_id'], self.cleanup.data['groups'][0]['created_project'])
+        self.assertEqual(group['destination_path'], display_folder(self.cleanup.destination / '회의록'))
 
     def test_confident_existing_classification_is_grouped_without_model_or_move(self):
         engine = self.demo.engine()
@@ -165,6 +191,11 @@ class InitialCleanupTests(unittest.TestCase):
         guide = folder / '_project.md'; guide.write_text('user-owned')
         with self.assertRaises(ValueError): self.cleanup.decide(group, True)
         self.assertEqual(guide.read_text(), 'user-owned')
+
+    def test_unregistered_existing_folder_is_not_advertised_as_a_new_folder(self):
+        folder = self.cleanup.destination / '회의록'; folder.mkdir(parents=True)
+        with self.assertRaises(ValueError): self.propose()
+        self.assertEqual(self.cleanup.data['groups'], [])
 
     def test_worker_transport_prepares_proposals_without_applying_them(self):
         worker = self.base / 'worker.py'
