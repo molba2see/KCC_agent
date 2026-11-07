@@ -11,6 +11,29 @@ from lifecycle_v3 import Lifecycle
 
 
 class DownloadTrackingTests(unittest.TestCase):
+    def test_confident_download_is_automatically_analyzed_but_waits_for_confirmation(self):
+        with TemporaryDirectory() as directory:
+            base = Path(directory); root = base / 'workspace'; root.mkdir()
+            inbox = base / 'Downloads'; inbox.mkdir(); original = inbox / 'lecture.pdf'; original.write_bytes(b'fixture')
+            target = base / 'project'; target.mkdir()
+            engine = Lifecycle(root); engine.data.update(projects={'old': 'active'}, folders={'old': str(target)}); engine.save()
+            def analyze(aid):
+                engine = Lifecycle(root); engine.data['assets'][aid]['project'] = 'old'; engine.save()
+                return {'status': 'planned', 'project': 'old', 'decider': 'rule'}
+            demo = SimpleNamespace(root=root, lock=threading.Lock(), engine=lambda: Lifecycle(root),
+                origins={}, save_origins=lambda: None, sources={}, save_sources=lambda: None,
+                analyze=analyze, save_runs=lambda: None, events=[], version=0,
+                cleanup=SimpleNamespace(data={'status': 'scanning'}))
+            watcher = Watcher(demo, [], strict_inboxes=[str(inbox)], scan_existing=True)
+            with patch('demo_v5.where_froms', return_value=[]), patch('demo_v5.notify'):
+                for _ in range(4): watcher.tick()
+            assets = list(demo.engine().data['assets'].values())
+            self.assertEqual(len(assets), 1)
+            self.assertEqual(assets[0]['project'], 'old')
+            self.assertEqual(assets[0]['path'], assets[0]['original'])
+            self.assertEqual(list(target.iterdir()), [])
+            self.assertEqual(original.read_bytes(), b'fixture')
+
     def test_pdf_readable_without_external_pdf_tools(self):
         from reportlab.pdfgen import canvas
         with TemporaryDirectory() as temp:

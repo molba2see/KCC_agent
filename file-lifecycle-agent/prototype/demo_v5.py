@@ -240,7 +240,10 @@ class Watcher(threading.Thread):
                 text = (f'{r["project"]} 자료 · ' + {'file': '폴더 저장 권장', 'archive': '보관 권장', 'keep': '유지 권장', 'defer': '보류'}[plan['action']]) if plan \
                     else '어느 프로젝트인지 확인이 필요해요' if r['status'] == 'waiting_user' else str(r['status'])
                 strict_ok = p in self.strict and r.get('decider') in ('source', 'rule') and p.suffix.lower() in DOCS | IMAGE
-                if (p in self.auto or strict_ok) and plan and plan['action'] == 'file':
+                origin = getattr(self.d, 'origins', {}).get(a['original'], {})
+                source_kind = origin.get('kind') if isinstance(origin, dict) else origin
+                require_confirmation = bool(getattr(self.d, 'cleanup', None)) and (p in self.strict or source_kind in {'download', 'screenshot'})
+                if not require_confirmation and (p in self.auto or strict_ok) and plan and plan['action'] == 'file':
                     # Auto inbox (iPhone captures): the user captured on purpose, so a confident 'file' plan runs now; undo stays on the page.
                     try: self.d.engine().execute(aid, plan); text = f'{CAT[a["project"]]["name"]} 폴더에 자동 저장 (되돌리기 가능)'
                     except Exception as exc: text += f' · 자동 저장 실패: {exc}'
@@ -312,7 +315,7 @@ class Demo:
                            'source_kind': origin.get('kind'), 'received_at': origin.get('received_at', 0), 'source_mtime': origin.get('source_mtime'), 'keep': a['keep'], 'archived': a['path'] != a['original'], 'plan': plan, 'run': r,
                            'why': explain(e, a, r, plan) if r else []})
         assets.sort(key=lambda x: x['original'])
-        return {'capabilities': ['preview'], 'controller': self.name, 'root': str(self.root), 'assets': assets, 'journal': e.data['journal'][-20:],
+        return {'capabilities': ['preview'] + (['cleanup_scan'] if self.cleanup else []), 'controller': self.name, 'root': str(self.root), 'assets': assets, 'journal': e.data['journal'][-20:],
                 'catalog': [{'id': k, 'name': v['name'], 'desc': v['desc'], 'status': e.data['projects'].get(k)} for k, v in CAT.items()],
                 'cleanup': self.cleanup.public() if self.cleanup else None,
                 'digest': self.digest, 'pending': len(self.pending()),
@@ -532,6 +535,9 @@ def serve(demo, port, origins=()):
                     elif self.path == '/api/cleanup_retry':
                         if not demo.cleanup or demo.cleanup.data['status'] in ('scanning', 'generating'): raise ValueError('일괄 정리 제안을 준비 중입니다.')
                         demo.cleanup.data.update(status='scanning', detail=''); demo.cleanup.save(); out = True
+                    elif self.path == '/api/cleanup_scan':
+                        if not demo.cleanup: raise ValueError('Mac 연결 앱을 업데이트해 주세요.')
+                        out = demo.cleanup.rescan()
                     elif self.path == '/api/approve': out = demo.approve(aid, d.get('plan'))
                     elif self.path == '/api/undo': out = demo.undo(aid)
                     elif self.path == '/api/digest_now': out = demo.digest_now()
@@ -563,6 +569,7 @@ if __name__ == '__main__':
     ap.add_argument('--digest-hours', type=float, default=0, help='ask about unresolved files every N hours while the user is at the Mac (0 = off; the page also has an "ask now" button)')
     ap.add_argument('--screenshot-inbox', action='append', default=[], help='collect images only from the Mac screenshot save folder')
     ap.add_argument('--initial-cleanup', action='store_true', help='offer first-run grouped proposals after collecting existing files')
+    ap.add_argument('--cleanup-request', help='restart unconfirmed classification after a new folder onboarding request')
     ap.add_argument('--proposal-python', type=Path, help='local Qwen runtime Python')
     ap.add_argument('--proposal-worker', type=Path, help='local proposal worker')
     ap.add_argument('--proposal-root', type=Path, help='host-selected destination for confirmed new folders')
@@ -593,7 +600,7 @@ if __name__ == '__main__':
     if a.initial_cleanup:
         from initial_cleanup import InitialCleanup
         if not all((a.proposal_python, a.proposal_worker, a.proposal_root)): raise SystemExit('Initial cleanup needs a local proposal runtime, worker, and destination')
-        demo.cleanup = InitialCleanup(demo, CAT, a.proposal_python, a.proposal_worker, a.proposal_root)
+        demo.cleanup = InitialCleanup(demo, CAT, a.proposal_python, a.proposal_worker, a.proposal_root, request_id=a.cleanup_request)
     if a.watch: Watcher(demo, a.inbox, auto_inboxes=a.auto_inbox, strict_inboxes=a.strict_auto_inbox, ask_inboxes=a.ask_inbox, scan_existing=a.scan_existing_inbox, screenshot_inboxes=a.screenshot_inbox).start()
     if a.expire_installers_days:
         demo.expiry = Expiry(Path(a.root) / 'expiry.json', a.inbox + a.strict_auto_inbox, a.expire_installers_days)

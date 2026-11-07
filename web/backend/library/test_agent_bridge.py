@@ -75,6 +75,20 @@ class AgentBridgeTests(TestCase):
         self.assertEqual(response.json()['payload'], {'group_id': 'group-1'})
         AgentCommand.objects.all().delete()
         self.assertEqual(self.browser.post('/api/v1/agent/commands/', {'link_id': str(self.link.id), 'action': 'cleanup_confirm', 'group_id': 'foreign'}, format='json').status_code, 409)
+
+    def test_cleanup_scan_is_available_after_onboarding_and_requires_capability(self):
+        from .models import OnboardingProgress
+        from django.utils import timezone
+        OnboardingProgress.objects.create(owner=self.user, completed_at=timezone.now())
+        self.snapshot['cleanup'] = {'status': 'completed', 'groups': []}
+        self.mac.post('/api/v1/agent/bridge/poll/', {'snapshot': self.snapshot}, format='json')
+        body = {'link_id': str(self.link.id), 'action': 'cleanup_scan', 'path': '/untrusted'}
+        self.assertEqual(self.browser.post('/api/v1/agent/commands/', body, format='json').status_code, 409)
+        self.snapshot['capabilities'] = ['cleanup_scan']
+        self.mac.post('/api/v1/agent/bridge/poll/', {'snapshot': self.snapshot}, format='json')
+        response = self.browser.post('/api/v1/agent/commands/', body, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['payload'], {})
         self.snapshot['cleanup']['status'] = 'generating'
         self.mac.post('/api/v1/agent/bridge/poll/', {'snapshot': self.snapshot}, format='json')
         self.assertEqual(self.browser.post('/api/v1/agent/commands/', {'link_id': str(self.link.id), 'action': 'cleanup_confirm', 'group_id': 'group-1'}, format='json').status_code, 409)

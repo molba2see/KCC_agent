@@ -112,11 +112,14 @@ def main():
                         '--strict-auto-inbox', Path.home() / 'Downloads',
                         '--source-rules', DATA / 'source-rules.json', '--port', '8791']
                     cleanup_settings = DATA / 'initial-cleanup-settings.json'
-                    if cleanup_settings.exists() and json.loads(cleanup_settings.read_text()).get('enabled') is True:
+                    cleanup_options = json.loads(cleanup_settings.read_text()) if cleanup_settings.exists() else {}
+                    if cleanup_options.get('enabled', True) is True:
                         arguments += ['--screenshot-inbox', screenshot_folder(),
                             '--initial-cleanup', '--proposal-python', DATA / 'qwen-runtime/bin/python',
                             '--proposal-worker', REPO / 'web/local/batch_proposals.py',
                             '--proposal-root', Path.home() / 'Library/Mobile Documents/com~apple~CloudDocs/모아']
+                        if cleanup_options.get('request_id'):
+                            arguments += ['--cleanup-request', cleanup_options['request_id']]
                     agent = start('agent', arguments)
                     agent_inbox = inbox
                     agent_projects = projects_version

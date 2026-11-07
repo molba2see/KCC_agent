@@ -23,6 +23,8 @@ class OnboardingTests(TestCase):
         self.assertEqual(self.action('start_test').status_code, 409)
         self.assertEqual(self.action('complete').status_code, 409)
         self.assertEqual(self.action('confirm_iphone').status_code, 200)
+        self.assertEqual(self.action('start_test').status_code, 409)
+        self.assertEqual(self.action('defer_cleanup').status_code, 200)
         self.assertEqual(self.action('start_test').status_code, 200)
         state = self.client.get(self.path).json()
         self.assertFalse(state['file_received'])
@@ -46,6 +48,7 @@ class OnboardingTests(TestCase):
         AgentLink.objects.create(owner=self.other, token_hash='2' * 64, last_seen_at=timezone.now(),
                                  snapshot={'assets': [{'id': 'foreign', 'name': '비공개.png'}]})
         self.action('confirm_iphone')
+        self.action('defer_cleanup')
         self.action('start_test')
         self.assertFalse(self.client.get(self.path).json()['file_received'])
         self.link.last_seen_at = timezone.now() - timedelta(seconds=60)
@@ -57,6 +60,10 @@ class OnboardingTests(TestCase):
         self.assertFalse(self.client.get(self.path).json()['iphone_icloud_confirmed'])
 
     def test_first_cleanup_requires_decisions_and_downloads_do_not_pass_iphone_test(self):
+        self.assertEqual(self.action('confirm_cleanup').status_code, 409)
+        self.link.snapshot['cleanup'] = {'status': 'failed', 'groups': []}
+        self.link.save()
+        self.assertEqual(self.action('confirm_cleanup').status_code, 409)
         self.link.snapshot['cleanup'] = {'status': 'generating', 'groups': []}
         self.link.save()
         self.assertEqual(self.action('confirm_cleanup').status_code, 409)

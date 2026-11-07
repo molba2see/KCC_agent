@@ -28,7 +28,7 @@ def safe_name(value):
 
 
 class InitialCleanup:
-    def __init__(self, demo, catalog, python, worker, destination):
+    def __init__(self, demo, catalog, python, worker, destination, request_id=None):
         self.demo, self.catalog = demo, catalog
         self.python, self.worker = Path(python), Path(worker)
         self.destination = Path(destination).expanduser().resolve()
@@ -38,16 +38,37 @@ class InitialCleanup:
             self.data = json.loads(self.path.read_text())
         except (OSError, ValueError):
             self.data = {'status': 'scanning', 'groups': [], 'total': 0, 'model_processed': 0}
+        if self.data.get('version') != 2:
+            for group in self.data['groups']:
+                if group['status'] == 'pending': group['status'] = 'stale'
+            self.data.update(version=2, status='scanning', scan_id=uuid.uuid4().hex)
         if self.data['status'] == 'generating':
             self.data.update(status='failed', detail='제안 준비가 중단됐어요. 다시 제안받기를 눌러 주세요.')
+        if request_id and self.data.get('request_id') != request_id:
+            for group in self.data['groups']:
+                if group['status'] in {'pending', 'dismissed'}: group['status'] = 'stale'
+            self.data.update(request_id=request_id, status='scanning', detail='', scan_id=uuid.uuid4().hex,
+                             reanalyze=bool(self.demo.engine().data['assets']))
         self.save()
 
     def save(self):
         atomic(self.path, self.data)
 
     def eligible(self, asset):
-        return (not asset.get('context') and not asset.get('project') and not asset.get('keep')
+        origin = getattr(self.demo, 'origins', {}).get(asset.get('original'), {})
+        kind = origin.get('kind') if isinstance(origin, dict) else origin
+        return (kind != 'icloud' and not asset.get('context') and not asset.get('keep')
                 and asset['path'] == asset['original'] and Path(asset['path']).suffix.lower() in TEXT | IMAGE)
+
+    def rescan(self):
+        """Explicitly reconsider unconfirmed files, preserving approvals and kept files."""
+        if self.data['status'] in {'scanning', 'generating'} or (self.thread and self.thread.is_alive()):
+            raise ValueError('이미 파일을 분석하고 있어요. 완료될 때까지 기다려 주세요.')
+        for group in self.data['groups']:
+            if group['status'] in {'pending', 'dismissed'}: group['status'] = 'stale'
+        self.data.update(status='scanning', detail='', model_processed=0, scan_id=uuid.uuid4().hex, reanalyze=True)
+        self.save()
+        return {'scanning': True}
 
     def observe(self, watcher):
         if self.data['status'] != 'scanning':
@@ -74,16 +95,37 @@ class InitialCleanup:
     def generate(self):
         request_path = response_path = process = None
         try:
+            if self.data.get('reanalyze'):
+                with self.demo.lock:
+                    retry_ids = [asset['id'] for asset in self.demo.engine().data['assets'].values() if self.eligible(asset)]
+                for aid in retry_ids:
+                    with self.demo.lock:
+                        if self.eligible(self.demo.engine().data['assets'][aid]): self.demo.analyze(aid)
+                with self.demo.lock:
+                    self.data['reanalyze'] = False
+                    self.save()
             with self.demo.lock:
                 engine = self.demo.engine()
-                claimed = {aid for group in self.data['groups'] for aid in group['asset_ids']}
+                claimed = {aid for group in self.data['groups'] if group['status'] != 'stale' for aid in group['asset_ids']}
                 original_groups = list(self.data['groups'])
                 assets = [dict(asset) for asset in engine.data['assets'].values()
                           if self.eligible(asset) and asset['id'] not in claimed]
                 catalog = [{'id': pid, 'name': item['name'], 'guide': item.get('profile', '')[:1800]}
                            for pid, item in self.catalog.items()]
             files = []
+            # Confident classifications are proposals too; none execute before confirmation.
+            assigned = {}
             for asset in assets:
+                if asset.get('project') in self.catalog and not asset.get('refs'):
+                    assigned.setdefault(asset['project'], []).append(asset['id'])
+            with self.demo.lock:
+                self.accept_groups([{'project_id': pid, 'purpose': '선택한 폴더의 정리 지침에 맞는 파일입니다.', 'files': ids}
+                                    for pid, ids in assigned.items()], assets)
+                original_groups = list(self.data['groups'])
+                self.save()
+            assigned_ids = {aid for ids in assigned.values() for aid in ids}
+            for asset in assets:
+                if asset['id'] in assigned_ids or asset.get('refs'): continue
                 try:
                     text = content(engine.path(asset['path']))[:1000]
                 except Exception:
@@ -147,7 +189,7 @@ class InitialCleanup:
         if not isinstance(values, list):
             raise ValueError('Invalid groups')
         by_id = {asset['id']: asset for asset in assets}
-        claimed = {aid for group in self.data['groups'] for aid in group['asset_ids']}
+        claimed = {aid for group in self.data['groups'] if group['status'] != 'stale' for aid in group['asset_ids']}
         existing_ids = {group['id'] for group in self.data['groups']}
         for value in values:
             if not isinstance(value, dict): raise ValueError('Invalid group')
@@ -161,11 +203,12 @@ class InitialCleanup:
                 raise ValueError('Invalid proposal description')
             if target == 'new' and any(item['name'].casefold() == name.casefold() for item in self.catalog.values()):
                 raise ValueError('Existing folder name')
-            group_id = hashlib.sha256(json.dumps([target, name, purpose, sorted((aid, by_id[aid]['hash']) for aid in ids)], ensure_ascii=False).encode()).hexdigest()[:32]
+            group_id = hashlib.sha256(json.dumps([self.data.get('scan_id', 'initial'), target, name, purpose, sorted((aid, by_id[aid]['hash']) for aid in ids)], ensure_ascii=False).encode()).hexdigest()[:32]
             if group_id in existing_ids: continue
             if any(aid in claimed for aid in ids): raise ValueError('Duplicate proposal files')
             self.data['groups'].append({'id': group_id, 'name': name, 'purpose': purpose, 'project_id': target,
-                                        'asset_ids': ids, 'hashes': {aid: by_id[aid]['hash'] for aid in ids}, 'status': 'pending'})
+                                        'asset_ids': ids, 'hashes': {aid: by_id[aid]['hash'] for aid in ids},
+                                        'projects': {aid: by_id[aid].get('project') for aid in ids}, 'status': 'pending'})
             existing_ids.add(group_id); claimed.update(ids)
 
     def public(self):
@@ -177,6 +220,7 @@ class InitialCleanup:
             if group['status'] == 'pending' and any(
                 aid not in assets or not self.eligible(assets[aid])
                 or assets[aid].get('hash') != group['hashes'].get(aid)
+                or assets[aid].get('project') != group.get('projects', {}).get(aid)
                 for aid in group['asset_ids']
             ):
                 group['status'] = 'stale'
@@ -203,9 +247,11 @@ class InitialCleanup:
         if not approve:
             group['status'] = 'dismissed'; self.save(); return {'dismissed': True}
         engine = self.demo.engine()
+        previous = {aid: dict(engine.data['assets'].get(aid, {})) for aid in group['asset_ids']}
         for aid in group['asset_ids']:
             asset = engine.data['assets'].get(aid)
             if (not asset or not self.eligible(asset) or asset.get('refs') or asset['hash'] != group['hashes'][aid]
+                    or asset.get('project') != group.get('projects', {}).get(aid)
                     or sha(engine.path(asset['path'])) != group['hashes'][aid]):
                 raise ValueError('파일 상태가 바뀌었어요. 개별 분류 화면에서 다시 확인해 주세요.')
         reused = next((old.get('created_project') for old in self.data['groups'] if old['status'] == 'approved' and old['name'] == group['name'] and old.get('created_project') in self.catalog), None) if group['project_id'] == 'new' else None
@@ -250,7 +296,7 @@ class InitialCleanup:
             group['status'] = 'pending'
             for aid in reversed(moved): self.demo.engine().undo(aid)
             engine = self.demo.engine()
-            for aid in group['asset_ids']: engine.data['assets'][aid].update(project=None, reason=None)
+            for aid in group['asset_ids']: engine.data['assets'][aid].update(project=previous[aid].get('project'), reason=previous[aid].get('reason'))
             if created:
                 engine.data['projects'].pop(pid, None); engine.data['folders'].pop(pid, None); self.catalog.pop(pid, None)
                 if made_folder and folder.is_dir() and not folder.is_symlink():

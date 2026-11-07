@@ -27,7 +27,7 @@ def current_state(user, progress):
     cleanup_link = next((link for link in online if isinstance((link.snapshot or {}).get('cleanup'), dict)), None)
     return {'cleanup_confirmed': progress.initial_cleanup_confirmed,
             'cleanup': cleanup_link.snapshot['cleanup'] if cleanup_link else None,
-            'cleanup_link_id': str(cleanup_link.id) if cleanup_link else None,
+            'cleanup_link_id': str(cleanup_link.id) if cleanup_link else str(online[0].id) if online else None,
             'cleanup_busy': bool(cleanup_link and cleanup_link.commands.filter(status__in=['pending', 'running']).exists()),
             'mac_connected': bool(online), 'iphone_icloud_confirmed': progress.iphone_icloud_confirmed,
             'test_started': progress.test_started_at is not None,
@@ -53,7 +53,7 @@ def progress(request):
         elif action == 'confirm_cleanup':
             state = current_state(request.user, record)
             cleanup = state.get('cleanup')
-            if not state['mac_connected'] or (cleanup and (cleanup.get('status') in {'scanning', 'generating'} or cleanup.get('pending_groups', 0) or any(group.get('status') == 'pending' for group in cleanup.get('groups', [])))):
+            if not state['mac_connected'] or not cleanup or state['cleanup_busy'] or cleanup.get('status') not in {'review', 'completed'} or cleanup.get('pending_groups', 0) or any(group.get('status') == 'pending' for group in cleanup.get('groups', [])):
                 return Response({'detail': '일괄 정리 제안을 확인하거나 보류한 뒤 계속하세요.'}, status=409)
             record.initial_cleanup_confirmed = True
             record.save(update_fields=['initial_cleanup_confirmed'])
@@ -62,7 +62,7 @@ def progress(request):
             record.save(update_fields=['iphone_icloud_confirmed'])
         elif action == 'start_test':
             state = current_state(request.user, record)
-            if not state['mac_connected'] or not record.iphone_icloud_confirmed or (state['cleanup'] and not record.initial_cleanup_confirmed):
+            if not state['mac_connected'] or not record.iphone_icloud_confirmed or not record.initial_cleanup_confirmed:
                 return Response({'detail': 'Mac 연결과 iPhone iCloud 설정 확인을 먼저 완료하세요.'}, status=409)
             record.baseline_assets = [str(link.id) + ':' + str(asset.get('id'))
                 for link in AgentLink.objects.filter(owner=request.user)

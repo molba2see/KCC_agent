@@ -21,9 +21,12 @@ function renderWorkspace(){
  document.querySelector('.status-word').textContent=!authenticated?'연결 확인':links.some(l=>l.connected)?'연결됨':'연결 대기';
  document.getElementById('review-count').textContent=`${pendingCount}개 대기`;
  if(!authenticated){
+  for(const id of ['files-cleanup','folders-cleanup']){const target=document.getElementById(id);if(target)target.innerHTML='';}
   for(const id of ['recent-files','pending-summary','folder-summary','all-files','review-list','folder-list','folder-detail','scheduled-list','deleted-list','journal-list'])put(id,blank);
   return;
  }
+ const cleanupHTML=links.length?links.map(link=>window.MoaCleanup?.html(link.snapshot?.cleanup,link.id,(link.commands||[]).some(command=>['pending','running'].includes(command.status)),link.connected)||'').join(''):(window.MoaCleanup?.html(null)||'');
+ for(const id of ['files-cleanup','folders-cleanup']){const target=document.getElementById(id);if(target)target.innerHTML=cleanupHTML;}
  const row=({a,l})=>group(l,assetHTML(a,l));
  put('recent-files',entries.slice(0,5).map(row).join(''));
  put('pending-summary',authenticated?`<strong>${pendingCount}개 파일에 확인이 필요합니다.</strong><p>답변 후 생성된 이동 계획을 승인하세요.</p><button class="primary" data-page="review">분류 대기 보기</button>`:blank);
@@ -32,7 +35,7 @@ function renderWorkspace(){
  const limited=links.filter(link=>link.snapshot?.assets_truncated);
  const limitNote=limited.length?`<div class="empty">전체 ${links.reduce((sum,link)=>sum+(link.snapshot?.counts?.files??link.snapshot.assets.length),0)}개 중 최근 ${entries.length}개를 표시합니다. 검색은 현재 표시한 파일 안에서 진행해요.</div>`:'';
  put('all-files',limitNote+entries.filter(({a,l})=>(fileFilter==='all'||(fileFilter==='other'?needsReview(a):!needsReview(a)))&&(!q||`${a.name} ${(l.snapshot.catalog||[]).find(p=>p.id===a.project)?.name||''}`.toLowerCase().includes(q))).map(row).join(''));
- put('review-list',links.map(link=>window.MoaCleanup?.html(link.snapshot?.cleanup,link.id,(link.commands||[]).some(command=>['pending','running'].includes(command.status)),link.connected)||'').join('')+pending.filter(({a,l})=>!(l.snapshot?.cleanup?.groups||[]).some(group=>group.status==='pending'&&group.files?.some(file=>file.id===a.id))).map(row).join(''));
+ put('review-list',cleanupHTML+pending.filter(({a,l})=>!(l.snapshot?.cleanup?.groups||[]).some(group=>group.status==='pending'&&group.files?.some(file=>file.id===a.id))).map(row).join(''));
  put('folder-list',folders.map(p=>`<button data-live-folder="${esc(p.key)}" class="${liveFolder===p.key?'active':''}">${esc(p.name)} · ${esc(p.l.label)}</button>`).join(''));
  const folder=folders.find(p=>p.key===liveFolder)||folders[0];
  put('folder-detail',folder?`<h2>${esc(folder.name)}</h2><p>${esc(folder.desc||'프로젝트 설명 없음')}</p><p>프로젝트 지침 수정은 Mac에서 _project.md를 편집해 주세요.</p>${entries.filter(({a,l})=>l.id===folder.l.id&&a.project===folder.id).map(row).join('')}`:'');

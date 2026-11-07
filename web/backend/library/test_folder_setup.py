@@ -37,6 +37,7 @@ class FolderSetupTests(TestCase):
             self.assertEqual(response.status_code, 202)
             self.assertIn('--data', spawn.call_args.args[0])
             self.assertEqual(json.loads((self.data / 'selected-folders.json').read_text()), [str(self.folder.resolve())])
+            self.assertTrue(json.loads((self.data / 'initial-cleanup-settings.json').read_text())['enabled'])
         self.assertEqual(self.client.get(self.path).json()['status'], 'failed')  # stopped worker
         other = get_user_model().objects.create_user('other')
         self.client.force_login(other)
@@ -57,7 +58,7 @@ class FolderSetupTests(TestCase):
     def test_real_worker_publishes_completed_selection_and_releases_lock(self):
         self.client.force_login(self.user)
         (self.folder / '_project.md').write_text('# Existing owner guidance')
-        response = self.client.post(self.path, {'folders': [str(self.folder)]}, content_type='application/json')
+        response = self.client.post(self.path, {'folders': [str(self.folder)], 'initial_cleanup': False}, content_type='application/json')
         self.assertEqual(response.status_code, 202)
         deadline = time.monotonic() + 5
         while time.monotonic() < deadline:
@@ -72,6 +73,7 @@ class FolderSetupTests(TestCase):
 
     def test_add_mode_preserves_registered_folders_and_does_not_relink_account(self):
         self.client.force_login(self.user)
+        (self.data / 'initial-cleanup-settings.json').write_text(json.dumps({'enabled': False}))
         old = self.data / 'old'; old.mkdir()
         prior = {'keep-id': {'name': 'Old', 'folder': str(old.resolve()), 'keywords': ['saved']}}
         (self.data / 'projects.json').write_text(json.dumps(prior))

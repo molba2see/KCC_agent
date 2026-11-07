@@ -166,7 +166,7 @@ def main():
         if not args.generate:
             if all((folder / GUIDE).is_file() and not (folder / GUIDE).is_symlink() for folder in pending):
                 cleanup_settings = data / 'initial-cleanup-settings.json'
-                if cleanup_settings.exists() and json.loads(cleanup_settings.read_text()).get('enabled') is True:
+                if not cleanup_settings.exists() or json.loads(cleanup_settings.read_text()).get('enabled', True) is True:
                     model_python(data)
                 result = write_guides(folders, data, None, lambda index, name: status(completed=index, folder=name), append=args.append)
                 status(status='completed', completed=len(folders), folders=result)

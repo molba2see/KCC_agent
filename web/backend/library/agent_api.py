@@ -135,13 +135,15 @@ def queue_command(request):
             payload["plan"] = plan  # Agent rechecks the plan and current file hash.
         elif action == "undo" and not asset.get("archived"):
             return Response({"detail": "Asset has not moved"}, status=400)
-    elif action in {'cleanup_confirm', 'cleanup_dismiss', 'cleanup_retry'}:
+    elif action in {'cleanup_confirm', 'cleanup_dismiss', 'cleanup_retry', 'cleanup_scan'}:
         cleanup = snapshot.get('cleanup')
         if not isinstance(cleanup, dict):
             return Response({'detail': '최신 Mac 연결 앱을 설치해 일괄 정리를 준비하세요.'}, status=409)
         if cleanup.get('status') in {'scanning', 'generating'}:
             return Response({'detail': '일괄 정리 제안을 준비 중입니다.'}, status=409)
-        if action != 'cleanup_retry':
+        if action == 'cleanup_scan' and 'cleanup_scan' not in snapshot.get('capabilities', []):
+            return Response({'detail': 'Mac 연결 앱을 업데이트한 뒤 다시 분석해 주세요.'}, status=409)
+        if action not in {'cleanup_retry', 'cleanup_scan'}:
             group_id = request.data.get('group_id')
             group = next((group for group in cleanup.get('groups', []) if isinstance(group, dict) and group.get('id') == group_id and group.get('status') == 'pending'), None)
             if not isinstance(group_id, str) or not group:

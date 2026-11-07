@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+import uuid
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
@@ -50,8 +51,8 @@ def folders(request):
                 guides.validate_additions(selected, data)
         except (ValueError, OSError, TypeError):
             return JsonResponse({'detail': '접근 가능한 폴더를 1~20개 선택하세요. 상위·하위 폴더는 중복 선택할 수 없습니다.'}, status=400)
-        if mode == 'replace' and body.get('initial_cleanup') is True:
-            guides.atomic_json(data / 'initial-cleanup-settings.json', {'enabled': True})
+        if mode == 'replace':
+            guides.atomic_json(data / 'initial-cleanup-settings.json', {'enabled': body.get('initial_cleanup', True), 'request_id': uuid.uuid4().hex})
         guides.atomic_json(data / 'selected-folders.json', [str(folder) for folder in selected])
         status = {'status': 'preparing', 'completed': 0, 'total': len(selected), 'mode': mode}
         guides.atomic_json(status_file, status)

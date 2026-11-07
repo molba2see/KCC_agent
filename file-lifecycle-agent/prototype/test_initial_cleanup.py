@@ -35,7 +35,7 @@ class InitialCleanupTests(unittest.TestCase):
 
     def propose(self, target='new', name='회의록'):
         self.cleanup.accept_groups([{'project_id': target, 'name': name, 'purpose': '회의록과 회의 일정 자료를 보관합니다.', 'files': self.ids}], list(self.demo.engine().data['assets'].values()))
-        return self.cleanup.data['groups'][0]['id']
+        return self.cleanup.data['groups'][-1]['id']
 
     def test_proposal_and_dismissal_do_not_create_or_move_files(self):
         group = self.propose()
@@ -73,6 +73,61 @@ class InitialCleanupTests(unittest.TestCase):
         self.cleanup.decide(group, True)
         self.assertEqual(len(list(self.target.iterdir())), 2)
         self.assertFalse(self.cleanup.destination.exists())
+
+    def test_confident_existing_classification_is_grouped_without_model_or_move(self):
+        engine = self.demo.engine()
+        for aid in self.ids: engine.data['assets'][aid]['project'] = 'old'
+        engine.save()
+        with patch('initial_cleanup.subprocess.Popen') as worker:
+            self.cleanup.generate()
+            worker.assert_not_called()
+        self.assertEqual(self.cleanup.data['status'], 'review')
+        self.assertEqual(len(self.cleanup.public()['groups']), 1)
+        self.assertFalse(self.cleanup.public()['groups'][0]['new_folder'])
+        self.assertEqual(list(self.target.iterdir()), [])
+        self.cleanup.decide(self.cleanup.data['groups'][0]['id'], True)
+        self.assertEqual(len(list(self.target.iterdir())), 2)
+
+    def test_rescan_reconsiders_dismissed_groups_and_preserves_kept_files(self):
+        group = self.propose(); self.cleanup.decide(group, False)
+        self.cleanup.data['status'] = 'completed'
+        self.cleanup.rescan()
+        self.assertEqual(self.cleanup.data['status'], 'scanning')
+        self.assertEqual(self.cleanup.data['groups'][0]['status'], 'stale')
+        second = self.propose()
+        self.assertNotEqual(group, second)
+        self.assertEqual(self.cleanup.public()['pending_groups'], 1)
+        engine = self.demo.engine(); engine.data['assets'][self.ids[0]]['keep'] = True; engine.save()
+        self.assertFalse(self.cleanup.eligible(engine.data['assets'][self.ids[0]]))
+        with self.assertRaises(ValueError): self.cleanup.rescan()
+
+    def test_individual_project_change_invalidates_group(self):
+        self.propose()
+        engine = self.demo.engine(); engine.data['assets'][self.ids[0]]['project'] = 'old'; engine.save()
+        self.assertEqual(self.cleanup.public()['pending_groups'], 0)
+
+    def test_rescan_reruns_classifier_before_preparing_confirmations(self):
+        self.cleanup.data['status'] = 'completed'; self.cleanup.rescan()
+        called = []
+        def analyze(aid):
+            called.append(aid)
+            engine = self.demo.engine(); engine.data['assets'][aid]['project'] = 'old'; engine.save()
+        self.demo.analyze = analyze
+        with patch('initial_cleanup.subprocess.Popen') as worker:
+            self.cleanup.generate(); worker.assert_not_called()
+        self.assertEqual(set(called), set(self.ids))
+        self.assertEqual(self.cleanup.public()['pending_groups'], 1)
+        self.assertEqual(list(self.target.iterdir()), [])
+
+    def test_new_onboarding_request_starts_scan_but_restart_does_not_repeat_it(self):
+        group = self.propose(); self.cleanup.data['status'] = 'review'; self.cleanup.save()
+        new = InitialCleanup(self.demo, self.catalog, sys.executable, self.base / 'worker.py', self.cleanup.destination, request_id='new-onboarding')
+        self.assertEqual(new.data['status'], 'scanning')
+        self.assertTrue(new.data['reanalyze'])
+        self.assertEqual(new.data['groups'][0]['status'], 'stale')
+        new.data['status'] = 'completed'; new.save()
+        restarted = InitialCleanup(self.demo, self.catalog, sys.executable, self.base / 'worker.py', self.cleanup.destination, request_id='new-onboarding')
+        self.assertEqual(restarted.data['status'], 'completed')
 
     def test_changed_file_rejects_entire_group_before_folder_creation(self):
         group = self.propose(); (self.root / '회의록_2.txt').write_text('changed')
