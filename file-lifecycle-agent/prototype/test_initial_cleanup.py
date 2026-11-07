@@ -88,6 +88,31 @@ class InitialCleanupTests(unittest.TestCase):
         self.cleanup.decide(self.cleanup.data['groups'][0]['id'], True)
         self.assertEqual(len(list(self.target.iterdir())), 2)
 
+    def test_model_auto_policy_separates_new_files_from_initial_confirmation(self):
+        self.demo.preferences = SimpleNamespace(values={'download_mode': 'auto'})
+        self.demo.origins = {name: {'kind': 'download'} for name in ['회의록_1.txt', '회의록_2.txt']}
+        engine = self.demo.engine()
+        for index, aid in enumerate(self.ids):
+            engine.data['assets'][aid].update(project='old', filing_mode='auto', initial_import=index == 0)
+        engine.save()
+        self.cleanup.generate()
+        self.assertEqual(len(list(self.target.iterdir())), 1)
+        pending = self.cleanup.public()['groups']
+        self.assertEqual(len(pending), 1)
+        self.assertEqual(pending[0]['files'][0]['id'], self.ids[0])
+
+    def test_new_folder_and_files_received_in_review_mode_never_auto_apply(self):
+        self.demo.preferences = SimpleNamespace(values={'download_mode': 'auto'})
+        self.demo.origins = {name: {'kind': 'download'} for name in ['회의록_1.txt', '회의록_2.txt']}
+        engine = self.demo.engine()
+        for aid in self.ids: engine.data['assets'][aid].update(initial_import=False, filing_mode='review')
+        engine.save()
+        self.propose('old'); self.cleanup.auto_apply()
+        self.assertEqual(list(self.target.iterdir()), [])
+        for group in self.cleanup.data['groups']: group['status'] = 'stale'
+        self.propose('new'); self.cleanup.auto_apply()
+        self.assertFalse(self.cleanup.destination.exists())
+
     def test_rescan_reconsiders_dismissed_groups_and_preserves_kept_files(self):
         group = self.propose(); self.cleanup.decide(group, False)
         self.cleanup.data['status'] = 'completed'
@@ -171,6 +196,15 @@ class InitialCleanupTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 self.cleanup.accept_groups([{'project_id': target, 'name': name, 'purpose': '회의록 자료를 보관합니다.', 'files': ids}], assets)
         self.assertEqual(self.cleanup.data['groups'], [])
+
+    def test_invalid_generated_group_is_deferred_without_dropping_valid_groups(self):
+        assets = list(self.demo.engine().data['assets'].values())
+        self.cleanup.accept_generated({'groups': [
+            {'project_id': 'new', 'name': '../escape', 'purpose': '보관할 자료입니다.', 'files': [self.ids[0]]},
+            {'project_id': 'old', 'purpose': '수업 자료를 보관합니다.', 'files': [self.ids[1]]}], 'deferred': []}, assets)
+        self.assertEqual(self.cleanup.data['deferred_count'], 1)
+        self.assertEqual(self.cleanup.data['groups'][0]['asset_ids'], [self.ids[1]])
+        self.assertEqual(list(self.target.iterdir()), [])
 
     def test_public_proposal_omits_content_profiles_paths_and_file_hashes(self):
         self.propose(); public = json.dumps(self.cleanup.public(), ensure_ascii=False)

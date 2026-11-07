@@ -1,6 +1,7 @@
 """Local deterministic project lifecycle baseline. No remote model, no arbitrary code execution."""
 from pathlib import Path
 import hashlib, json, re, os, uuid, math
+from preferences import atomic_json
 from collections import Counter
 
 def sha(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -21,7 +22,7 @@ class Lifecycle:
         self.data=json.loads(self.db.read_text()) if self.db.exists() else {'assets':{},'projects':{},'journal':[]}
         self.recover()
     def save(self):
-        tmp=self.db.with_suffix('.tmp'); tmp.write_text(json.dumps(self.data,ensure_ascii=False,indent=2)); os.replace(tmp,self.db)
+        atomic_json(self.db, self.data)
     def path(self,p):
         q=Path(p).expanduser()
         if q.is_absolute():  # only inside a registered project folder (the 'file' action target)
@@ -52,6 +53,7 @@ class Lifecycle:
         self.save(); return a['project']
     def plan(self,aid,active_references=None):
         a=self.data['assets'][aid]; proj=a['project']
+        if a.get('trashed'): return {'action':'keep','reason':'in Trash'}
         if a['keep']: return {'action':'keep','reason':'user keep'}
         if not proj: return {'action':'defer','reason':a.get('reason','unknown project')}
         referenced = (a['path'] in active_references or Path(a['path']).name in active_references) if active_references is not None else any(x['refs'] and (a['path'] in x['refs'] or Path(a['path']).name in x['refs']) for x in self.data['assets'].values() if self.data['projects'].get(x['project'])!='completed')
@@ -80,8 +82,10 @@ class Lifecycle:
         if crash: raise RuntimeError('injected crash after link')
         src.unlink(); a['path']=j['dst']; j['state']='done'; self.save(); return True
     def recover(self):
+        changed = False
         for j in self.data['journal']:
             if j['state']!='prepared': continue
+            changed = True
             src,dst=self.path(j['src']),self.path(j['dst'])
             # Roll back incomplete link, or finish bookkeeping after unlink.
             if src.exists() and dst.exists() and os.path.samefile(src,dst) and sha(src)==sha(dst)==j['hash']: dst.unlink(); j['state']='rolled_back'
@@ -89,7 +93,7 @@ class Lifecycle:
                 self.data['assets'][j['asset']]['path']=j['dst']; j['state']='done'
             elif src.exists() and not dst.exists(): j['state']='rolled_back'
             else: raise ValueError('recovery needs review')
-        self.save()
+        if changed or not self.db.exists(): self.save()
     def undo(self,aid):
         a=self.data['assets'][aid]; src=self.path(a['path']); dst=self.path(a['original'])
         if dst.exists(): raise FileExistsError(dst)

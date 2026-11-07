@@ -11,6 +11,31 @@ from lifecycle_v3 import Lifecycle
 
 
 class DownloadTrackingTests(unittest.TestCase):
+    def test_new_file_policy_is_per_source_and_initial_files_always_wait(self):
+        from preferences import Preferences
+        for source in ['download', 'screenshot', 'icloud']:
+            for mode, initial in [('auto', False), ('review', False), ('auto', True)]:
+                with self.subTest(source=source, mode=mode, initial=initial), TemporaryDirectory() as directory:
+                    base = Path(directory); root = base / 'workspace'; root.mkdir()
+                    inbox = base / 'source'; inbox.mkdir(); target = base / 'project'; target.mkdir()
+                    path = inbox / 'lecture.png'
+                    if initial: path.write_bytes(b'fixture')
+                    engine = Lifecycle(root); engine.data.update(projects={'old': 'active'}, folders={'old': str(target)}); engine.save()
+                    preferences = Preferences(root / 'preferences.json'); preferences.values[source + '_mode'] = mode
+                    def analyze(aid):
+                        engine = Lifecycle(root); engine.data['assets'][aid]['project'] = 'old'; engine.save()
+                        return {'status': 'planned', 'project': 'old', 'decider': 'rule'}
+                    demo = SimpleNamespace(root=root, lock=threading.Lock(), engine=lambda: Lifecycle(root),
+                        preferences=preferences, origins={}, save_origins=lambda: None, sources={}, save_sources=lambda: None,
+                        analyze=analyze, save_runs=lambda: None, events=[], version=0, cleanup=SimpleNamespace(data={'status': 'scanning'}))
+                    arguments = {'auto_inboxes': [str(inbox)]} if source == 'icloud' else {'screenshot_inboxes': [str(inbox)]} if source == 'screenshot' else {'strict_inboxes': [str(inbox)]}
+                    watcher = Watcher(demo, [], scan_existing=True, **arguments)
+                    if not initial: path.write_bytes(b'fixture')
+                    with patch('demo_v5.where_froms', return_value=[]), patch('demo_v5.notify'), patch.dict('demo_v5.CAT', {'old': {'name': '수업'}}):
+                        for _ in range(4): watcher.tick()
+                    moved = bool(list(target.iterdir()))
+                    self.assertEqual(moved, mode == 'auto' and (not initial or source == 'icloud'))
+
     def test_confident_download_is_automatically_analyzed_but_waits_for_confirmation(self):
         with TemporaryDirectory() as directory:
             base = Path(directory); root = base / 'workspace'; root.mkdir()

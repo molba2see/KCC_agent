@@ -7,10 +7,11 @@ let csrf='',authenticated=false,latest=[],loadError='',liveFolder='';
 const reviewChoices=new Map();
 async function api(path,body){const response=await fetch('/api/v1/'+path,{method:body?'POST':'GET',credentials:'same-origin',headers:body?{'Content-Type':'application/json','X-CSRFToken':csrf}:{},body:body?JSON.stringify(body):undefined});const result=await response.json().catch(()=>({detail:'서버 응답을 읽을 수 없습니다.'}));if(!response.ok){const error=new Error(result.detail||result.error||`HTTP ${response.status}`);error.fields=result.errors||{};throw error;}return result}
 async function session(){try{const s=await api('auth/session/');csrf=s.csrf;authenticated=s.authenticated;window.MoaSession={authenticated:s.authenticated,username:s.username,display_name:s.display_name};document.dispatchEvent(new CustomEvent("moa-session",{detail:window.MoaSession}));document.getElementById('agent-login').hidden=authenticated;document.getElementById('signup-form').hidden=authenticated;document.getElementById('signup-already').hidden=!authenticated;document.getElementById('agent-live').hidden=!authenticated;document.getElementById('agent-account').textContent=s.username?`${s.display_name||s.username}`:' ';renderWorkspace();if(authenticated&&!s.onboarding_completed&&!location.hash&&!['localhost','127.0.0.1'].includes(location.hostname))page('onboarding');if(authenticated)await refresh();else{latest=[];reviewChoices.clear();renderWorkspace()}}catch(e){loadError='서버 연결 실패: '+e.message;renderWorkspace();document.getElementById('agent-login-error').textContent=e.message}}
-const needsReview=a=>!a.archived&&!a.keep;
-const group=(link,html)=>`<section data-link="${esc(link.id)}"><h3>${esc(link.label)} · ${link.connected?'연결됨':'연결 끊김 · 마지막 수신 상태'}</h3>${html}</section>`;
+const needsReview=a=>!a.archived&&!a.keep&&!a.trashed;
+const group=(link,html)=>`<section data-link="${esc(link.id)}"><h3>${esc(link.label)} · ${link.connected?(link.snapshot?.agent_available===false?'연결됨 · 파일 분석 중':'연결됨'):'연결 끊김 · 마지막 수신 상태'}</h3>${html}</section>`;
 function renderWorkspace(){
  const links=authenticated?latest:[],entries=links.flatMap(l=>(l.snapshot?.assets||[]).map(a=>({a,l}))),folders=links.flatMap(l=>(l.snapshot?.catalog||[]).map(p=>({...p,key:l.id+':'+p.id,l}))),pending=entries.filter(({a})=>needsReview(a));
+ document.dispatchEvent(new CustomEvent('moa-workspace',{detail:{authenticated,links}}));
  const blank=`<div class="empty">${esc(loadError||(!authenticated?'연결 화면에서 로그인하면 실제 파일이 표시됩니다.':links.length?'수신된 항목이 없습니다.':'Mac 에이전트와 브리지를 실행해 주세요.'))}<button class="ghost" data-page="connection">연결 확인</button></div>`;
  const pendingCount=links.reduce((sum,link)=>sum+(link.snapshot?.counts?.pending??(link.snapshot?.assets||[]).filter(needsReview).length),0);
  const movedCount=links.reduce((sum,link)=>sum+(link.snapshot?.counts?.moved??(link.snapshot?.assets||[]).filter(asset=>asset.archived).length),0);
@@ -25,7 +26,7 @@ function renderWorkspace(){
   for(const id of ['recent-files','pending-summary','folder-summary','all-files','review-list','folder-list','folder-detail','scheduled-list','deleted-list','journal-list'])put(id,blank);
   return;
  }
- const cleanupHTML=links.length?links.map(link=>window.MoaCleanup?.html(link.snapshot?.cleanup,link.id,(link.commands||[]).some(command=>['pending','running'].includes(command.status)),link.connected)||'').join(''):(window.MoaCleanup?.html(null)||'');
+ const cleanupHTML=links.length?links.map(link=>window.MoaCleanup?.html(link.snapshot?.cleanup,link.id,(link.commands||[]).some(command=>['pending','running'].includes(command.status))||link.snapshot?.agent_available===false,link.connected)||'').join(''):(window.MoaCleanup?.html(null)||'');
  for(const id of ['files-cleanup','folders-cleanup']){const target=document.getElementById(id);if(target)target.innerHTML=cleanupHTML;}
  const row=({a,l})=>group(l,assetHTML(a,l));
  put('recent-files',entries.slice(0,5).map(row).join(''));
@@ -48,13 +49,13 @@ function renderWorkspace(){
 window.MoaLive={get enabled(){return true},render:renderWorkspace,selectFolder(id){liveFolder=id;renderWorkspace()}};
 document.getElementById('folder-list').addEventListener('click',e=>{const b=e.target.closest('[data-live-folder]');if(b){liveFolder=b.dataset.liveFolder;renderWorkspace()}});
 function assetHTML(a,link){
- const busy=(link.commands||[]).some(command=>['pending','running'].includes(command.status));
+ const busy=link.snapshot?.agent_available===false||(link.commands||[]).some(command=>['pending','running'].includes(command.status));
  const run=a.run||{},plan=a.plan||{},name=basename(a.name||a.original||a.path)||a.id;
  const reasons=(a.why||[]).slice(0,4).map(reason=>`<p>${esc(reason)}</p>`).join('');
  const disabled=busy||!link.connected?'disabled':'';
- const waiting=run.status==='waiting_user'&&!a.archived&&!a.keep;
- const canApprove=['file','archive'].includes(plan.action)&&!a.archived;
- return `<article class="agent-asset" data-asset="${esc(a.id)}"><div class="review-card-header"><h3><button class="file-preview-trigger" type="button" data-preview-link="${esc(link.id)}" data-preview-asset="${esc(a.id)}" data-preview-name="${esc(name)}" aria-label="${esc(name)} 미리보기">${esc(name)} ↗</button></h3><span class="chip ${run.status==='waiting_user'?'other':''}">${esc(a.archived?'이동됨':run.status==='waiting_user'?'질문 대기':plan.action==='file'?'승인 대기':plan.action||'판단 중')}</span></div>${reasons||(!run.question?'<p>판단 근거를 기다리는 중입니다.</p>':'')}${plan.target?`<p>계획: ${esc(plan.action)} → ${esc(basename(plan.target))}</p>`:''}${run.question?`<p class="review-question"><b>질문</b> ${esc(run.question)}</p>`:''}${waiting?reviewControlsHTML(a,link,busy):''}<div class="actions asset-footer">${canApprove?`<button class="primary" ${disabled} data-agent-action="approve">계획 승인</button>`:''}${!waiting&&!a.archived&&!a.keep?`<button class="ghost" ${disabled} data-agent-action="keep">그대로 두기</button>`:''}${a.archived?`<button class="ghost" ${disabled} data-agent-action="undo">이동 되돌리기</button>`:''}</div></article>`;
+ const waiting=run.status==='waiting_user'&&!a.archived&&!a.keep&&!a.trashed;
+ const canApprove=['file','archive'].includes(plan.action)&&!a.archived&&!a.trashed;
+ return `<article class="agent-asset" data-asset="${esc(a.id)}"><div class="review-card-header"><h3><button class="file-preview-trigger" type="button" data-preview-link="${esc(link.id)}" data-preview-asset="${esc(a.id)}" data-preview-name="${esc(name)}" ${a.trashed?'disabled':''} aria-label="${esc(name)} 미리보기">${esc(name)} ↗</button></h3><span class="chip ${run.status==='waiting_user'?'other':''}">${esc(a.trashed?'휴지통':a.archived?'이동됨':run.status==='waiting_user'?'질문 대기':plan.action==='file'?'승인 대기':plan.action||'판단 중')}</span></div>${reasons||(!run.question?'<p>판단 근거를 기다리는 중입니다.</p>':'')}${plan.target?`<p>계획: ${esc(plan.action)} → ${esc(basename(plan.target))}</p>`:''}${run.question?`<p class="review-question"><b>질문</b> ${esc(run.question)}</p>`:''}${waiting?reviewControlsHTML(a,link,busy):''}<div class="actions asset-footer">${!a.trashed&&!a.keep?`<button class="ghost" data-expiry-action="expiry_schedule" ${disabled||!link.snapshot?.capabilities?.includes('expiry')?'disabled':''}>삭제 기한 예약</button>`:''}${canApprove?`<button class="primary" ${disabled} data-agent-action="approve">계획 승인</button>`:''}${!waiting&&!a.archived&&!a.keep&&!a.trashed?`<button class="ghost" ${disabled} data-agent-action="keep">그대로 두기</button>`:''}${a.archived&&!a.trashed?`<button class="ghost" ${disabled} data-agent-action="undo">이동 되돌리기</button>`:''}</div></article>`;
 }
 function reviewControlsHTML(a,link,busy){
  const choices=[...(link.snapshot.catalog||[])].sort((left,right)=>Number((a.run.candidates||[]).includes(right.id))-Number((a.run.candidates||[]).includes(left.id)));

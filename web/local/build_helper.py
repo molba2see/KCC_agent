@@ -49,7 +49,7 @@ def universal(source, output, frameworks):
     output.chmod(0o755)
 
 
-def build(origin='https://moa.3-38-192-19.sslip.io'):
+def build(origin='https://3.38.192.19'):
     from urllib.parse import urlsplit
     parsed = urlsplit(origin)
     if parsed.scheme != 'https' or not parsed.hostname or parsed.path or parsed.query or parsed.fragment or parsed.username:
@@ -102,5 +102,5 @@ def build(origin='https://moa.3-38-192-19.sslip.io'):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--origin', default='https://moa.3-38-192-19.sslip.io')
+    parser.add_argument('--origin', default='https://3.38.192.19')
     build(parser.parse_args().origin)

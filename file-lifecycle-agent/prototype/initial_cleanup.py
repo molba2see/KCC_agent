@@ -57,8 +57,35 @@ class InitialCleanup:
     def eligible(self, asset):
         origin = getattr(self.demo, 'origins', {}).get(asset.get('original'), {})
         kind = origin.get('kind') if isinstance(origin, dict) else origin
-        return (kind != 'icloud' and not asset.get('context') and not asset.get('keep')
+        return ((kind != 'icloud' or asset.get('initial_import') is False) and not asset.get('context') and not asset.get('keep') and not asset.get('trashed')
                 and asset['path'] == asset['original'] and Path(asset['path']).suffix.lower() in TEXT | IMAGE)
+
+    def enqueue(self):
+        if self.data['status'] == 'generating': self.data['queued'] = True
+        elif self.data['status'] != 'scanning': self.data.update(status='scanning', detail='')
+        self.save()
+
+    def auto_apply(self):
+        preferences = getattr(self.demo, 'preferences', None)
+        if not preferences: return
+        engine = self.demo.engine()
+        for group in list(self.data['groups']):
+            if group['status'] != 'pending' or group['project_id'] == 'new': continue
+            auto_ids = []
+            for aid in group['asset_ids']:
+                asset = engine.data['assets'].get(aid, {})
+                origin = getattr(self.demo, 'origins', {}).get(asset.get('original'), {})
+                kind = origin.get('kind') if isinstance(origin, dict) else origin
+                if not asset.get('initial_import', True) and asset.get('filing_mode') == 'auto' and preferences.values.get(str(kind) + '_mode') == 'auto': auto_ids.append(aid)
+            if auto_ids:
+                if len(auto_ids) != len(group['asset_ids']):
+                    group['status'] = 'stale'
+                    remaining = [aid for aid in group['asset_ids'] if aid not in auto_ids]
+                    values = [{'project_id': group['project_id'], 'purpose': group['purpose'], 'files': ids} for ids in (auto_ids, remaining)]
+                    self.accept_groups(values, list(engine.data['assets'].values()))
+                    group = next(item for item in reversed(self.data['groups']) if item['status'] == 'pending' and item['asset_ids'] == auto_ids)
+                try: self.decide(group['id'], True, automatic=True)
+                except (ValueError, OSError): pass  # Changed or conflicting files stay available for explicit review.
 
     def rescan(self):
         """Explicitly reconsider unconfirmed files, preserving approvals and kept files."""
@@ -87,7 +114,7 @@ class InitialCleanup:
         if self.thread and self.thread.is_alive():
             return
         with self.demo.lock:
-            self.data.update(status='generating', detail='', model_processed=0)
+            self.data.update(status='generating', detail='', model_processed=0, deferred_count=0)
             self.save()
         self.thread = threading.Thread(target=self.generate, daemon=True)
         self.thread.start()
@@ -107,16 +134,18 @@ class InitialCleanup:
             with self.demo.lock:
                 engine = self.demo.engine()
                 claimed = {aid for group in self.data['groups'] if group['status'] != 'stale' for aid in group['asset_ids']}
+                references = {ref for item in engine.data['assets'].values() if engine.data['projects'].get(item.get('project')) != 'completed' for ref in item.get('refs', [])}
                 original_groups = list(self.data['groups'])
                 assets = [dict(asset) for asset in engine.data['assets'].values()
-                          if self.eligible(asset) and asset['id'] not in claimed]
+                          if self.eligible(asset) and asset['id'] not in claimed and not asset.get('refs')
+                          and asset['path'] not in references and Path(asset['path']).name not in references]
                 catalog = [{'id': pid, 'name': item['name'], 'guide': item.get('profile', '')[:1800]}
                            for pid, item in self.catalog.items()]
             files = []
             # Confident classifications are proposals too; none execute before confirmation.
             assigned = {}
             for asset in assets:
-                if asset.get('project') in self.catalog and not asset.get('refs'):
+                if asset.get('project') in self.catalog and engine.plan(asset['id'])['action'] == 'file':
                     assigned.setdefault(asset['project'], []).append(asset['id'])
             with self.demo.lock:
                 self.accept_groups([{'project_id': pid, 'purpose': '선택한 폴더의 정리 지침에 맞는 파일입니다.', 'files': ids}
@@ -133,6 +162,7 @@ class InitialCleanup:
                 files.append({'id': asset['id'], 'name': Path(asset['original']).name, 'text': text})
             if not files:
                 with self.demo.lock:
+                    self.auto_apply()
                     self.data['status'] = 'review' if any(g['status'] == 'pending' for g in self.data['groups']) else 'completed'
                     self.save()
                 return
@@ -152,14 +182,14 @@ class InitialCleanup:
                     response = {}
                 with self.demo.lock:
                     self.data['groups'] = list(original_groups)
-                    self.accept_groups(response.get('groups', []), assets)
+                    self.accept_generated(response, assets)
                     self.data['model_processed'] = min(len(files), int(response.get('processed', 0)))
                     self.save()
                 if process.poll() is not None:
                     response = json.loads(response_path.read_text())
                     with self.demo.lock:
                         self.data['groups'] = list(original_groups)
-                        self.accept_groups(response.get('groups', []), assets)
+                        self.accept_generated(response, assets)
                         self.data['model_processed'] = min(len(files), int(response.get('processed', 0)))
                         self.save()
                     if process.returncode or response.get('status') != 'completed':
@@ -171,6 +201,7 @@ class InitialCleanup:
                     raise TimeoutError('Model proposal timeout')
                 time.sleep(1)
             with self.demo.lock:
+                self.auto_apply()
                 self.data['status'] = 'review' if any(g['status'] == 'pending' for g in self.data['groups']) else 'completed'
                 self.save()
         except Exception:
@@ -184,6 +215,22 @@ class InitialCleanup:
                 except subprocess.TimeoutExpired: process.kill(); process.wait()
             for path in (request_path, response_path):
                 if path is not None: path.unlink(missing_ok=True)
+            with self.demo.lock:
+                if self.data.pop('queued', False) and self.data['status'] != 'failed': self.data['status'] = 'scanning'
+                self.save()
+
+    def accept_generated(self, response, assets):
+        valid_ids = {asset['id'] for asset in assets}
+        deferred_values = response.get('deferred', [])
+        deferred = {aid for aid in deferred_values if isinstance(aid, str) and aid in valid_ids} if isinstance(deferred_values, list) else set()
+        values = response.get('groups', [])
+        if not isinstance(values, list): values = []
+        for value in values:
+            try: self.accept_groups([value], assets)
+            except ValueError:
+                ids = value.get('files', []) if isinstance(value, dict) else []
+                if isinstance(ids, list): deferred.update(aid for aid in ids if isinstance(aid, str) and aid in valid_ids)
+        self.data['deferred_count'] = len(deferred)
 
     def accept_groups(self, values, assets):
         if not isinstance(values, list):
@@ -236,12 +283,13 @@ class InitialCleanup:
                               files=[{'id': aid, 'name': Path(assets[aid]['original']).name} for aid in group['asset_ids'] if aid in assets])
         visible = [asset for asset in assets.values() if not asset.get('context')]
         return {'status': self.data['status'], 'detail': self.data.get('detail', ''),
+                'deferred_count': self.data.get('deferred_count', 0),
                 'total': max(self.data['total'], len(visible)), 'processed': len(visible),
                 'classified': sum(bool(a.get('project')) for a in visible),
                 'remaining': sum(self.eligible(a) for a in visible),
                 'model_processed': self.data.get('model_processed', 0), 'pending_groups': len(pending), 'groups': groups}
 
-    def decide(self, group_id, approve):
+    def decide(self, group_id, approve, automatic=False):
         group = next((group for group in self.data['groups'] if group['id'] == group_id), None)
         if not group or group['status'] != 'pending': raise ValueError('이미 처리되었거나 만료된 제안입니다.')
         if not approve:
@@ -290,6 +338,10 @@ class InitialCleanup:
                 atomic(self.demo.projects_path, projects); config_written = True
             if created or reused: group['created_project'] = pid
             group['status'] = 'approved'; self.save()
+            if not automatic and hasattr(self.demo, 'learn_source'):
+                for aid in group['asset_ids']:
+                    try: self.demo.learn_source(self.demo.engine().data['assets'][aid], pid)
+                    except (OSError, ValueError, TypeError, KeyError): pass  # Filing is committed; optional learning must not undo it.
             return {'approved': True, 'count': len(moved), 'folder': group['name']}
         except Exception:
             if config_written: atomic(self.demo.projects_path, previous_projects)

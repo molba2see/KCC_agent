@@ -27,7 +27,7 @@ def main():
     expected = {'Label': LABEL, 'ProgramArguments': [sys.executable, str(REPO / 'web/local/run.py')],
                 'RunAtLoad': True, 'KeepAlive': True, 'ThrottleInterval': 10,
                 'WorkingDirectory': str(REPO),
-                'EnvironmentVariables': {'MOA_CLOUD_ORIGIN': os.environ.get('MOA_CLOUD_ORIGIN', 'https://moa.3-38-192-19.sslip.io').rstrip('/')},
+                'EnvironmentVariables': {'MOA_CLOUD_ORIGIN': os.environ.get('MOA_CLOUD_ORIGIN', 'https://3.38.192.19').rstrip('/')},
                 'StandardOutPath': str(DATA / 'service.log'),
                 'StandardErrorPath': str(DATA / 'service.log')}
     existing = plistlib.loads(plist.read_bytes()) if plist.exists() else None

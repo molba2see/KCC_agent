@@ -10,7 +10,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 
-ACTIONS = {"cleanup_scan", "preview", "answer", "approve", "keep", "undo", "restore_trashed", "cleanup_confirm", "cleanup_dismiss", "cleanup_retry"}
+ACTIONS = {"preferences", "expiry_schedule", "expiry_confirm", "expiry_cancel", "expiry_change", "cleanup_scan", "preview", "answer", "approve", "keep", "undo", "restore_trashed", "cleanup_confirm", "cleanup_dismiss", "cleanup_retry"}
 
 
 def post(url, body, token=None):
@@ -23,7 +23,7 @@ def post(url, body, token=None):
 
 
 def get(url):
-    with urlopen(url, timeout=25) as response:
+    with urlopen(url, timeout=8) as response:
         return json.load(response)
 
 
@@ -39,9 +39,12 @@ def public_state(raw):
     """Send only the fields needed by the web UI and command validator."""
     assets = sorted(raw.get("assets", []), key=lambda asset: asset.get("received_at") or 0, reverse=True)
     result = {
-        "capabilities": [name for name in ('preview', 'cleanup_scan') if name in raw.get('capabilities', [])],
+        "agent_available": True,
+        "capabilities": [name for name in ('preview', 'cleanup_scan', 'preferences', 'expiry') if name in raw.get('capabilities', [])],
+        "preferences": {key: raw['preferences'].get(key) for key in ('download_mode', 'screenshot_mode', 'icloud_mode', 'installers_enabled', 'installer_days', 'volatile_mode', 'volatile_days', 'revision', 'updated_at')} if isinstance(raw.get('preferences'), dict) else None,
+        "expiry": public_expiry(raw.get('expiry')),
         "assets": [{"id": a.get("id"), "name": Path(a.get("original") or a.get("path") or "").name,
-                    "source_kind": a.get("source_kind"), "source_mtime": a.get("source_mtime"), "project": a.get("project"), "archived": bool(a.get("archived")), "keep": bool(a.get("keep")),
+                    "source_kind": a.get("source_kind"), "source_mtime": a.get("source_mtime"), "project": a.get("project"), "archived": bool(a.get("archived")), "keep": bool(a.get("keep")), "trashed": bool(a.get('trashed')),
                     "plan": a.get("plan"),
                     "why": [str(x)[:500] for x in (a.get("why") or [])[:4]],
                     "run": {k: (a.get("run") or {}).get(k) for k in ("status", "question", "candidates")}}
@@ -52,7 +55,7 @@ def public_state(raw):
                     for t in raw.get("trashed", [])],
         "cleanup": public_cleanup(raw.get("cleanup")),
         "counts": {"files": len(assets), "moved": sum(bool(asset.get('archived')) for asset in assets),
-                   "pending": sum(not asset.get('archived') and not asset.get('keep') for asset in assets),
+                   "pending": sum(not asset.get('archived') and not asset.get('keep') and not asset.get('trashed') for asset in assets),
                    "folders": {str(project.get('id')): sum(asset.get('project') == project.get('id') for asset in assets) for project in raw.get('catalog', [])}},
         "pending": raw.get("pending", 0),
     }
@@ -64,9 +67,16 @@ def public_state(raw):
 
 
 
+def public_expiry(value):
+    if not isinstance(value, dict): return None
+    return {'total': value.get('total', 0), 'entries': [
+        {**{key: entry.get(key) for key in ('id', 'asset_id', 'kind', 'status', 'due_at', 'first_seen', 'error')}, 'name': Path(str(entry.get('name') or '')).name}
+        for entry in value.get('entries', [])[:100] if isinstance(entry, dict)]}
+
+
 def public_cleanup(value):
     if not isinstance(value, dict): return None
-    result = {key: value.get(key) for key in ('status', 'detail', 'total', 'processed', 'classified', 'remaining', 'model_processed', 'pending_groups')}
+    result = {key: value.get(key) for key in ('status', 'detail', 'total', 'processed', 'classified', 'remaining', 'model_processed', 'pending_groups', 'deferred_count')}
     result['groups'] = [{**{key: group.get(key) for key in ('id', 'name', 'purpose', 'status', 'new_folder', 'destination')},
                          'files': [{'id': file.get('id'), 'name': Path(str(file.get('name') or '')).name} for file in group.get('files', [])]}
                         for group in value.get('groups', []) if isinstance(group, dict)]
@@ -95,13 +105,17 @@ def run(server, local, token, interval, state_file, allow_insecure_localhost=Fal
         raise SystemExit("Local agent URL must use 127.0.0.1")
     server, local = server.rstrip("/"), local.rstrip("/")
     print("Moa bridge started; local files remain on this Mac", flush=True)
+    last_snapshot = None
     while True:
         try:
             if state_file.exists():
                 result = json.loads(state_file.read_text())
                 post(server + "/api/v1/agent/bridge/result/", result, token)
                 state_file.unlink()
-            snapshot = public_state(get(local + "/api/state"))
+            try:
+                snapshot = public_state(get(local + "/api/state")); last_snapshot = snapshot
+            except (HTTPError, URLError, ValueError, OSError):
+                snapshot = {**(last_snapshot or {'assets': [], 'catalog': []}), 'agent_available': False}
             reply = post(server + "/api/v1/agent/bridge/poll/", {"snapshot": snapshot}, token)
             command = reply.get("command")
             if command:

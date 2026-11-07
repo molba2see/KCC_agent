@@ -16,6 +16,22 @@ REPO = Path(__file__).resolve().parents[2]
 DATA = Path(os.environ.get('MOA_LOCAL_DATA', Path.home() / 'Library/Application Support/Moa'))
 
 
+def cloud_configuration(path, expected_origin=None):
+    cloud = json.loads(path.read_text())
+    expected = expected_origin or os.environ.get('MOA_CLOUD_ORIGIN')
+    if expected == 'https://3.38.192.19' and cloud.get('origin') == 'https://moa.3-38-192-19.sslip.io':
+        backup = path.with_name('cloud-before-ip.json')
+        if not backup.exists():
+            with backup.open('x') as handle:
+                os.chmod(backup, 0o600); handle.write(path.read_text())
+        cloud['origin'] = expected
+        temporary = path.with_suffix('.origin.tmp')
+        with temporary.open('w') as handle:
+            os.chmod(temporary, 0o600); json.dump(cloud, handle)
+        temporary.replace(path)
+    return cloud
+
+
 def screenshot_folder():
     result = subprocess.run(['defaults', 'read', 'com.apple.screencapture', 'location'], capture_output=True, text=True)
     value = result.stdout.strip() if result.returncode == 0 else ''
@@ -129,7 +145,7 @@ def main():
                         '--state-file', DATA / 'bridge-result.json'], {'MOA_AGENT_TOKEN': token})
                 cloud_file = DATA / 'cloud.json'
                 if cloud_file.exists():
-                    cloud = json.loads(cloud_file.read_text())
+                    cloud = cloud_configuration(cloud_file)
                     version = cloud_file.stat().st_mtime_ns
                     if cloud_bridge and version != cloud_version and cloud_bridge.poll() is None:
                         cloud_bridge.terminate()

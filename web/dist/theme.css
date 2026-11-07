@@ -39,12 +39,25 @@
 }
 body { background: var(--bg); color: var(--ink); }
 .file-preview-trigger { border: 0; padding: 0; background: transparent; color: var(--link); text-align: left; font: inherit; text-decoration: underline; text-underline-offset: 4px; overflow-wrap: anywhere; }
-.file-preview { width: min(780px,calc(100% - 32px)); max-height: 85dvh; padding: 28px; border: 1px solid var(--line); border-radius: 24px; background: var(--card); color: var(--ink); overflow: auto; }
-.file-preview::backdrop { background: #3b3f4a66; }
-.file-preview h2 { padding-right: 26px; font-size: 20px; overflow-wrap: anywhere; }
+.file-preview, .expiry-dialog { width: min(780px,calc(100% - 32px)); max-height: 85dvh; padding: 28px; border: 1px solid var(--line); border-radius: 24px; background: var(--card); color: var(--ink); overflow: auto; }
+.file-preview::backdrop, .expiry-dialog::backdrop { background: #3b3f4a66; }
+.file-preview h2, .expiry-dialog h2 { padding-right: 26px; font-size: 20px; overflow-wrap: anywhere; }
 .file-preview-status { color: var(--muted); font-size: 13px; }
 .file-preview-content pre { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; font-size: 14px; line-height: 1.85; }
 .file-preview-content img { display: block; max-width: 100%; max-height: 60dvh; object-fit: contain; margin: 20px auto; }
+.policy-mac { display: flex; align-items: center; gap: 16px; margin: 24px 0; font-size: 14px; }
+.policy-mac select, .expiry-date-label input { padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--ink); max-width: 100%; }
+#policy-form fieldset { min-width: 0; border: 0; padding: 0; margin: 32px 0; }
+#policy-form legend { font-size: 20px; font-weight: 700; }
+#policy-form fieldset > p { font-size: 13px; color: var(--muted); line-height: 1.8; }
+#policy-form input[type=number] { width: 80px; max-width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 10px; color: var(--ink); background: var(--card); }
+.policy-status { font-size: 13px; line-height: 1.8; color: var(--muted); }
+.expiry-row { min-width: 0; border: 1px solid var(--line); border-radius: 18px; padding: 20px; margin: 16px 0; background: var(--card); }
+.expiry-row h3 { margin: 0; font-size: 15px; overflow-wrap: anywhere; }
+.expiry-row p { color: var(--muted); font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; }
+.expiry-row .review-card-header { align-items: flex-start; }
+.expiry-row .chip { flex-shrink: 0; }
+.expiry-date-label { display: grid; gap: 12px; font-size: 14px; margin: 24px 0; }
 body::after { opacity: 0; }
 a, .text-link, .media-row article > a { color: var(--link); }
 code { color: var(--link); }

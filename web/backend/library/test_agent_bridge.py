@@ -6,6 +6,18 @@ from .models import AgentLink, AgentCommand
 
 
 class AgentBridgeTests(TestCase):
+    def test_busy_agent_heartbeats_keep_connection_without_dispatching_commands(self):
+        self.mac.post('/api/v1/agent/bridge/poll/', {'snapshot': self.snapshot}, format='json')
+        self.browser.post('/api/v1/agent/commands/', {'link_id': str(self.link.id), 'action': 'keep', 'asset_id': 'asset-1'}, format='json')
+        response = self.mac.post('/api/v1/agent/bridge/poll/', {'snapshot': {'assets': [], 'catalog': [], 'agent_available': False}}, format='json')
+        self.assertIsNone(response.json()['command'])
+        state = self.browser.get('/api/v1/agent/status/').json()['links'][0]
+        self.assertTrue(state['connected'])
+        self.assertEqual(state['snapshot']['assets'][0]['id'], 'asset-1')
+        self.assertEqual(self.browser.post('/api/v1/agent/commands/', {'link_id': str(self.link.id), 'action': 'keep', 'asset_id': 'asset-1'}, format='json').status_code, 409)
+        response = self.mac.post('/api/v1/agent/bridge/poll/', {'snapshot': self.snapshot}, format='json')
+        self.assertEqual(response.json()['command']['action'], 'keep')
+
     def setUp(self):
         self.user = get_user_model().objects.create_user('owner', password='strong-password-123')
         self.other = get_user_model().objects.create_user('other', password='strong-password-123')

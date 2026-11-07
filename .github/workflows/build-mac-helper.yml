@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build universal helper
-        run: python3 web/local/build_helper.py --origin https://moa.3-38-192-19.sslip.io
+        run: python3 web/local/build_helper.py --origin https://3.38.192.19
       - uses: actions/upload-artifact@v4
         with:
           name: moa-mac-helper

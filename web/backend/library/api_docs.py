@@ -63,10 +63,15 @@ def complete_schema(result, generator, request, public):
         '분류 대기: answer는 asset_id와 project_id로 분류 위치를 선택합니다. '
         '분류/보관 대기: approve는 asset_id의 기존 file/archive 계획을 승인하고 keep은 현재 파일을 유지합니다. '
         '이동한 파일: undo는 asset_id의 이동을 되돌립니다. Mac 휴지통: restore_trashed는 trash_index 항목을 복구합니다. '
+        '설정: preferences는 settings와 현재 revision으로 Mac 정책을 변경합니다. '
+        '삭제 예약: expiry_schedule은 asset_id와 Unix 초 단위 due_at을, expiry_confirm/cancel/change는 entry_id를 사용합니다. change에는 due_at도 필요합니다. '
         'link_id는 상태 조회의 links[].id입니다. 실행 결과는 상태 조회의 commands에서 확인합니다. 기기별 대기/실행 중 명령은 하나만 허용합니다.',
-        COMMAND, obj({"link_id": {"type": "string", "format": "uuid"}, "action": {"type": "string", "enum": ['answer', 'approve', 'keep', 'undo', 'restore_trashed']},
+        COMMAND, obj({"link_id": {"type": "string", "format": "uuid"}, "action": {"type": "string", "enum": ['answer', 'approve', 'keep', 'undo', 'restore_trashed', 'preview', 'cleanup_scan', 'cleanup_retry', 'cleanup_confirm', 'cleanup_dismiss', 'preferences', 'expiry_schedule', 'expiry_confirm', 'expiry_cancel', 'expiry_change']},
             "asset_id": {**STRING, "description": "answer/approve/keep/undo 필수. snapshot.assets의 id"},
             "project_id": {**STRING, "description": "answer 필수. snapshot.catalog의 id"},
+            "settings": JSON, "revision": {"type": "integer"}, "entry_id": STRING,
+            "due_at": {"type": "number", "description": "1분 이후부터 1년 이내의 Unix 초 단위 예정 시각"},
+            "group_id": STRING,
             "trash_index": {"type": "integer", "description": "restore_trashed 필수. snapshot.trashed의 i"}}, ('link_id', 'action')),
         ((400, '잘못된 명령·파일·프로젝트·실행 계획'), (403, '로그인 또는 CSRF 검증 필요'), (404, '내 기기를 찾을 수 없음'), (409, '이미 진행 중인 명령이 있음')))
     bearer = ({"in": "header", "name": "Authorization", "required": True, "schema": STRING,

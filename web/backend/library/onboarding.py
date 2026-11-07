@@ -28,7 +28,7 @@ def current_state(user, progress):
     return {'cleanup_confirmed': progress.initial_cleanup_confirmed,
             'cleanup': cleanup_link.snapshot['cleanup'] if cleanup_link else None,
             'cleanup_link_id': str(cleanup_link.id) if cleanup_link else str(online[0].id) if online else None,
-            'cleanup_busy': bool(cleanup_link and cleanup_link.commands.filter(status__in=['pending', 'running']).exists()),
+            'cleanup_busy': bool(cleanup_link and (cleanup_link.snapshot.get('agent_available') is False or cleanup_link.commands.filter(status__in=['pending', 'running']).exists())),
             'mac_connected': bool(online), 'iphone_icloud_confirmed': progress.iphone_icloud_confirmed,
             'test_started': progress.test_started_at is not None,
             'file_received': bool(received), 'received_filename': received[0] if received else None,

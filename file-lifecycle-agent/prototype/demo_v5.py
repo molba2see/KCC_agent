@@ -13,6 +13,7 @@ from sources import where_froms, source_keys, Rules
 from profile_learn import learn, profile_text, rule_note, make_caption
 from digest import parse_reply, guide, user_active, propose_folders, MIN_FILES
 from expiry import Expiry
+from preferences import Preferences
 from tasks_v5 import CATALOG, SHARED, FILLER, INJECT, NOISE_TEXT
 
 HERE = Path(__file__).resolve().parent
@@ -159,6 +160,12 @@ class Watcher(threading.Thread):
         try: self.seen_fingerprints = json.loads(self.seen_file.read_text()) if scan_existing else {}
         except (OSError, ValueError): self.seen_fingerprints = {}
         self.seen = set() if scan_existing else {p for x in self.inboxes for p in x.glob('*')}
+        self.initial_files = {}
+        for folder in self.strict_inboxes:
+            for path in folder.glob('*'):
+                try:
+                    if path.is_file() and not path.is_symlink(): self.initial_files[str(path)] = self.fingerprint(path)
+                except OSError: pass
 
     def candidates(self):
         for x in self.inboxes:
@@ -220,7 +227,8 @@ class Watcher(threading.Thread):
                     continue
                 self.remember(p)
                 if hasattr(self.d, 'origins'):
-                    self.d.origins[str(copy_to.relative_to(self.d.root))] = {'kind': 'icloud' if p.parent in self.auto_inboxes else 'screenshot' if p.parent in self.screenshot_inboxes else 'download', 'received_at': time.time(), 'source_mtime': p.stat().st_mtime}
+                    self.d.origins[str(copy_to.relative_to(self.d.root))] = {'kind': 'icloud' if p.parent in self.auto_inboxes else 'screenshot' if p.parent in self.screenshot_inboxes else 'download', 'received_at': time.time(), 'source_mtime': p.stat().st_mtime,
+                        'initial_import': self.initial_files.get(str(p)) == self.fingerprint(p)}
                     self.d.save_origins()
                 urls = where_froms(p)
                 if urls: self.d.sources[str(copy_to.relative_to(self.d.root))] = urls; self.d.save_sources()
@@ -234,6 +242,12 @@ class Watcher(threading.Thread):
                 if p.suffix.lower() in IMAGE and p.parent.name == 'screenshots' and not caption(p):
                     p, rel = self.rename(p)  # 'IMG_1234.png' -> 'KCC 대회 공지.png', named by the agent from the OCR text
                 aid = self.d.engine().ingest(rel)
+                origin = getattr(self.d, 'origins', {}).get(rel, {})
+                if isinstance(origin, dict) and 'initial_import' in origin:
+                    engine = self.d.engine(); engine.data['assets'][aid]['initial_import'] = origin['initial_import']
+                    preferences = getattr(self.d, 'preferences', None)
+                    if preferences: engine.data['assets'][aid]['filing_mode'] = preferences.values.get(str(origin.get('kind')) + '_mode', 'review')
+                    engine.save()
                 try: r = self.d.analyze(aid); r['trigger'] = 'watch'; self.d.save_runs()
                 except Exception as exc: r = {'status': f'error: {exc}', 'project': None}
                 a = self.d.engine().data['assets'][aid]; plan = self.d.engine().plan(aid) if a['project'] else None
@@ -242,13 +256,22 @@ class Watcher(threading.Thread):
                 strict_ok = p in self.strict and r.get('decider') in ('source', 'rule') and p.suffix.lower() in DOCS | IMAGE
                 origin = getattr(self.d, 'origins', {}).get(a['original'], {})
                 source_kind = origin.get('kind') if isinstance(origin, dict) else origin
-                require_confirmation = bool(getattr(self.d, 'cleanup', None)) and (p in self.strict or source_kind in {'download', 'screenshot'})
-                if not require_confirmation and (p in self.auto or strict_ok) and plan and plan['action'] == 'file':
+                preferences = getattr(self.d, 'preferences', None)
+                if preferences:
+                    mode = preferences.values.get(str(source_kind) + '_mode', 'review')
+                    initial = source_kind in {'download', 'screenshot'} and a.get('initial_import', True)
+                    can_auto = mode == 'auto' and not initial and (p in self.auto or r.get('decider') in {'rule', 'source'})
+                else:
+                    require_confirmation = bool(getattr(self.d, 'cleanup', None)) and (p in self.strict or source_kind in {'download', 'screenshot'})
+                    can_auto = not require_confirmation and (p in self.auto or strict_ok)
+                if can_auto and plan and plan['action'] == 'file':
                     # Auto inbox (iPhone captures): the user captured on purpose, so a confident 'file' plan runs now; undo stays on the page.
                     try: self.d.engine().execute(aid, plan); text = f'{CAT[a["project"]]["name"]} 폴더에 자동 저장 (되돌리기 가능)'
                     except Exception as exc: text += f' · 자동 저장 실패: {exc}'
                 self.d.events.append({'path': rel, 'text': text}); self.d.events = self.d.events[-20:]; self.d.version += 1
                 filed = self.d.engine().data['assets'][aid]['path'] != rel
+                cleanup = getattr(self.d, 'cleanup', None)
+                if not filed and cleanup and hasattr(cleanup, 'enqueue') and cleanup.eligible(a): cleanup.enqueue()
             if p in self.ask and not filed:
                 threading.Thread(target=ask_folder, args=(self.d, aid, p.name, r.get('project') or (r.get('candidates') or [None])[0]), daemon=True).start()
             elif not getattr(self.d, 'cleanup', None) or self.d.cleanup.data['status'] != 'scanning': notify(f'새 파일: {p.name}', text)
@@ -277,6 +300,7 @@ class Demo:
         self.origins = json.loads(self.origins_path.read_text()) if self.origins_path.exists() else {}
         self.cleanup = None
         self.expiry = None  # expiry.Expiry: installers to the Trash after N days
+        self.preferences = Preferences(self.root / 'preferences.json')
 
     def save_origins(self):
         temporary = self.origins_path.with_suffix('.tmp'); temporary.write_text(json.dumps(self.origins, ensure_ascii=False)); temporary.chmod(0o600); temporary.replace(self.origins_path)
@@ -312,10 +336,12 @@ class Demo:
             if isinstance(origin, str): origin = {'kind': origin}
             plan = e.plan(a['id'], active_references=active_references) if a['project'] or a['keep'] else None
             assets.append({'id': a['id'], 'path': a['path'], 'original': a['original'], 'project': a['project'],
-                           'source_kind': origin.get('kind'), 'received_at': origin.get('received_at', 0), 'source_mtime': origin.get('source_mtime'), 'keep': a['keep'], 'archived': a['path'] != a['original'], 'plan': plan, 'run': r,
+                           'source_kind': origin.get('kind'), 'received_at': origin.get('received_at', 0), 'source_mtime': origin.get('source_mtime'), 'keep': a['keep'], 'trashed': bool(a.get('trashed')), 'archived': a['path'] != a['original'], 'plan': plan, 'run': r,
                            'why': explain(e, a, r, plan) if r else []})
         assets.sort(key=lambda x: x['original'])
-        return {'capabilities': ['preview'] + (['cleanup_scan'] if self.cleanup else []), 'controller': self.name, 'root': str(self.root), 'assets': assets, 'journal': e.data['journal'][-20:],
+        return {'capabilities': ['preview', 'preferences'] + (['expiry'] if self.expiry else []) + (['cleanup_scan'] if self.cleanup else []),
+                'preferences': self.preferences.public(), 'expiry': self.expiry.public() if self.expiry else None,
+                'controller': self.name, 'root': str(self.root), 'assets': assets, 'journal': e.data['journal'][-20:],
                 'catalog': [{'id': k, 'name': v['name'], 'desc': v['desc'], 'status': e.data['projects'].get(k)} for k, v in CAT.items()],
                 'cleanup': self.cleanup.public() if self.cleanup else None,
                 'digest': self.digest, 'pending': len(self.pending()),
@@ -369,7 +395,7 @@ class Demo:
     def expire(self):
         moved = self.expiry.sweep()
         if moved:
-            text = f'설치 파일 {len(moved)}개를 휴지통으로 옮겼어요 (화면에서 복구 가능)'
+            text = f'기한이 지난 파일 {len(moved)}개를 휴지통으로 옮겼어요 (화면에서 복구 가능)'
             self.events.append({'path': ', '.join(moved), 'text': text}); self.events = self.events[-20:]; self.version += 1
             notify(f'설치 파일 {len(moved)}개 정리', text)
         return moved
@@ -385,7 +411,7 @@ class Demo:
     def pending(self):
         e = self.engine()
         return [a for a in e.data['assets'].values() if not a.get('context') and not a['project'] and not a['keep']
-                and a['path'] == a['original'] and (self.runs.get(a['id']) or {}).get('status') == 'waiting_user']
+                and not a.get('trashed') and a['path'] == a['original'] and (self.runs.get(a['id']) or {}).get('status') == 'waiting_user']
 
     def digest_now(self):
         e = self.engine(); items = []; texts = []
@@ -524,6 +550,15 @@ def serve(demo, port, origins=()):
                 aid = d.get('id')
                 with demo.lock:
                     if self.path == '/api/analyze': out = demo.analyze(aid)
+                    elif self.path == '/api/preferences':
+                        out = demo.preferences.update(d.get('settings'), d.get('revision'))
+                        if demo.expiry: demo.expiry.sweep(execute=False)
+                    elif self.path == '/api/expiry_schedule':
+                        if not demo.expiry: raise ValueError('만료 실행기를 사용할 수 없습니다.')
+                        out = demo.expiry.schedule(aid, d.get('due_at'))
+                    elif self.path in ('/api/expiry_confirm', '/api/expiry_cancel', '/api/expiry_change'):
+                        if not demo.expiry: raise ValueError('만료 실행기를 사용할 수 없습니다.')
+                        out = demo.expiry.decide(d.get('entry_id'), 'cancel' if self.path.endswith('cancel') else 'confirm', d.get('due_at'))
                     elif self.path == '/api/preview':
                         from file_preview import preview
                         out = preview(demo.engine(), aid)
@@ -577,7 +612,7 @@ if __name__ == '__main__':
     ap.add_argument('--strict-auto-inbox', action='append', default=[], help='like --inbox, but documents/screenshots are filed without a click when a download-source rule or the rule controller decided (e.g. ~/Downloads, ~/Desktop)')
     ap.add_argument('--source-rules', help='JSON {page key: project id}; learned from answers/approvals (see sources.py)')
     ap.add_argument('--projects', help="real projects JSON {pid: {name, folder, desc, keywords}} (see build_profiles.py); approved files are filed into each project's folder")
-    ap.add_argument('--expire-installers-days', type=float, default=0, help='move .dmg/.pkg installers in the inboxes to the Trash N days after first seen, by the Mac clock (0 = off)')
+    ap.add_argument('--expire-installers-days', type=float, default=None, help='override installer retention in days; 0 disables installer expiry; default uses saved settings (3 days)')
     ap.add_argument('--allow-origin', action='append', default=[], help='web page origin allowed to call the API from a browser, e.g. http://localhost:3000 (repeatable; default: only this page)')
     ap.add_argument('--ask-inbox', action='append', default=[], help='documents from this folder that were not filed automatically are asked about in a macOS dialog (e.g. ~/Downloads)')
     a = ap.parse_args()
@@ -602,8 +637,12 @@ if __name__ == '__main__':
         if not all((a.proposal_python, a.proposal_worker, a.proposal_root)): raise SystemExit('Initial cleanup needs a local proposal runtime, worker, and destination')
         demo.cleanup = InitialCleanup(demo, CAT, a.proposal_python, a.proposal_worker, a.proposal_root, request_id=a.cleanup_request)
     if a.watch: Watcher(demo, a.inbox, auto_inboxes=a.auto_inbox, strict_inboxes=a.strict_auto_inbox, ask_inboxes=a.ask_inbox, scan_existing=a.scan_existing_inbox, screenshot_inboxes=a.screenshot_inbox).start()
-    if a.expire_installers_days:
-        demo.expiry = Expiry(Path(a.root) / 'expiry.json', a.inbox + a.strict_auto_inbox, a.expire_installers_days)
+    if a.expire_installers_days is not None:
+        if not 0 <= a.expire_installers_days <= 365: raise SystemExit('Expiry days must be 0–365')
+        demo.preferences.values.update(installers_enabled=a.expire_installers_days > 0, installer_days=max(1, a.expire_installers_days))
+    demo.expiry = Expiry(Path(a.root) / 'expiry.json', a.inbox + a.strict_auto_inbox,
+                        policy=lambda: demo.preferences.values, engine=demo.engine)
+    if demo.expiry:
         def sweeper():  # every minute, so a clock moved forward is noticed quickly
             while True:
                 try:

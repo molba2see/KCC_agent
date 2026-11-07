@@ -1,8 +1,22 @@
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
+from urllib.error import URLError
 from mac_bridge import public_state, server_allowed
 
 
 class PrivacyTests(unittest.TestCase):
+    def test_timeout_sends_retained_snapshot_heartbeat_without_leaking_exception(self):
+        import mac_bridge
+        posts = []
+        with TemporaryDirectory() as directory, patch('mac_bridge.get', side_effect=[{'assets': [{'id': 'a', 'original': 'file.txt'}], 'catalog': []}, URLError('/private/exception')]), patch('mac_bridge.post', side_effect=lambda url, body, token: posts.append(body) or {'command': None}), patch('mac_bridge.time.sleep', side_effect=[None, KeyboardInterrupt]):
+            with self.assertRaises(KeyboardInterrupt): mac_bridge.run('https://example.com', 'http://127.0.0.1:8791', 'fixture', 5, Path(directory) / 'pending.json')
+        self.assertEqual(len(posts), 2)
+        self.assertFalse(posts[1]['snapshot']['agent_available'])
+        self.assertEqual(posts[1]['snapshot']['assets'][0]['id'], 'a')
+        self.assertNotIn('/private', str(posts))
+
     def test_state_omits_content_and_trace_but_keeps_approval_plan(self):
         state = {'root':'/private/home', 'assets':[{'id':'a','project':'p','original':'/private/notes.txt','path':'/private/notes.txt',
                   'plan':{'action':'file','target':'/projects/notes.txt'}, 'run':{'status':'planned','full':[{'secret':'body'}], 'trace':['private content']},

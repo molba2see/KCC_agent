@@ -15,6 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import AgentCommand, AgentLink
+from .runtime_policy import settings_values
 
 
 @ensure_csrf_cookie
@@ -109,7 +110,39 @@ def queue_command(request):
     snapshot = link.snapshot or {}
     assets = {str(a.get("id")): a for a in snapshot.get("assets", []) if isinstance(a, dict)}
     payload = {}
-    if action == 'preview':
+    if snapshot.get('agent_available') is False:
+        return Response({'detail': 'Mac은 연결되어 있지만 파일 분석을 처리 중입니다. 잠시 뒤 다시 시도해 주세요.'}, status=409)
+    if action == 'preferences' or action in {'expiry_schedule', 'expiry_confirm', 'expiry_cancel', 'expiry_change'}:
+        capability = 'preferences' if action == 'preferences' else 'expiry'
+        if capability not in snapshot.get('capabilities', []):
+            return Response({'detail': '최신 Mac 연결 앱을 설치하고 다시 시도해 주세요.'}, status=409)
+        if not link.last_seen_at or (timezone.now() - link.last_seen_at).total_seconds() >= 30:
+            return Response({'detail': 'Mac이 연결된 뒤 설정과 예약을 변경할 수 있습니다.'}, status=409)
+        if action == 'preferences':
+            try: payload['settings'] = settings_values(request.data.get('settings'))
+            except ValueError as error: return Response({'detail': str(error)}, status=400)
+            revision = request.data.get('revision')
+            if type(revision) is not int or revision != (snapshot.get('preferences') or {}).get('revision'):
+                return Response({'detail': '설정이 변경됐어요. 새로고침 후 다시 저장해 주세요.'}, status=409)
+            payload['revision'] = revision
+        elif action == 'expiry_schedule':
+            if not isinstance(asset_id, str) or asset_id not in assets or assets[asset_id].get('trashed'):
+                return Response({'detail': '예약할 파일을 찾을 수 없습니다.'}, status=400)
+            payload['id'] = asset_id
+        else:
+            entry_id = request.data.get('entry_id')
+            entries = (snapshot.get('expiry') or {}).get('entries', [])
+            entry = next((entry for entry in entries if entry.get('id') == entry_id), None)
+            if not isinstance(entry_id, str) or not entry or entry.get('status') not in {'pending', 'scheduled', 'paused', 'blocked', 'changed'}:
+                return Response({'detail': '예약 상태가 바뀌었어요. 다시 확인해 주세요.'}, status=409)
+            payload['entry_id'] = entry_id
+        if action in {'expiry_schedule', 'expiry_change'}:
+            due_at = request.data.get('due_at')
+            now = timezone.now().timestamp()
+            if type(due_at) not in (int, float) or not now + 60 <= due_at <= now + 366 * 86400:
+                return Response({'detail': '1분 이후부터 1년 이내의 시간을 선택하세요.'}, status=400)
+            payload['due_at'] = due_at
+    elif action == 'preview':
         if 'preview' not in snapshot.get('capabilities', []):
             return Response({'detail': 'Mac 연결 앱을 최신 버전으로 다시 설치한 뒤 미리보기를 사용해 주세요.'}, status=409)
         cleanup = snapshot.get('cleanup') or {}
@@ -178,10 +211,12 @@ def bridge_poll(request):
         return Response({"detail": "Agent state too large"}, status=413)
     with transaction.atomic():
         link = AgentLink.objects.select_for_update().get(pk=link.pk)
+        unavailable = snapshot.get('agent_available') is False
+        if unavailable: snapshot = {**(link.snapshot or snapshot), 'agent_available': False}
         link.snapshot = snapshot
         link.last_seen_at = timezone.now()
         link.save(update_fields=["snapshot", "last_seen_at"])
-        command = link.commands.filter(status="pending").order_by("created_at").first()
+        command = link.commands.filter(status="pending").order_by("created_at").first() if not unavailable else None
         if command:
             command.status = "running"
             command.save(update_fields=["status"])

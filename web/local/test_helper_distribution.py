@@ -14,6 +14,7 @@ class HelperDistributionTests(unittest.TestCase):
                          'web/local/requirements-qwen.txt', 'web/local/batch_proposals.py',
                          'file-lifecycle-agent/prototype/initial_cleanup.py', 'web/backend/manage.py',
                          'file-lifecycle-agent/prototype/file_preview.py', 'web/dist/file-preview.js',
+                         'file-lifecycle-agent/prototype/preferences.py', 'web/dist/workspace-policy.js',
                          'web/bridge/mac_bridge.py', 'file-lifecycle-agent/prototype/demo_v5.py',
                          'file-lifecycle-agent/prototype/agent_specs/system_v5.md', 'web/THIRD_PARTY_NOTICES.md']:
             self.assertIn(required, paths)
