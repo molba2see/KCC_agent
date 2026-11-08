@@ -114,6 +114,7 @@
 
     /* figure + side column (9, 13-15) */
     .figrow{display:grid;grid-template-columns:1fr 380px;gap:40px;margin-top:40px;align-items:start}
+    .demovid{margin:28px 0 0}.demovid video{display:block;width:100%;border-radius:14px;border:1px solid #E7E3DC;background:#000}.demovid figcaption{margin-top:8px;font-size:16px;font-weight:700;color:var(--muted)}
     .side h3{font-size:26px;letter-spacing:-.03em;margin:0 0 10px}
     .side .list li{font-size:20px}
     .side .card{padding:26px 28px;margin-top:22px}
@@ -430,7 +431,7 @@
       <div class="side">
         <h3>시연 흐름</h3>
         <div class="steps"><div><span class="badge blue">1</span>아이폰에서 캡처</div><div><span class="badge peach">2</span>iCloud로 맥에 도착</div><div><span class="badge mint">3</span>OCR → 캡션 → 파일 이름</div><div><span class="badge butter">4</span>근거 확인 후 폴더 저장</div></div>
-        <p class="note" style="margin-top:26px">분류가 모호하면 근거를 보여주고 사용자가 고릅니다. 시연에서는 현재 구현에서 실제로 작동하는 단계만 실행합니다.</p>
+        <figure class="demovid"><video src="assets/demo1.mp4" poster="assets/demo1-poster.jpg" controls muted loop playsinline preload="auto"></video><figcaption>▶ 실제 시연 영상</figcaption></figure>
       </div>
     </div>
     <div class="pagefoot">DEMO · 프로젝트 구현 흐름에 맞춘 순서</div>
@@ -444,7 +445,7 @@
       <div class="side">
         <h3>시연 흐름</h3>
         <div class="steps"><div><span class="badge blue">1</span>기존 과목 폴더 탐색</div><div><span class="badge peach">2</span>어느 폴더인지 질문</div><div><span class="badge mint">3</span>이동 계획 승인</div><div><span class="badge butter">4</span>같은 페이지는 바로 정리</div></div>
-        <p class="note" style="margin-top:26px">처음 한 번 답하면, 같은 페이지 다운로드는 다음부터 바로 정리됩니다.</p>
+        <figure class="demovid"><video src="assets/demo2.mp4" poster="assets/demo2-poster.jpg" controls muted loop playsinline preload="auto"></video><figcaption>▶ 실제 시연 영상</figcaption></figure>
       </div>
     </div>
     <div class="pagefoot">DEMO · 프로젝트 구현 흐름에 맞춘 순서</div>

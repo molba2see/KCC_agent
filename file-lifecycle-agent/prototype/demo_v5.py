@@ -159,7 +159,11 @@ class Watcher(threading.Thread):
         self.seen_file = Path(self.d.root) / 'inbox-seen.json'
         try: self.seen_fingerprints = json.loads(self.seen_file.read_text()) if scan_existing else {}
         except (OSError, ValueError): self.seen_fingerprints = {}
-        self.seen = set() if scan_existing else {p for x in self.inboxes for p in x.glob('*')}
+        self.seen = set()
+        if not scan_existing:  # files already there are skipped, but a re-download under the same name is new
+            for p in (p for x in self.inboxes for p in x.glob('*')):
+                try: self.seen_fingerprints[str(p)] = self.fingerprint(p)
+                except OSError: pass
         self.initial_files = {}
         for folder in self.strict_inboxes:
             for path in folder.glob('*'):
@@ -170,7 +174,7 @@ class Watcher(threading.Thread):
     def candidates(self):
         for x in self.inboxes:
             for p in x.glob('*'):
-                if p not in self.seen and not p.is_symlink() and p.is_file() and (x not in self.image_only or p.suffix.lower() in IMAGE) and not p.name.startswith(('.', '~$')) and p.suffix.lower() in TEXT | IMAGE | WEIGHTS and (not self.scan_existing or self.seen_fingerprints.get(str(p)) != self.fingerprint(p)):
+                if not p.is_symlink() and p.is_file() and (x not in self.image_only or p.suffix.lower() in IMAGE) and not p.name.startswith(('.', '~$')) and p.suffix.lower() in TEXT | IMAGE | WEIGHTS and self.seen_fingerprints.get(str(p)) != self.fingerprint(p):
                     yield p, self.d.root / 'screenshots' / p.name
         for sub in WATCH_DIRS:
             for p in (self.d.root / sub).glob('*'):
@@ -187,8 +191,8 @@ class Watcher(threading.Thread):
 
     def remember(self, p):
         self.seen.add(p)
+        self.seen_fingerprints[str(p)] = self.fingerprint(p)
         if self.scan_existing:
-            self.seen_fingerprints[str(p)] = self.fingerprint(p)
             tmp = self.seen_file.with_suffix('.tmp')
             tmp.write_text(json.dumps(self.seen_fingerprints), encoding='utf-8')
             tmp.replace(self.seen_file)
@@ -261,7 +265,9 @@ class Watcher(threading.Thread):
                 if preferences:
                     mode = preferences.values.get(str(source_kind) + '_mode', 'review')
                     initial = source_kind in {'download', 'screenshot'} and a.get('initial_import', True)
-                    can_auto = mode == 'auto' and not initial and (p in self.auto or r.get('decider') in {'rule', 'source'})
+                    # downloads: only a learned page rule files silently; the first file from a page asks (taught once)
+                    trusted = {'source'} if source_kind == 'download' and p in self.ask else {'rule', 'source'}
+                    can_auto = mode == 'auto' and not initial and (p in self.auto or r.get('decider') in trusted)
                 else:
                     require_confirmation = bool(getattr(self.d, 'cleanup', None)) and (p in self.strict or source_kind in {'download', 'screenshot'})
                     can_auto = not require_confirmation and (p in self.auto or strict_ok)
