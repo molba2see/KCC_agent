@@ -191,6 +191,7 @@ class Expiry:
             for folder in self.inboxes:
                 for path in folder.glob('*'):
                     if path.is_symlink() or not path.is_file() or path.name.startswith('.') or not installer(path): continue
+                    if 0 <= now - path.stat().st_mtime < 60: continue  # still downloading: register once the file settles
                     try: self._upsert('installer:' + str(path), self._safe(path), 'installer', options['installer_days'], 'auto', now)
                     except (OSError, ValueError): continue
         if self.engine and options['volatile_mode'] != 'off':

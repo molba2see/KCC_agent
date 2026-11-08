@@ -62,10 +62,10 @@ def main():
     token = json.loads(credentials.read_text())['bridge_token']
     children = []
 
-    def start(name, args, extra=None):
+    def start(name, args, extra=None, command=(sys.executable,)):
         children[:] = [child for child in children if child.poll() is None]
         with (DATA / (name + '.log')).open('a') as log:
-            child = subprocess.Popen([sys.executable, *map(str, args)], env={**env, **(extra or {})}, stdout=log, stderr=log)
+            child = subprocess.Popen([*command, *map(str, args)], env={**env, **(extra or {})}, stdout=log, stderr=log)
         children.append(child)
         return child
 
@@ -136,7 +136,10 @@ def main():
                             '--proposal-root', Path.home() / 'Library/Mobile Documents/com~apple~CloudDocs/모아']
                         if cleanup_options.get('request_id'):
                             arguments += ['--cleanup-request', cleanup_options['request_id']]
-                    agent = start('agent', arguments)
+                    if os.environ.get('MOA_AGENT_COMMAND'):  # local demo: own agent script (real folders, LoRA model)
+                        agent = start('agent', [], command=(os.environ['MOA_AGENT_COMMAND'],))
+                    else:
+                        agent = start('agent', arguments)
                     agent_inbox = inbox
                     agent_projects = projects_version
                 if bridge is None or bridge.poll() is not None:
